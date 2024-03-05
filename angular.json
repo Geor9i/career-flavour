@@ -5,7 +5,7 @@
   "projects": {
     "career-flavour": {
       "projectType": "application",
-      "schematics": "schematics": {
+      "schematics": {
         "@schematics/angular:component": {
           "skipTests": true
         }
