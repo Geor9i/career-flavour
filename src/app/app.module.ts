@@ -7,6 +7,8 @@ import { provideFirebaseApp, getApp, initializeApp } from '@angular/fire/app';
 import { getFirestore, provideFirestore } from '@angular/fire/firestore';
 import { firebaseConfig } from 'src/environments/environment';
 import { TestReadComponent } from './test-read/test-read.component';
+import { CoreModule } from './modules/core/core.module';
+import { UserModule } from './modules/user/user.module';
 
 @NgModule({
   declarations: [AppComponent, TestReadComponent],
@@ -15,6 +17,8 @@ import { TestReadComponent } from './test-read/test-read.component';
     AppRoutingModule,
     provideFirebaseApp(() => initializeApp(firebaseConfig)),
     provideFirestore(() => getFirestore()),
+    CoreModule,
+    UserModule
   ],
   providers: [],
   bootstrap: [AppComponent],
