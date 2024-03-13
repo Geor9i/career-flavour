@@ -1,24 +1,25 @@
 <div class="form-wrapper">
-  <form>
+  <form #registerForm="ngForm" (ngSubmit)="submitHandler(registerForm)">
     <div class="inputbox">
       <label for="firstName">First Name</label>
-      <input type="text" id="firstName" placeholder="John"/>
+      <input type="text" id="firstName" name="firstName" placeholder="John" ngModel/>
     </div>
     <div class="inputbox">
-      <label for="email">Last Name</label>
-      <input type="text" id="email" placeholder="Smith"/>
+      <label for="lastName">Last Name</label>
+      <input type="text" id="lastName" name="lastName" placeholder="Smith" ngModel/>
     </div>
     <div class="inputbox">
       <label for="email">Email</label>
-      <input type="text" id="email" placeholder="user@email.com"/>
+      <input type="text" id="email" name="email" placeholder="user@email.com" ngModel/>
     </div>
     <div class="inputbox">
       <label for="password">Password</label>
-      <input type="password" id="password" placeholder="*******"/>
+      <input type="password" id="password" name="password" placeholder="*******" ngModel/>
     </div>
     <div class="inputbox">
       <label for="repeatPassword">Repeat password</label>
-      <input type="password" id="repeatPassword" placeholder="*******"/>
+      <input type="password" id="repeatPassword" name="repeatPassword" placeholder="*******" ngModel/>
     </div>
+    <input type="submit" value="Register">
   </form>
 </div>

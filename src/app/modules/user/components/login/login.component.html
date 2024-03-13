@@ -1,12 +1,13 @@
 <div class="form-wrapper">
-  <form>
+  <form #loginForm="ngForm" (ngSubmit)="submitHandler(loginForm)">
     <div class="inputbox">
       <label for="email">Email</label>
-      <input type="text" id="email" placeholder="user@email.com"/>
+      <input type="text" id="email" name="email" placeholder="user@email.com" ngModel />
     </div>
     <div class="inputbox">
       <label for="password">Password</label>
-      <input type="password" id="password" placeholder="*******"/>
+      <input type="password" id="password" name="password" placeholder="*******" ngModel />
     </div>
+    <input type="submit" value="Login">
   </form>
 </div>
