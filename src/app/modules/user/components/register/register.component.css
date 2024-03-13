@@ -1,0 +1,40 @@
+:host {
+  height: 100%;
+  width: 100%;
+}
+
+.form-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  /* min-height: 100vh; */
+  height: 100%;
+}
+
+form {
+  border-radius: 13px;
+  padding: 4em 8em;
+  display: flex;
+  gap: 1em;
+  flex-direction: column;
+  background: linear-gradient(to right, rgb(255, 230, 230), rgb(233, 233, 233));
+  box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.4);
+}
+
+.inputbox {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5em;
+}
+
+label {
+  letter-spacing: 1px;
+  font-size: 18px;
+  font-weight: bold;
+}
+
+input {
+  border-radius: 5px;
+  padding: 0.5em;
+  background-color: rgb(255, 255, 255);
+}

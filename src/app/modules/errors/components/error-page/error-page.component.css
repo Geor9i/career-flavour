@@ -1,0 +1,21 @@
+.errorContainer {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+}
+
+.errorContainer p:first-child {
+  font-size: 8em;
+  font-weight: bold;
+}
+
+.errorContainer span {
+  color: red;
+}
+
+.errorContainer a {
+  color: blue;
+  font-weight: bold;
+}

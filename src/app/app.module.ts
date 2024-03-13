@@ -9,16 +9,19 @@ import { firebaseConfig } from 'src/environments/environment';
 import { TestReadComponent } from './test-read/test-read.component';
 import { CoreModule } from './modules/core/core.module';
 import { UserModule } from './modules/user/user.module';
+import { ErrorsModule } from './modules/errors/errors.module';
+import { NavigationComponent } from './modules/core/navigation/navigation.component';
 
 @NgModule({
   declarations: [AppComponent, TestReadComponent],
   imports: [
     BrowserModule,
-    AppRoutingModule,
     provideFirebaseApp(() => initializeApp(firebaseConfig)),
     provideFirestore(() => getFirestore()),
     CoreModule,
-    UserModule
+    UserModule,
+    ErrorsModule,
+    AppRoutingModule,
   ],
   providers: [],
   bootstrap: [AppComponent],
