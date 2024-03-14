@@ -1,6 +1,11 @@
 :host {
   height: 100%;
   width: 100%;
+  --mst: -6px;
+  --st: 0px;
+  --text-shadow-color: rgb(119, 0, 255);
+  --text-shadow: var(--mst) var(--mst) 0 var(--text-shadow-color), var(--st) var(--mst) 0 var(--text-shadow-color), var(--mst) var(--st) 0 var(--text-shadow-color),
+  var(--st) var(--st) 0 var(--text-shadow-color);
 }
 
 .errorContainer {
@@ -14,10 +19,12 @@
 .errorContainer p:first-child {
   font-size: 8em;
   font-weight: bold;
+  text-shadow: var(--text-shadow)
 }
 
 .errorContainer span {
   color: red;
+  text-shadow: var(--text-shadow);
 }
 
 .errorContainer a {

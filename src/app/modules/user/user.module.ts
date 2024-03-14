@@ -6,6 +6,7 @@ import { UserRoutingModule } from './user-routing.module';
 import { FormsModule } from '@angular/forms';
 import { FireModule } from 'src/app/services/fire/fire.module';
 import { ProfileComponent } from './components/profile/profile.component';
+import { UtilsModule } from '../utils/utils.module';
 
 
 @NgModule({
@@ -18,7 +19,8 @@ import { ProfileComponent } from './components/profile/profile.component';
     CommonModule,
     UserRoutingModule,
     FormsModule, //Template driven
-    FireModule
+    FireModule,
+    UtilsModule
   ],
   exports: []
 })
