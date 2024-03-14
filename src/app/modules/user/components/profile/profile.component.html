@@ -1,0 +1,45 @@
+<div class="page-container">
+  <p class="username">{{ firstName }} {{ lastName }}</p>
+
+  <main>
+    <section class="account">
+      <p class="title">Account Settings</p>
+      <form
+        #accountForm="ngForm"
+        (ngSubmit)="accountSubmitHandler(accountForm)"
+      >
+        <div class="main-input-box">
+          <div class="input-box">
+            <label for="first-name">First Name</label>
+            <input
+              type="text"
+              id="first-name"
+              name="firstName"
+              [(ngModel)]="formData.firstName"
+              (ngModelChange)="(inputChangeHandler)"
+            />
+          </div>
+          <div class="input-box">
+            <label for="last-name">Last name</label>
+            <input
+              type="text"
+              id="last-name"
+              name="lastName"
+              [(ngModel)]="formData.lastName"
+              (ngModelChange)="(inputChangeHandler)"
+            />
+          </div>
+        </div>
+        <input type="submit" value="Update Details" />
+      </form>
+    </section>
+
+    <section class="change-password">
+      <p class="title">Change password</p>
+    </section>
+
+    <section class="email">
+      <p class="title">Change password</p>
+    </section>
+  </main>
+</div>

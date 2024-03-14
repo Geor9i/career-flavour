@@ -1,2 +1,7 @@
-@import url('reset.css');
-@import url('typography.css');
+@import url("reset.css");
+@import url("typography.css");
+
+:root {
+  --text-outline: -1px -1px 0 #000000, 1px -1px 0 #000000, -1px 1px 0 #000000,
+    1px 1px 0 #000000; /* Shadows to create outline effect */
+}
