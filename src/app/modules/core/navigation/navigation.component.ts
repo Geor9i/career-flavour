@@ -8,14 +8,14 @@ import { FireService } from 'src/app/services/fire/fire-service';
   styleUrls: ['./navigation.component.css']
 })
 export class NavigationComponent implements OnInit, OnDestroy {
-  isLoggedIn = false;
+  isAuthUser = false;
   private userSubscription!: Subscription;
 
   constructor(private fireservice: FireService) {}
 
   ngOnInit(): void {
     this.userSubscription = this.fireservice.onAuthStateChanged(user => {
-      this.isLoggedIn = !!user;
+      this.isAuthUser = !!user;
     }).subscribe();
   }
 

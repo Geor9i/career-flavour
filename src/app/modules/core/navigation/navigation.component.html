@@ -1,11 +1,10 @@
 <nav class="guest-nav">
-  <!-- <h1>{{isLoggedIn}}</h1> -->
   <ul>
     <li routerLink="/home"><a>Career Flavour</a></li>
-    <li routerLink="/login"><a>Login</a></li>
-    <li routerLink="/register"><a>Register</a></li>
+    <li *ngIf="!isAuthUser" routerLink="/login"><a>Login</a></li>
+    <li *ngIf="!isAuthUser" routerLink="/register"><a>Register</a></li>
     <li routerLink="/about"><a>About</a></li>
     <li routerLink="/contact"><a>Contact</a></li>
-    <li routerLink="/logout"><a>Logout</a></li>
+    <li *ngIf="isAuthUser" routerLink="/logout"><a>Logout</a></li>
   </ul>
 </nav>
