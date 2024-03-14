@@ -36,10 +36,60 @@
 
     <section class="change-password">
       <p class="title">Change password</p>
+      <form
+        #accountForm="ngForm"
+        (ngSubmit)="passwordUpdateSubmitHandler(accountForm)"
+      >
+        <div class="main-input-box">
+          <div class="input-box">
+            <label for="password">Password</label>
+            <input
+              type="text"
+              id="password"
+              name="password"
+              [(ngModel)]="formData.password"
+              (ngModelChange)="(inputChangeHandler)"
+            />
+          </div>
+          <div class="input-box">
+            <label for="repeat-password">Repeat Password</label>
+            <input
+              type="text"
+              id="repeat-password"
+              name="repeatPassword"
+              [(ngModel)]="formData.repeatPassword"
+              (ngModelChange)="(inputChangeHandler)"
+            />
+          </div>
+        </div>
+        <input type="submit" value="Change password" />
+      </form>
     </section>
 
     <section class="email">
-      <p class="title">Change password</p>
+      <p class="title">Change Email</p>
+      <div class="container">
+        <p>Account email</p>
+        <p>{{this.email}}</p>
+      </div>
+      <form
+        #accountForm="ngForm"
+        (ngSubmit)="emailUpdateSubmitHandler(accountForm)"
+      >
+        <div class="main-input-box">
+          <div class="input-box">
+            <label for="email">Email</label>
+            <input
+              type="text"
+              id="email"
+              name="email"
+              [(ngModel)]="formData.email"
+              (ngModelChange)="(inputChangeHandler)"
+            />
+          </div>
+        </div>
+        <input type="submit" value="Change Email" />
+      </form>
     </section>
   </main>
 </div>

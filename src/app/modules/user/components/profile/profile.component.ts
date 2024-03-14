@@ -11,6 +11,7 @@ export class ProfileComponent implements OnInit{
   private fireservice = inject(FireService);
   firstName: string = '';
   lastName: string = '';
+  email: string | null | undefined = '';
   public formData = {
     firstName: '',
     lastName: '',
@@ -22,13 +23,14 @@ export class ProfileComponent implements OnInit{
   ngOnInit(): void {
     const displayName = this.fireservice.auth.currentUser?.displayName || '';
     [this.firstName, this.lastName] = displayName.split(' ');
+    this.email = this.fireservice.auth.currentUser?.email;
   }
 
   accountSubmitHandler(form: NgForm) {
 
   }
 
-  securityUpdateSubmitHandler(form: NgForm) {
+  passwordUpdateSubmitHandler(form: NgForm) {
 
   }
 

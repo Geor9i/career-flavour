@@ -36,7 +36,33 @@ main section {
   flex-direction: column;
   align-items: center;
   background: linear-gradient(to right, rgb(85, 85, 85), rgb(102, 102, 102));
-  box-shadow: 3px 3px 8px;
+  box-shadow:
+  3px 3px 8px black,
+  -20px 10px 0 0 black inset,
+  -1000px 10px 0 0 linear-gradient(to right, black, blue) inset;
+
+}
+
+main section .container {
+  padding: 0.5em 1em;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+}
+
+main section .container p:first-child{
+  font-size: 18px;
+  font-weight: bold;
+  color: #8cffb4;
+}
+
+main section .container p:last-child{
+  font-size: 22px;
+  font-weight: bold;
+  color: #00ffc4;
+  text-shadow: var(--text-outline);
+
 }
 
 .title {
@@ -47,7 +73,7 @@ main section {
 }
 
 form {
-  padding: 2em 4em 0 2em;
+  padding: 1em 2em 0 2em;
   display: flex;
   flex-direction: column;
   align-items: center;
