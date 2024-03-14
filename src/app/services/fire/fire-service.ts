@@ -6,7 +6,9 @@ import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
   updateProfile,
-  signOut
+  signOut,
+  onAuthStateChanged,
+  User
 } from '@angular/fire/auth';
 import { Observable, from } from 'rxjs';
 import {
@@ -23,6 +25,17 @@ export class FireService {
 
   get auth() {
     return this.fireAuth
+  }
+
+
+  onAuthStateChanged(callback: (user: User | null) => void): Observable<void> {
+    return new Observable<void>((observer) => {
+      const unsubscribe = onAuthStateChanged(this.fireAuth, (user) => {
+        callback(user);
+        observer.next();
+      });
+      return { unsubscribe };
+    });
   }
 
   register(userData: UserRegisterInterface): Observable<void> {
