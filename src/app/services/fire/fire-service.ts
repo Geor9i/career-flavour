@@ -17,7 +17,7 @@ import {
   UserInterface,
   UserRegisterInterface,
 } from 'src/app/modules/user/types/user.interface';
-import { Conditional } from '../types/interfaces';
+import { Conditional } from './types/interfaces';
 @Injectable({
   providedIn: 'root',
 })
@@ -78,10 +78,10 @@ export class FireService {
     lastName: string;
   }): Observable<void> {
     const displayName = `${firstName} ${lastName}`;
-  return this.wrapToObservable(updateProfile, {
-    params: [{ displayName }], // Pass an object with displayName property
-    conditional: { name: 'User', value: this.fireAuth.currentUser },
-  });
+    return this.wrapToObservable(updateProfile, {
+      params: [{ displayName }],
+      conditional: { name: 'User', value: this.fireAuth.currentUser },
+    });
   }
 
   changePassword(password: string): Observable<void> {
@@ -97,12 +97,15 @@ export class FireService {
       conditional: { name: 'User', value: this.fireAuth.currentUser },
     });
   }
-  wrapToObservable(
+  private wrapToObservable(
     callback: Function,
     {
       params = [],
       conditional = { name: '', value: null },
-    }: { params: string[] | object[]; conditional: Conditional<unknown, string> }
+    }: {
+      params: string[] | object[];
+      conditional: Conditional<unknown, string>;
+    }
   ): Observable<void> {
     return new Observable((observer) => {
       let pass = !!conditional.value;
