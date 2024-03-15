@@ -10,13 +10,14 @@ import {
   onAuthStateChanged,
   User,
   updatePassword,
-  updateEmail
+  updateEmail,
 } from '@angular/fire/auth';
 import { Observable, from } from 'rxjs';
 import {
   UserInterface,
   UserRegisterInterface,
 } from 'src/app/modules/user/types/user.interface';
+import { Conditional } from '../types/interfaces';
 @Injectable({
   providedIn: 'root',
 })
@@ -76,64 +77,47 @@ export class FireService {
     firstName: string;
     lastName: string;
   }): Observable<void> {
+    const displayName = `${firstName} ${lastName}`;
+  return this.wrapToObservable(updateProfile, {
+    params: [{ displayName }], // Pass an object with displayName property
+    conditional: { name: 'User', value: this.fireAuth.currentUser },
+  });
+  }
+
+  changePassword(password: string): Observable<void> {
+    return this.wrapToObservable(updatePassword, {
+      params: [password],
+      conditional: { name: 'User', value: this.fireAuth.currentUser },
+    });
+  }
+
+  changeEmail(email: string): Observable<void> {
+    return this.wrapToObservable(updateEmail, {
+      params: [email],
+      conditional: { name: 'User', value: this.fireAuth.currentUser },
+    });
+  }
+  wrapToObservable(
+    callback: Function,
+    {
+      params = [],
+      conditional = { name: '', value: null },
+    }: { params: string[] | object[]; conditional: Conditional<unknown, string> }
+  ): Observable<void> {
     return new Observable((observer) => {
-      if (this.fireAuth.currentUser) {
-        updateProfile(this.fireAuth.currentUser, {
-          displayName: `${firstName} ${lastName}`,
-        })
+      let pass = !!conditional.value;
+      if (pass) {
+        callback(conditional.value, ...params)
           .then(() => {
             observer.next();
             observer.complete();
           })
-          .catch((err) => {
+          .catch((err: Error) => {
             observer.error(err);
           });
       } else {
-        observer.error(new Error('No active user!'));
+        observer.error(new Error(`${conditional.name} is not active!`));
       }
     });
-  }
-
-  changePassword(password: string): Observable<void> {
-
-    return new Observable((obsever) => {
-      if (this.fireAuth.currentUser) {
-        updatePassword(this.fireAuth.currentUser, password)
-        .then(() => {
-          obsever.next();
-          obsever.complete()
-        })
-        .catch((err) => {
-          obsever.error(err);
-        })
-
-      } else {
-        obsever.error(new Error('No Active User!'))
-      }
-
-    })
-
-  }
-
-
-  changeEmail(email: string): Observable<void> {
-
-    return new Observable((obsever) => {
-      if (this.fireAuth.currentUser) {
-        updateEmail(this.fireAuth.currentUser, email)
-        .then(() => {
-          obsever.next();
-          obsever.complete()
-        })
-        .catch((err) => {
-          obsever.error(err);
-        })
-
-      } else {
-        obsever.error(new Error('No Active User!'))
-      }
-
-    })
-
   }
 }
