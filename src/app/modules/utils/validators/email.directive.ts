@@ -22,7 +22,6 @@ export class EmailDirective implements Validator {
   constructor() {}
 
   validate(control: AbstractControl<any, any>): ValidationErrors | null {
-      console.log('control: ', control.value);
     try {
       this.formUtil.formValidator({ email: control.value });
     } catch (error) {

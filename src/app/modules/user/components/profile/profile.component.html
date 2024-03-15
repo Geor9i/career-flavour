@@ -8,14 +8,14 @@
         #accountForm="ngForm"
         (ngSubmit)="accountSubmitHandler(accountForm)"
       >
-        <div class="main-input-box">
-          <div class="input-box">
+        <div class="main-input-box" >
+          <div class="input-box" [class.error]="firstNameInput.touched && firstNameInput.invalid">
             <label for="first-name">First Name</label>
-            <input type="text" id="first-name" name="firstName" ngModel />
+            <input appString type="text" id="first-name" name="firstName" ngModel #firstNameInput="ngModel" minlength="2" maxlength="15"/>
           </div>
-          <div class="input-box">
+          <div class="input-box" [class.error]="lastNameInput.touched && lastNameInput.invalid">
             <label for="last-name">Last name</label>
-            <input type="text" id="last-name" name="lastName" ngModel />
+            <input appString type="text" id="last-name" name="lastName" #lastNameInput="ngModel" ngModel minlength="2" maxlength="15" />
           </div>
         </div>
         <input type="submit" value="Update Details" />
@@ -29,17 +29,20 @@
         (ngSubmit)="passwordUpdateSubmitHandler(securityForm)"
       >
         <div class="main-input-box">
-          <div class="input-box">
+          <div class="input-box" [class.error]="password.touched && password.invalid">
             <label for="password">Password</label>
-            <input type="text" id="password" name="password" ngModel />
+            <input type="text" id="password" name="password" ngModel #password="ngModel" minlength="6" />
           </div>
-          <div class="input-box">
+          <p class="errorMessage"></p>
+          <div class="input-box" [class.error]="repeatPassword.touched && password.value && password.value !== repeatPassword.value">
             <label for="repeat-password">Repeat Password</label>
             <input
               type="text"
               id="repeat-password"
               name="repeatPassword"
               ngModel
+              #repeatPassword="ngModel"
+              minlength="6"
             />
           </div>
         </div>
@@ -64,11 +67,10 @@
           >
             Invalid Email
           </p>
-          <div class="input-box">
+          <div class="input-box" [class.error]="emailInput.touched && emailInput.invalid">
             <label for="email">Email</label>
             <div>
               <input
-              [class.error]="emailInput.touched && emailInput.invalid"
               type="text"
               id="email"
               name="email"

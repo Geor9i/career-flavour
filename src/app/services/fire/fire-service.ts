@@ -8,7 +8,7 @@ import {
   updateProfile,
   signOut,
   onAuthStateChanged,
-  User
+  User,
 } from '@angular/fire/auth';
 import { Observable, from } from 'rxjs';
 import {
@@ -24,9 +24,8 @@ export class FireService {
   private fireAuth = inject(Auth);
 
   get auth() {
-    return this.fireAuth
+    return this.fireAuth;
   }
-
 
   onAuthStateChanged(callback: (user: User | null) => void): Observable<void> {
     return new Observable<void>((observer) => {
@@ -66,5 +65,30 @@ export class FireService {
 
   getData<T>() {
     return collectionData(this.testCollection) as Observable<T[]>;
+  }
+
+  updateDisplayName({
+    firstName,
+    lastName,
+  }: {
+    firstName: string;
+    lastName: string;
+  }): Observable<void> {
+    return new Observable((observer) => {
+      if (this.fireAuth.currentUser) {
+        updateProfile(this.fireAuth.currentUser, {
+          displayName: `${firstName} ${lastName}`,
+        })
+          .then(() => {
+            observer.next();
+            observer.complete();
+          })
+          .catch((err) => {
+            observer.error(err);
+          });
+      } else {
+        observer.error(new Error('No active user!'));
+      }
+    });
   }
 }

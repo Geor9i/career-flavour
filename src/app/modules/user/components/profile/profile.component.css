@@ -111,6 +111,10 @@ form input[type="submit"] {
   cursor: pointer;
   background: linear-gradient(to bottom, rgb(80, 80, 80), rgb(214, 214, 214));
 }
-.error {
+.error input{
   border: 3px solid #ff0000;
+}
+
+.errorMessage{
+  
 }

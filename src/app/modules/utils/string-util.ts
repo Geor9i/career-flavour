@@ -24,7 +24,6 @@ export class StringUtil {
   /**
    *
    * @param {String} string The string to be filtered
-   * @param {Object} options
    * @param {String} regexSymbols[].symbol - The regex symbol.
    * @param {Number} regexSymbols[].matches - The match limit for the regex symbol. If not provided or 0, matches any quantity.
    * @param {Boolean} regexSymbols[].remove Keep or Reject matches
