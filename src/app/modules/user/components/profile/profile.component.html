@@ -11,19 +11,11 @@
         <div class="main-input-box">
           <div class="input-box">
             <label for="first-name">First Name</label>
-            <input
-              type="text"
-              id="first-name"
-              name="firstName"
-            />
+            <input type="text" id="first-name" name="firstName" ngModel />
           </div>
           <div class="input-box">
             <label for="last-name">Last name</label>
-            <input
-              type="text"
-              id="last-name"
-              name="lastName"
-            />
+            <input type="text" id="last-name" name="lastName" ngModel />
           </div>
         </div>
         <input type="submit" value="Update Details" />
@@ -33,19 +25,13 @@
     <section class="change-password">
       <p class="title">Change password</p>
       <form
-        #accountForm="ngForm"
-        (ngSubmit)="passwordUpdateSubmitHandler(accountForm)"
+        #securityForm="ngForm"
+        (ngSubmit)="passwordUpdateSubmitHandler(securityForm)"
       >
         <div class="main-input-box">
           <div class="input-box">
             <label for="password">Password</label>
-            <input
-              type="text"
-              id="password"
-              name="password"
-              [(ngModel)]="formData.password"
-              (ngModelChange)="(inputChangeHandler)"
-            />
+            <input type="text" id="password" name="password" ngModel />
           </div>
           <div class="input-box">
             <label for="repeat-password">Repeat Password</label>
@@ -53,8 +39,7 @@
               type="text"
               id="repeat-password"
               name="repeatPassword"
-              [(ngModel)]="formData.repeatPassword"
-              (ngModelChange)="(inputChangeHandler)"
+              ngModel
             />
           </div>
         </div>
@@ -66,25 +51,33 @@
       <p class="title">Change Email</p>
       <div class="container">
         <p>Account email</p>
-        <p>{{this.email}}</p>
+        <p>{{ this.email }}</p>
       </div>
       <form
-        #accountForm="ngForm" appEmail
-        (ngSubmit)="emailUpdateSubmitHandler(accountForm)"
+        #emailForm="ngForm"
+        (ngSubmit)="emailUpdateSubmitHandler(emailForm)"
       >
-      <div *ngIf="accountForm.errors?.['appEmail'] && (accountForm.touched || accountForm.dirty)" class="cross-validation-error-message alert">
-        Name cannot match role.
-    </div>
         <div class="main-input-box">
+          <p
+            style="color: red"
+            *ngIf="emailInput.errors?.['appEmail'] && emailInput.value"
+          >
+            Invalid Email
+          </p>
           <div class="input-box">
             <label for="email">Email</label>
-            <input
+            <div>
+              <input
+              [class.error]="emailInput.touched && emailInput.invalid"
               type="text"
               id="email"
               name="email"
               ngModel
+              required
+              appEmail
+              #emailInput="ngModel"
             />
-            {{accountForm.form.controls}}
+            </div>
           </div>
         </div>
         <input type="submit" value="Change Email" />

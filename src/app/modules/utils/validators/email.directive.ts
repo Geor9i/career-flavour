@@ -1,20 +1,11 @@
-import {
-  Directive,
-  Input,
-  OnChanges,
-  OnInit,
-  SimpleChanges,
-  inject,
-} from '@angular/core';
+import { Directive, Input, inject } from '@angular/core';
 import {
   AbstractControl,
   NG_VALIDATORS,
   ValidationErrors,
   Validator,
-  ValidatorFn,
 } from '@angular/forms';
 import FormUtil from '../form-util';
-import { Observable, from } from 'rxjs';
 
 @Directive({
   selector: '[appEmail]',
@@ -30,17 +21,12 @@ export class EmailDirective implements Validator {
   private formUtil = inject(FormUtil);
   constructor() {}
 
-
   validate(control: AbstractControl<any, any>): ValidationErrors | null {
+      console.log('control: ', control.value);
     try {
-      console.log(control.value);
-
-      this.formUtil.formValidator({email: control.value});
-      console.log(this.formUtil.formValidator({email: control.value}))
+      this.formUtil.formValidator({ email: control.value });
     } catch (error) {
-      console.log(error);
-
-      return { invalidEmail: true };
+      return { appEmail: true };
     }
 
     return null; // Return null if validation succeeds

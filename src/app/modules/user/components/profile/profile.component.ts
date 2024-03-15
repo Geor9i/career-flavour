@@ -1,4 +1,4 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { FireService } from 'src/app/services/fire/fire-service';
 
@@ -8,7 +8,8 @@ import { FireService } from 'src/app/services/fire/fire-service';
   styleUrls: ['./profile.component.css'],
 })
 export class ProfileComponent implements OnInit {
-  private fireservice = inject(FireService);
+  @ViewChild('emailForm') emailForm: NgForm | undefined;
+
   firstName: string = '';
   lastName: string = '';
   email: string | null | undefined = '';
@@ -20,7 +21,11 @@ export class ProfileComponent implements OnInit {
     repeatPassword: '',
   };
 
+  constructor(private fireservice: FireService) {}
+
   ngOnInit(): void {
+    console.log(`emailForm: `, this.emailForm);
+
     const displayName = this.fireservice.auth.currentUser?.displayName || '';
     [this.firstName, this.lastName] = displayName.split(' ');
     this.email = this.fireservice.auth.currentUser?.email;
@@ -28,13 +33,12 @@ export class ProfileComponent implements OnInit {
 
   accountSubmitHandler(form: NgForm) {
     console.log(form);
-
   }
 
   passwordUpdateSubmitHandler(form: NgForm) {
     console.log(form);
-
   }
+
   emailUpdateSubmitHandler(form: NgForm) {
     console.log(form);
   }
