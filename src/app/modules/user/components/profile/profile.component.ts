@@ -7,7 +7,7 @@ import { FireService } from 'src/app/services/fire/fire-service';
   templateUrl: './profile.component.html',
   styleUrls: ['./profile.component.css'],
 })
-export class ProfileComponent implements OnInit{
+export class ProfileComponent implements OnInit {
   private fireservice = inject(FireService);
   firstName: string = '';
   lastName: string = '';
@@ -18,7 +18,7 @@ export class ProfileComponent implements OnInit{
     email: '',
     password: '',
     repeatPassword: '',
-  }
+  };
 
   ngOnInit(): void {
     const displayName = this.fireservice.auth.currentUser?.displayName || '';
@@ -27,18 +27,17 @@ export class ProfileComponent implements OnInit{
   }
 
   accountSubmitHandler(form: NgForm) {
+    console.log(form);
 
   }
 
   passwordUpdateSubmitHandler(form: NgForm) {
+    console.log(form);
 
   }
-
   emailUpdateSubmitHandler(form: NgForm) {
-
+    console.log(form);
   }
 
-  inputChangeHandler() {
-
-  }
+  inputChangeHandler() {}
 }

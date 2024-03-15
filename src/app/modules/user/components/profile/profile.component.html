@@ -15,8 +15,6 @@
               type="text"
               id="first-name"
               name="firstName"
-              [(ngModel)]="formData.firstName"
-              (ngModelChange)="(inputChangeHandler)"
             />
           </div>
           <div class="input-box">
@@ -25,8 +23,6 @@
               type="text"
               id="last-name"
               name="lastName"
-              [(ngModel)]="formData.lastName"
-              (ngModelChange)="(inputChangeHandler)"
             />
           </div>
         </div>
@@ -73,9 +69,12 @@
         <p>{{this.email}}</p>
       </div>
       <form
-        #accountForm="ngForm"
+        #accountForm="ngForm" appEmail
         (ngSubmit)="emailUpdateSubmitHandler(accountForm)"
       >
+      <div *ngIf="accountForm.errors?.['appEmail'] && (accountForm.touched || accountForm.dirty)" class="cross-validation-error-message alert">
+        Name cannot match role.
+    </div>
         <div class="main-input-box">
           <div class="input-box">
             <label for="email">Email</label>
@@ -83,9 +82,9 @@
               type="text"
               id="email"
               name="email"
-              appEmail
               ngModel
             />
+            {{accountForm.form.controls}}
           </div>
         </div>
         <input type="submit" value="Change Email" />
