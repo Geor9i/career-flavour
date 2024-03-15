@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { EmailDirective } from './validators/email.directive';
 import { StringUtil } from './string-util';
+import FormUtil from './form-util';
 
 
 
@@ -13,6 +14,6 @@ import { StringUtil } from './string-util';
     CommonModule
   ],
   exports: [EmailDirective],
-  providers:[StringUtil]
+  providers:[StringUtil, FormUtil]
 })
 export class UtilsModule { }

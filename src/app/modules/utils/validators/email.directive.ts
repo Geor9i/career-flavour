@@ -1,4 +1,11 @@
-import { Directive, Input, OnChanges, SimpleChanges, inject } from '@angular/core';
+import {
+  Directive,
+  Input,
+  OnChanges,
+  OnInit,
+  SimpleChanges,
+  inject,
+} from '@angular/core';
 import {
   AbstractControl,
   NG_VALIDATORS,
@@ -6,7 +13,8 @@ import {
   Validator,
   ValidatorFn,
 } from '@angular/forms';
-import { StringUtil } from '../string-util';
+import FormUtil from '../form-util';
+import { Observable, from } from 'rxjs';
 
 @Directive({
   selector: '[appEmail]',
@@ -18,23 +26,23 @@ import { StringUtil } from '../string-util';
     },
   ],
 })
-export class EmailDirective implements Validator, OnChanges {
-  @Input() appEmail: string[] = [];
-  private stringUtil = inject(StringUtil);
+export class EmailDirective implements Validator {
+  private formUtil = inject(FormUtil);
   constructor() {}
 
-  validator: ValidatorFn = () => null;
 
-  validate(control: AbstractControl): ValidationErrors | null {
-    // console.log('control', control);
-    return this.validator(control);
-  }
+  validate(control: AbstractControl<any, any>): ValidationErrors | null {
+    try {
+      console.log(control.value);
 
-  ngOnChanges(changes: SimpleChanges): void {
-    console.log('changes', changes['appEmail']);
-    const { currentValue } = changes['appEmail'];
-    if (currentValue?.length) {
-      this.validator = this.stringUtil.emailValidator(currentValue);
+      this.formUtil.formValidator({email: control.value});
+      console.log(this.formUtil.formValidator({email: control.value}))
+    } catch (error) {
+      console.log(error);
+
+      return { invalidEmail: true };
     }
+
+    return null; // Return null if validation succeeds
   }
 }
