@@ -9,7 +9,6 @@ import { FireService } from 'src/app/services/fire/fire-service';
   styleUrls: ['./profile.component.css'],
 })
 export class ProfileComponent implements OnInit {
-
   firstName: string = '';
   lastName: string = '';
   email: string | null | undefined = '';
@@ -21,7 +20,7 @@ export class ProfileComponent implements OnInit {
     repeatPassword: '',
   };
 
- constructor(private fireservice: FireService,  private router: Router) {}
+  constructor(private fireservice: FireService, private router: Router) {}
 
   ngOnInit(): void {
     const displayName = this.fireservice.auth.currentUser?.displayName || '';
@@ -32,15 +31,20 @@ export class ProfileComponent implements OnInit {
   accountSubmitHandler(form: NgForm) {
     this.fireservice.updateDisplayName(form.value).subscribe(() => {
       this.router.navigateByUrl('/');
-    })
+    });
   }
 
   passwordUpdateSubmitHandler(form: NgForm) {
-    console.log(form);
+    const { password, repeatPassword } = form.value;
+    if (password === repeatPassword) {
+      this.fireservice.changePassword(password).subscribe(() => {
+        this.router.navigateByUrl('/');
+      });
+    }
   }
 
   emailUpdateSubmitHandler(form: NgForm) {
-    console.log(form);
+    const { email } = form.value;
+    this.fireservice.changeEmail(email).subscribe(() => this.router.navigateByUrl('/'));
   }
-
 }

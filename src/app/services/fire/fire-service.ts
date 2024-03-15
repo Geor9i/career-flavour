@@ -9,6 +9,8 @@ import {
   signOut,
   onAuthStateChanged,
   User,
+  updatePassword,
+  updateEmail
 } from '@angular/fire/auth';
 import { Observable, from } from 'rxjs';
 import {
@@ -90,5 +92,48 @@ export class FireService {
         observer.error(new Error('No active user!'));
       }
     });
+  }
+
+  changePassword(password: string): Observable<void> {
+
+    return new Observable((obsever) => {
+      if (this.fireAuth.currentUser) {
+        updatePassword(this.fireAuth.currentUser, password)
+        .then(() => {
+          obsever.next();
+          obsever.complete()
+        })
+        .catch((err) => {
+          obsever.error(err);
+        })
+
+      } else {
+        obsever.error(new Error('No Active User!'))
+      }
+
+    })
+
+  }
+
+
+  changeEmail(email: string): Observable<void> {
+
+    return new Observable((obsever) => {
+      if (this.fireAuth.currentUser) {
+        updateEmail(this.fireAuth.currentUser, email)
+        .then(() => {
+          obsever.next();
+          obsever.complete()
+        })
+        .catch((err) => {
+          obsever.error(err);
+        })
+
+      } else {
+        obsever.error(new Error('No Active User!'))
+      }
+
+    })
+
   }
 }
