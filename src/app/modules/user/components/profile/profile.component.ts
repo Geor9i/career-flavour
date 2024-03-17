@@ -1,6 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit, TemplateRef, inject } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { Router } from '@angular/router';
+import { ModalService } from 'src/app/modules/shared/modal/modal.service';
 import { FireService } from 'src/app/services/fire/fire-service';
 
 @Component({
@@ -8,10 +9,11 @@ import { FireService } from 'src/app/services/fire/fire-service';
   templateUrl: './profile.component.html',
   styleUrls: ['./profile.component.css'],
 })
-export class ProfileComponent implements OnInit {
+export class ProfileComponent implements OnInit, OnDestroy {
   firstName: string = '';
   lastName: string = '';
   email: string | null | undefined = '';
+  modalQuestion = 'Are you sure?'
   public formData = {
     firstName: '',
     lastName: '',
@@ -20,12 +22,26 @@ export class ProfileComponent implements OnInit {
     repeatPassword: '',
   };
 
+  private modalService = inject(ModalService);
+  selectedOption: string = '';
   constructor(private fireservice: FireService, private router: Router) {}
+
+
+  openModal(modalTemplate: TemplateRef<any>) {
+    this.modalService.open(modalTemplate, {size: 'lg', title: 'Foo'}).subscribe(action => {
+      console.log('modalAction: ', action);
+
+    })
+  }
+
 
   ngOnInit(): void {
     const displayName = this.fireservice.auth.currentUser?.displayName || '';
     [this.firstName, this.lastName] = displayName.split(' ');
     this.email = this.fireservice.auth.currentUser?.email;
+  }
+  ngOnDestroy(): void {
+
   }
 
   accountSubmitHandler(form: NgForm) {

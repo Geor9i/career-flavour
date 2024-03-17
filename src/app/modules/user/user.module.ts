@@ -8,6 +8,7 @@ import { FireModule } from 'src/app/services/fire/fire.module';
 import { ProfileComponent } from './components/profile/profile.component';
 import { UtilsModule } from '../utils/utils.module';
 import { AnimationsModule } from '../animations/animations.module';
+import { SharedModule } from '../shared/shared.module';
 
 @NgModule({
   declarations: [LoginComponent, RegisterComponent, ProfileComponent],
@@ -17,6 +18,7 @@ import { AnimationsModule } from '../animations/animations.module';
     FormsModule, //Template driven
     FireModule,
     UtilsModule,
+    SharedModule,
     AnimationsModule,
   ],
   exports: [],

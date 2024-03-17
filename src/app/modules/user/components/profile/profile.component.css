@@ -112,3 +112,33 @@ form input[type="submit"] {
 }
 
 
+
+/* Modal */
+
+.modal-question {
+  font-size: 2em;
+}
+
+
+.modal-container {
+  display: flex;
+  justify-content: center;
+  gap: 2em;
+}
+
+.modal-container a {
+  padding: 1em 2em;
+  border-radius: 13px;
+  font-size: 1.2em;
+  font-weight: bold;
+  box-shadow: 2px 2px 5px;
+  transition: background 0.5s ease-in;
+}
+
+.modal-container a:hover {
+  background-color: black;
+  color: white;
+  cursor: pointer;
+}
+
+

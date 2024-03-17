@@ -1,6 +1,12 @@
 <div class="page-container">
   <p class="username">{{ firstName }} {{ lastName }}</p>
 
+  <button (click)="openModal(modalTemplate)">Modal Here</button>
+
+  <ng-template #modalTemplate>
+    <div>This is a test Modal</div>
+  </ng-template>>
+
   <main>
     <section class="account">
       <p class="title">Account Settings</p>
@@ -9,45 +15,39 @@
         (ngSubmit)="accountSubmitHandler(accountForm)"
       >
         <div class="main-input-box">
-          <div
-            class="input-box"
-          >
+          <div class="input-box">
             <label for="first-name">First Name</label>
             <div>
               <input
-              appGlowFields
-              appString
-              type="text"
-              id="first-name"
-              name="firstName"
-              ngModel
-              #firstNameInput="ngModel"
-              minlength="2"
-              maxlength="15"
-              required
-            />
+                appGlowFields
+                appString
+                type="text"
+                id="first-name"
+                name="firstName"
+                ngModel
+                #firstNameInput="ngModel"
+                minlength="2"
+                maxlength="15"
+                required
+              />
             </div>
-
           </div>
-          <div
-            class="input-box"
-          >
+          <div class="input-box">
             <label for="last-name">Last name</label>
             <div>
               <input
-              appGlowFields
-              appString
-              type="text"
-              id="last-name"
-              name="lastName"
-              #lastNameInput="ngModel"
-              ngModel
-              minlength="2"
-              maxlength="15"
-              required
-            />
+                appGlowFields
+                appString
+                type="text"
+                id="last-name"
+                name="lastName"
+                #lastNameInput="ngModel"
+                ngModel
+                minlength="2"
+                maxlength="15"
+                required
+              />
             </div>
-
           </div>
         </div>
         <input
@@ -68,46 +68,40 @@
         (ngSubmit)="passwordUpdateSubmitHandler(securityForm)"
       >
         <div class="main-input-box">
-          <div
-            class="input-box"
-          >
+          <div class="input-box">
             <label for="password">Password</label>
             <div>
               <input
-              appGlowFields
-              appPassword
-              appString
-              type="password"
-              id="password"
-              name="password"
-              ngModel
-              #password="ngModel"
-              minlength="6"
-              required
-            />
+                appPassword
+                appGlowFields
+                appString
+                type="password"
+                id="password"
+                name="password"
+                ngModel
+                #password="ngModel"
+                minlength="6"
+                required
+              />
             </div>
-
           </div>
           <p class="errorMessage"></p>
-          <div
-            class="input-box"
-          >
+          <div class="input-box">
             <label for="repeat-password">Repeat Password</label>
             <div>
               <input
-              appGlowFields
-              appPassword
-              appString
-              type="password"
-              id="repeat-password"
-              name="repeatPassword"
-              ngModel
-              #repeatPassword="ngModel"
-              minlength="6"
-              required
-            />
+                appPassword
+                appGlowFields
+                appString
+                type="password"
+                id="repeat-password"
+                name="repeatPassword"
+                ngModel
+                #repeatPassword="ngModel"
+                minlength="6"
+                required
+              />
             </div>
-
           </div>
         </div>
         <input
@@ -138,9 +132,7 @@
           >
             Invalid Email
           </p>
-          <div
-            class="input-box"
-          >
+          <div class="input-box">
             <label for="email">Email</label>
             <div>
               <input

@@ -26,11 +26,10 @@ export class RepeatPasswordDirective implements Validator {
         if (this.isPassCtrl(control)) {
           this.repeatPasswordControl.setErrors({repeatPasswordError: true})
           this.repeatPasswordControl.updateValueAndValidity();
-          return null
         } else {
           return {repeatPasswordError: true}
         }
-      }
+      } 
 
     }
     return null;

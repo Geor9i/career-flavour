@@ -7,6 +7,7 @@ import { TestReadComponent } from './test-read/test-read.component';
 import { CoreModule } from './modules/core/core.module';
 import { UserModule } from './modules/user/user.module';
 import { ErrorsModule } from './modules/errors/errors.module';
+import { SharedModule } from './modules/shared/shared.module';
 
 @NgModule({
   declarations: [AppComponent, TestReadComponent],
@@ -15,6 +16,7 @@ import { ErrorsModule } from './modules/errors/errors.module';
     CoreModule,
     UserModule,
     ErrorsModule,
+    SharedModule,
     AppRoutingModule,
   ],
   providers: [],
