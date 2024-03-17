@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { CommonModule, NgClass } from '@angular/common';
 import { LoginComponent } from './components/login/login.component';
 import { RegisterComponent } from './components/register/register.component';
 import { UserRoutingModule } from './user-routing.module';
@@ -20,7 +20,7 @@ import { UtilsModule } from '../utils/utils.module';
     UserRoutingModule,
     FormsModule, //Template driven
     FireModule,
-    UtilsModule
+    UtilsModule,
   ],
   exports: []
 })

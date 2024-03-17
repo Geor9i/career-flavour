@@ -44,7 +44,7 @@
             />
           </div>
         </div>
-        <input [disabled]="accountForm.invalid" type="submit" value="Update Details" />
+        <input [style]="{ backgroundColor: accountForm.invalid ? 'gray' : '#aaff70'}" [disabled]="accountForm.invalid" type="submit" value="Update Details" />
       </form>
     </section>
 
@@ -93,7 +93,7 @@
             />
           </div>
         </div>
-        <input [disabled]="securityForm.invalid" type="submit" value="Change password" />
+        <input [style]="{ backgroundColor: securityForm.invalid ? 'gray' : '#aaff70'}" [disabled]="securityForm.invalid" type="submit" value="Change password" />
       </form>
     </section>
 
@@ -132,7 +132,7 @@
             </div>
           </div>
         </div>
-        <input [disabled]="emailForm.invalid" type="submit" value="Change Email" />
+        <input [style]="{ backgroundColor: emailForm.invalid ? 'gray' : '#aaff70'}" [disabled]="emailForm.invalid" type="submit" value="Change Email" />
       </form>
     </section>
   </main>

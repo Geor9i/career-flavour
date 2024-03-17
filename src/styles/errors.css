@@ -1,0 +1,37 @@
+.err-field {
+  border: 3px solid red;
+}
+
+.error-border {
+  border-radius: 5px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  background-image: repeating-conic-gradient(from var(--a) at 50% 50%, #F61B1BFF 0%, #F61B1B00 30%, #FF000000 50%, #FF0000FF 51%);
+  animation: animate 2s linear infinite;
+  padding: 0.1em;
+  box-shadow: 0 0 2px 0 rgb(255, 38, 0);
+}
+
+
+@property --a {
+  syntax: "<angle>";
+  inherits: false;
+  initial-value: 0deg;
+}
+
+
+@keyframes animate {
+  0% {
+    --a: 0deg;
+  }
+  100% {
+    --a: 360deg;
+  }
+}
+
+.error-border input {
+  border: none;
+  outline: none;
+}

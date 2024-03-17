@@ -1,5 +1,7 @@
 @import url("reset.css");
 @import url("typography.css");
+@import url("errors.css");
+@import url("valid.css");
 
 :root {
   --text-outline: -1px -1px 0 #000000, 1px -1px 0 #000000, -1px 1px 0 #000000,

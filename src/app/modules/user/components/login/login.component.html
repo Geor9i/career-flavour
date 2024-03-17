@@ -2,11 +2,15 @@
   <form #loginForm="ngForm" (ngSubmit)="submitHandler(loginForm)">
     <div class="inputbox">
       <label for="email">Email</label>
-      <input type="text" id="email" name="email" placeholder="user@email.com" ngModel />
+      <div [class.error-border]="email.touched && email.invalid" >
+        <input appString appEmail type="text" id="email" name="email" placeholder="user@email.com" #email="ngModel" [class.pass]="email.touched && email.valid && email.value" ngModel />
+      </div>
     </div>
     <div class="inputbox">
       <label for="password">Password</label>
-      <input type="password" id="password" name="password" placeholder="*******" ngModel />
+      <div [class.error-border]="password.touched && password.invalid" >
+        <input appString type="password" id="password" name="password" placeholder="*******" #password="ngModel" minlength="6" [class.pass]="password.touched && password.valid && password.value" ngModel />
+      </div>
     </div>
     <input type="submit" value="Login">
   </form>

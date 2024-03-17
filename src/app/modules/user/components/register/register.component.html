@@ -2,23 +2,33 @@
   <form #registerForm="ngForm" (ngSubmit)="submitHandler(registerForm)">
     <div class="inputbox">
       <label for="firstName">First Name</label>
-      <input type="text" id="firstName" name="firstName" placeholder="John" ngModel/>
+      <div [class.error-border]="firstName.touched && firstName.invalid" >
+        <input appErrorBorder  #firstName="ngModel" [class.pass]="firstName.touched && firstName.valid && firstName.value" appString type="text" id="firstName" name="firstName" placeholder="John" ngModel minlength="2"/>
+      </div>
     </div>
     <div class="inputbox">
       <label for="lastName">Last Name</label>
-      <input type="text" id="lastName" name="lastName" placeholder="Smith" ngModel/>
+      <div [class.error-border]="lastName.touched && lastName.invalid">
+        <input appString #lastName="ngModel" [class.pass]="lastName.touched && lastName.valid && lastName.value" type="text" id="lastName" name="lastName" placeholder="Smith" ngModel minlength="2"/>
+      </div>
     </div>
     <div class="inputbox">
       <label for="email">Email</label>
-      <input type="text" id="email" name="email" placeholder="user@email.com" ngModel/>
+      <div [class.error-border]="email.touched && email.invalid">
+        <input appEmail appString #email="ngModel" [class.pass]="email.touched && email.valid && email.value" type="text" id="email" name="email" placeholder="user@email.com" ngModel/>
+      </div>
     </div>
     <div class="inputbox">
       <label for="password">Password</label>
-      <input type="password" id="password" name="password" placeholder="*******" ngModel/>
+      <div [class.error-border]="password.touched && password.invalid">
+        <input appString #password="ngModel" [class.pass]="password.touched && password.valid && password.value" type="password" id="password" name="password" placeholder="*******" ngModel minlength="6"/>
+      </div>
     </div>
     <div class="inputbox">
       <label for="repeatPassword">Repeat password</label>
-      <input type="password" id="repeatPassword" name="repeatPassword" placeholder="*******" ngModel/>
+      <div [class.error-border]="repeatPassword.touched && password.touched && password.value !== repeatPassword.value">
+        <input appString #repeatPassword="ngModel" [class.pass]="repeatPassword.touched && repeatPassword.valid && repeatPassword.value" type="password" id="repeatPassword" name="repeatPassword" placeholder="*******" ngModel/>
+      </div>
     </div>
     <input type="submit" value="Register">
   </form>
