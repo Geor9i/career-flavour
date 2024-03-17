@@ -110,7 +110,5 @@ form input[type="submit"] {
   font-weight: bold;
   cursor: pointer;
 }
-.error input{
-  border: 3px solid #ff0000;
-}
+
 

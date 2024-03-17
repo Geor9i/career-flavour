@@ -4,18 +4,20 @@ import { EmailDirective } from './validators/email.directive';
 import { StringDirective } from './formaters/string.directive';
 import { StringUtil } from './string-util';
 import FormUtil from './form-util';
+import { RepeatPasswordDirective } from './validators/repeat-password.directive';
 
 
 
 @NgModule({
   declarations: [
     EmailDirective,
-    StringDirective
+    StringDirective,
+    RepeatPasswordDirective
   ],
   imports: [
     CommonModule
   ],
-  exports: [EmailDirective, StringDirective],
+  exports: [EmailDirective, StringDirective, RepeatPasswordDirective],
   providers:[StringUtil, FormUtil]
 })
 export class UtilsModule { }

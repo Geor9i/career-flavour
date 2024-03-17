@@ -2,32 +2,32 @@
   <form #registerForm="ngForm" (ngSubmit)="submitHandler(registerForm)">
     <div class="inputbox">
       <label for="firstName">First Name</label>
-      <div [class.error-border]="firstName.touched && firstName.invalid" >
-        <input appErrorBorder  #firstName="ngModel" [class.pass]="firstName.touched && firstName.valid && firstName.value" appString type="text" id="firstName" name="firstName" placeholder="John" ngModel minlength="2"/>
+      <div>
+        <input appGlowFields appString #firstName="ngModel" type="text" id="firstName" name="firstName" placeholder="John" ngModel minlength="2"/>
       </div>
     </div>
     <div class="inputbox">
       <label for="lastName">Last Name</label>
-      <div [class.error-border]="lastName.touched && lastName.invalid">
-        <input appString #lastName="ngModel" [class.pass]="lastName.touched && lastName.valid && lastName.value" type="text" id="lastName" name="lastName" placeholder="Smith" ngModel minlength="2"/>
+      <div>
+        <input appGlowFields appString #lastName="ngModel" type="text" id="lastName" name="lastName" placeholder="Smith" ngModel minlength="2"/>
       </div>
     </div>
     <div class="inputbox">
       <label for="email">Email</label>
-      <div [class.error-border]="email.touched && email.invalid">
-        <input appEmail appString #email="ngModel" [class.pass]="email.touched && email.valid && email.value" type="text" id="email" name="email" placeholder="user@email.com" ngModel/>
+      <div>
+        <input appGlowFields appEmail appString #email="ngModel" type="text" id="email" name="email" placeholder="user@email.com" ngModel/>
       </div>
     </div>
     <div class="inputbox">
       <label for="password">Password</label>
-      <div [class.error-border]="password.touched && password.invalid">
-        <input appString #password="ngModel" [class.pass]="password.touched && password.valid && password.value" type="password" id="password" name="password" placeholder="*******" ngModel minlength="6"/>
+      <div>
+        <input appGlowFields appPassword appString #password="ngModel" type="password" id="password" name="password" placeholder="*******" ngModel minlength="6"/>
       </div>
     </div>
     <div class="inputbox">
       <label for="repeatPassword">Repeat password</label>
-      <div [class.error-border]="repeatPassword.touched && password.touched && password.value !== repeatPassword.value">
-        <input appString #repeatPassword="ngModel" [class.pass]="repeatPassword.touched && repeatPassword.valid && repeatPassword.value" type="password" id="repeatPassword" name="repeatPassword" placeholder="*******" ngModel/>
+      <div>
+        <input appGlowFields appPassword appString #repeatPassword="ngModel" type="password" id="repeatPassword" name="repeatPassword" placeholder="*******" ngModel/>
       </div>
     </div>
     <input type="submit" value="Register">

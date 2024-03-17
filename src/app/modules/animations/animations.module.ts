@@ -1,15 +1,16 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ErrorBorderDirective } from './errors/error-border.directive';
+import { GlowFieldsDirective } from './glow-fields.directive';
 
 
 
 @NgModule({
   declarations: [
-    ErrorBorderDirective
+    GlowFieldsDirective
   ],
   imports: [
     CommonModule
-  ]
+  ],
+  exports:[GlowFieldsDirective]
 })
 export class AnimationsModule { }
