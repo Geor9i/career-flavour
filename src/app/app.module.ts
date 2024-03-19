@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { ErrorHandler, NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 
 import { AppRoutingModule } from './app-routing.module';
@@ -8,6 +8,7 @@ import { CoreModule } from './modules/core/core.module';
 import { UserModule } from './modules/user/user.module';
 import { ErrorsModule } from './modules/errors/errors.module';
 import { SharedModule } from './modules/shared/shared.module';
+import { GlobalErrorHandler } from './modules/errors/error.service';
 
 @NgModule({
   declarations: [AppComponent, TestReadComponent],
@@ -19,7 +20,7 @@ import { SharedModule } from './modules/shared/shared.module';
     SharedModule,
     AppRoutingModule,
   ],
-  providers: [],
+  providers: [{ provide: ErrorHandler, useClass: GlobalErrorHandler }],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

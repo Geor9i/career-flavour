@@ -27,7 +27,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
   constructor(private fireservice: FireService, private router: Router) {}
 
 
-  openModal(modalTemplate: TemplateRef<any>) {
+  openModal(modalTemplate: TemplateRef<unknown>) {
     this.modalService.open(modalTemplate, {size: 'lg', title: 'Foo'}).subscribe(action => {
       console.log('modalAction: ', action);
 

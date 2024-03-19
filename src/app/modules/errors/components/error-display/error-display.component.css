@@ -1,0 +1,37 @@
+:host {
+  position: absolute;
+  inset: 0;
+  z-index: 2000;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+}
+
+.container  {
+  position: relative;
+  border-radius: 13px;
+  width: 30%;
+  min-height: 30%;
+  background-color: rgb(255, 255, 255);
+  box-shadow: 5px 5px 10px;
+  z-index: 2002;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.container p {
+  font-size: 24px;
+  font-weight: bold;
+  color: red;
+}
+
+.backdrop {
+  position: absolute;
+  inset: 0;
+  z-index: 2001;
+  backdrop-filter: blur(10px);
+}

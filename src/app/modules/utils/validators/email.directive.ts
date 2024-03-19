@@ -21,9 +21,9 @@ export class EmailDirective implements Validator {
   private formUtil = inject(FormUtil);
   constructor() {}
 
-  validate(control: AbstractControl<any, any>): ValidationErrors | null {
+  validate(control: AbstractControl<unknown, unknown>): ValidationErrors | null {
     try {
-      this.formUtil.formValidator({ email: control.value });
+      this.formUtil.formValidator({ email: control.value as string });
     } catch (error) {
       return { appEmail: true };
     }

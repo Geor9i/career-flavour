@@ -15,8 +15,8 @@ import { StringUtil } from '../string-util';
 export class StringDirective implements Validator{
   constructor(private stringUtil: StringUtil, private elRef: ElementRef, private renderer: Renderer2) {}
 
-  validate(control: AbstractControl<any, any>): ValidationErrors | null {
-    let value = control.value;
+  validate(control: AbstractControl<unknown, unknown>): ValidationErrors | null {
+    let value = control.value as string;
     if (value !== null) {
         value = this.stringUtil.filterString(value, [{symbol: `\\s`, remove: true}]);
     }
