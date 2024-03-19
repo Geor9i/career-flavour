@@ -11,18 +11,16 @@ import { FireService } from 'src/app/modules/fire/fire-service';
 export class LoginComponent {
   private fireService = inject(FireService);
   private router = inject(Router);
-  errorMessage: string | null = null;
 
   submitHandler(form: NgForm) {
     const { email, password } = form.value;
     this.fireService.login({ email, password }).subscribe({
       next: (data) => {
         console.log(data);
-
         this.router.navigateByUrl('/');
       },
       error: (err) => {
-        this.errorMessage = err.code;
+        throw new Error(err)
       },
     });
   }

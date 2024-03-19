@@ -25,7 +25,7 @@ export class RegisterComponent {
           this.router.navigateByUrl('/');
         },
         error: (err) => {
-          this.errorMessage = err.code;
+          throw new Error(err)
         },
       });
 

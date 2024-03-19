@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, OnDestroy, ChangeDetectorRef, ChangeDetectionStrategy } from '@angular/core';
 import { ErrorMessageService } from '../../error-message.service';
 import { Subscription, timer } from 'rxjs';
 
@@ -6,6 +6,7 @@ import { Subscription, timer } from 'rxjs';
   selector: 'app-error-display',
   templateUrl: './error-display.component.html',
   styleUrls: ['./error-display.component.css'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ErrorDisplayComponent implements OnInit, OnDestroy {
   public errors: Error[] = [];
@@ -23,7 +24,7 @@ export class ErrorDisplayComponent implements OnInit, OnDestroy {
       });
     });
   }
-
+  
   private removeError(error: Error): void {
     const index = this.errors.indexOf(error);
     if (index !== -1) {

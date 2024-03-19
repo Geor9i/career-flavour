@@ -9,6 +9,8 @@ import { UserModule } from './modules/user/user.module';
 import { ErrorsModule } from './modules/errors/errors.module';
 import { SharedModule } from './modules/shared/shared.module';
 import { GlobalErrorHandler } from './modules/errors/global-error-handler.service';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations'; // Import BrowserAnimationsModule
+
 
 @NgModule({
   declarations: [AppComponent, TestReadComponent],
@@ -18,6 +20,7 @@ import { GlobalErrorHandler } from './modules/errors/global-error-handler.servic
     UserModule,
     ErrorsModule,
     SharedModule,
+    BrowserAnimationsModule,
     AppRoutingModule,
   ],
   providers: [{ provide: ErrorHandler, useClass: GlobalErrorHandler }],

@@ -45,22 +45,39 @@ export class ProfileComponent implements OnInit, OnDestroy {
   }
 
   accountSubmitHandler(form: NgForm) {
-    this.fireservice.updateDisplayName(form.value).subscribe(() => {
-      this.router.navigateByUrl('/');
+    this.fireservice.updateDisplayName(form.value).subscribe({
+      next: () => {
+        this.router.navigateByUrl('/');
+      },
+      error: (err) => {
+        throw new Error(err)
+      },
     });
   }
 
   passwordUpdateSubmitHandler(form: NgForm) {
     const { password, repeatPassword } = form.value;
     if (password === repeatPassword) {
-      this.fireservice.changePassword(password).subscribe(() => {
-        this.router.navigateByUrl('/');
+      this.fireservice.changePassword(password).subscribe({
+        next: () => {
+          this.router.navigateByUrl('/');
+        },
+        error: (err) => {
+          throw new Error(err)
+        },
       });
     }
   }
 
   emailUpdateSubmitHandler(form: NgForm) {
     const { email } = form.value;
-    this.fireservice.changeEmail(email).subscribe(() => this.router.navigateByUrl('/'));
+    this.fireservice.changeEmail(email).subscribe({
+      next: () => {
+        this.router.navigateByUrl('/');
+      },
+      error: (err) => {
+        throw new Error(err)
+      },
+    });
   }
 }
