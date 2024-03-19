@@ -1,4 +1,4 @@
-import { Injectable, inject } from '@angular/core';
+import { Injectable, OnInit, inject } from '@angular/core';
 import { Firestore, collection, collectionData } from '@angular/fire/firestore';
 import {
   Auth,
@@ -22,9 +22,9 @@ import { Conditional } from './types/interfaces';
   providedIn: 'root',
 })
 export class FireService {
-  // constructor(private firestore: Firestore, private auth: Auth) {}
   private firestore = inject(Firestore);
   private fireAuth = inject(Auth);
+  constructor() {}
 
   get auth() {
     return this.fireAuth;

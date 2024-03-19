@@ -1,5 +1,5 @@
 import { CanActivateFn } from '@angular/router';
-import { FireService } from '../services/fire/fire-service';
+import { FireService } from '../modules/fire/fire-service';
 import { inject } from '@angular/core';
 
 export const guestGuard: CanActivateFn = (route, state) => {

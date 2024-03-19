@@ -1,8 +1,7 @@
-import { NgClass } from '@angular/common';
 import { Component, inject } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { Router } from '@angular/router';
-import { FireService } from 'src/app/services/fire/fire-service';
+import { FireService } from 'src/app/modules/fire/fire-service';
 
 @Component({
   selector: 'app-login',

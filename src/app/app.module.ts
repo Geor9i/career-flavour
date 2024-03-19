@@ -8,7 +8,7 @@ import { CoreModule } from './modules/core/core.module';
 import { UserModule } from './modules/user/user.module';
 import { ErrorsModule } from './modules/errors/errors.module';
 import { SharedModule } from './modules/shared/shared.module';
-import { GlobalErrorHandler } from './modules/errors/error.service';
+import { GlobalErrorHandler } from './modules/errors/global-error-handler.service';
 
 @NgModule({
   declarations: [AppComponent, TestReadComponent],

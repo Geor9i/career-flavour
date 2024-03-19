@@ -1,6 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
-import { FireService } from 'src/app/services/fire/fire-service';
+import { FireService } from 'src/app/modules/fire/fire-service';
 
 @Component({
   selector: 'app-navigation',
