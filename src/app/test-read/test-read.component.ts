@@ -1,6 +1,6 @@
 import { Component, inject } from '@angular/core';
 import { Firestore, collection, getDoc, addDoc } from '@angular/fire/firestore';
-import { FireService } from '../services/fire/fire-service';
+import { FireService } from '../modules/fire/fire-service';
 @Component({
   selector: 'app-test-read',
   templateUrl: './test-read.component.html',

@@ -1,5 +1,8 @@
-<!-- <div *ngIf="isActive" class="container"> -->
-  <!-- <p *ngFor="let error of errors"></p> -->
-  <!-- <p>Hello</p> -->
-<!-- </div> -->
-<!-- <div *ngIf="isActive" class="backdrop"></div> -->
+<div *ngIf="errors.length" class="container">
+  <div class="error-container">
+    <div *ngFor="let error of errors">
+      <p>{{ error.message }}</p>
+    </div>
+  </div>
+  <div class="backdrop"></div>
+</div>
