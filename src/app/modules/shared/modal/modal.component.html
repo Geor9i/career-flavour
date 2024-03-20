@@ -1,4 +1,14 @@
 <div class="container">
-  <ng-content></ng-content>
+  <div class="modal-header">
+    <p>{{ title }}</p>
+    <span (click)="close()"><i class="fa-solid fa-xmark"></i></span>
+  </div>
+  <div class="modal content">
+    <ng-content></ng-content>
+  </div>
+  <div class="modal-footer">
+    <a *ngFor="let button of buttons" (click)="getAction(button.action)">{{ button.name }}</a>
+    <!-- <a (click)="submit()">Submit</a> -->
+  </div>
 </div>
-<div (click)="close()"  class="backdrop"></div>
+<div (click)="close()" class="backdrop"></div>

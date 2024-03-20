@@ -1,8 +1,15 @@
-import { Component, OnDestroy, OnInit, TemplateRef, inject } from '@angular/core';
+import { ModalService } from 'src/app/modules/shared/modal/modal.service';
+import {
+  Component,
+  OnDestroy,
+  OnInit,
+  TemplateRef,
+  inject,
+} from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { Router } from '@angular/router';
-import { ModalService } from 'src/app/modules/shared/modal/modal.service';
 import { FireService } from 'src/app/modules/fire/fire-service';
+import { Button } from 'src/app/modules/shared/modal/types';
 
 @Component({
   selector: 'app-profile',
@@ -13,7 +20,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
   firstName: string = '';
   lastName: string = '';
   email: string | null | undefined = '';
-  modalQuestion = 'Are you sure?'
+  modalQuestion = 'Are you sure?';
   public formData = {
     firstName: '',
     lastName: '',
@@ -22,27 +29,25 @@ export class ProfileComponent implements OnInit, OnDestroy {
     repeatPassword: '',
   };
 
-  private modalService = inject(ModalService);
+  // private modalService = inject(ModalService);
   selectedOption: string = '';
-  constructor(private fireservice: FireService, private router: Router) {}
+  constructor(private fireservice: FireService, private router: Router, private modalService: ModalService) {}
 
+  openModal(modalTemplate: TemplateRef<unknown | any>) {
 
-  openModal(modalTemplate: TemplateRef<unknown>) {
-    this.modalService.open(modalTemplate, {size: 'lg', title: 'Foo'}).subscribe(action => {
-      console.log('modalAction: ', action);
-
-    })
+    const buttons: Button[] = [{name: 'Submit', action: 'submit'}, {name: 'Cancel', action: 'cancel'}];
+    this.modalService.open(modalTemplate, { size: 'lg', title: 'Foo', buttons })
+      .subscribe((action) => {
+        console.log('modalAction: ', action);
+      });
   }
-
 
   ngOnInit(): void {
     const displayName = this.fireservice.auth.currentUser?.displayName || '';
     [this.firstName, this.lastName] = displayName.split(' ');
     this.email = this.fireservice.auth.currentUser?.email;
   }
-  ngOnDestroy(): void {
-
-  }
+  ngOnDestroy(): void {}
 
   accountSubmitHandler(form: NgForm) {
     this.fireservice.updateDisplayName(form.value).subscribe({
@@ -50,7 +55,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
         this.router.navigateByUrl('/');
       },
       error: (err) => {
-        throw new Error(err)
+        throw new Error(err);
       },
     });
   }
@@ -63,7 +68,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
           this.router.navigateByUrl('/');
         },
         error: (err) => {
-          throw new Error(err)
+          throw new Error(err);
         },
       });
     }
@@ -76,7 +81,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
         this.router.navigateByUrl('/');
       },
       error: (err) => {
-        throw new Error(err)
+        throw new Error(err);
       },
     });
   }
