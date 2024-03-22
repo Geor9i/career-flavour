@@ -2,22 +2,16 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { EmailDirective } from './validators/email.directive';
 import { StringDirective } from './formaters/string.directive';
-import { StringUtil } from './string-util';
-import FormUtil from './form-util';
 import { RepeatPasswordDirective } from './validators/repeat-password.directive';
-
-
+import StringUtil from './string-util';
+import ObjectUtil from './object.util';
+import ResumeBuilderUtil from './resume-util';
+import FormUtil from './form-util';
 
 @NgModule({
-  declarations: [
-    EmailDirective,
-    StringDirective,
-    RepeatPasswordDirective
-  ],
-  imports: [
-    CommonModule
-  ],
+  declarations: [EmailDirective, StringDirective, RepeatPasswordDirective],
+  imports: [CommonModule],
   exports: [EmailDirective, StringDirective, RepeatPasswordDirective],
-  providers:[StringUtil, FormUtil]
+  providers: [StringUtil, ObjectUtil, ResumeBuilderUtil, FormUtil]
 })
-export class UtilsModule { }
+export class UtilsModule {}

@@ -2,6 +2,9 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ModalComponent } from './modal/modal.component';
 import { ModalService } from './modal/modal.service';
+import { UtilsModule } from '../utils/utils.module';
+import { FormsModule } from '@angular/forms';
+import { AnimationsModule } from '../animations/animations.module';
 
 
 
@@ -11,7 +14,10 @@ import { ModalService } from './modal/modal.service';
   ],
   providers: [ModalService],
   imports: [
-    CommonModule
+    CommonModule,
+    UtilsModule,
+    AnimationsModule,
+    FormsModule,
   ],
   exports: [ModalComponent]
 })

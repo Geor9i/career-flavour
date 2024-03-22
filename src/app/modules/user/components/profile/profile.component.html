@@ -1,10 +1,22 @@
 <div class="page-container">
   <p class="username">{{ firstName }} {{ lastName }}</p>
 
-  <button (click)="openModal(modalTemplate)">Modal Here</button>
 
-  <ng-template #modalTemplate>
-    <div>This is a test Modal</div>
+  <ng-template #authModal>
+    <form #authForm="ngForm" >
+      <div class="inputbox">
+        <label for="email">Email</label>
+        <div>
+          <input appGlowFields appString appEmail type="text" id="email" name="email" placeholder="user@email.com" #email="ngModel"ngModel />
+        </div>
+      </div>
+      <div class="inputbox">
+        <label for="password">Password</label>
+        <div>
+          <input appString type="password" id="password" name="password" placeholder="*******" #password="ngModel" minlength="6" ngModel />
+        </div>
+      </div>
+    </form>
   </ng-template>
 
   <main>
@@ -58,6 +70,9 @@
           type="submit"
           value="Update Details"
         />
+        <ng-template #detailsModal>
+          <p class="modal-text">Are you sure you want to change your Name</p>
+        </ng-template>
       </form>
     </section>
 

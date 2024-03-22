@@ -1,6 +1,6 @@
 import { RegexSymbol } from "./types/stringUtilInterface";
 
-export class StringUtil {
+export default class StringUtil {
   toUpperCase(string: string) {
     if (typeof string === "string") {
       return string.toUpperCase();

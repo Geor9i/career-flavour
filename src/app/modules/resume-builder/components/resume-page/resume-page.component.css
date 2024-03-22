@@ -1,0 +1,24 @@
+aside{
+  padding: 4em;
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100px;
+  height: 50px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 1em;
+}
+
+aside a, aside p {
+  font-size: 20px;
+  font-weight: bold;
+  cursor: pointer;
+  padding: 0.5em;
+}
+
+aside a:hover, aside p:hover {
+  background-color: rgb(11, 255, 23);
+}

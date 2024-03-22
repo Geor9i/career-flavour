@@ -14,12 +14,12 @@ import { Button } from './types';
   providedIn: 'root',
 })
 export class ModalService {
-  private modalNotifier?: Subject<string>;
+  private modalNotifier?: Subject<any>;
 
   constructor(@Inject(DOCUMENT) private document: Document, private environmentInjector: EnvironmentInjector
     ) {}
 
-  open(content: TemplateRef<unknown>, options?: { size?: string; title?: string, buttons?: Button[] }
+  open(content: TemplateRef<unknown>, options?: { size?: string; title?: string, buttons?: Button[]}
   ) {
 
     const conetentViewRef = content.createEmbeddedView(null);
@@ -27,8 +27,8 @@ export class ModalService {
     const modalComponentRef = createComponent(ModalComponent, {environmentInjector: this.environmentInjector, projectableNodes: [contentNodes]});
 
     modalComponentRef.instance.buttons = options?.buttons;
-    modalComponentRef.instance.size = options?.size || 'medium';
-    modalComponentRef.instance.title = options?.title || 'Modal';
+    modalComponentRef.instance.size = options?.size;
+    modalComponentRef.instance.title = options?.title;
     modalComponentRef.instance.closeEvent.subscribe(() => {
       this.closeModal();
     })
@@ -43,11 +43,11 @@ export class ModalService {
     return this.modalNotifier?.asObservable();
   }
 
-  closeModal() {
+ private closeModal() {
     this.modalNotifier?.complete();
   }
 
-  submitModal() {
+  private submitModal() {
     this.modalNotifier?.next('confirm');
     this.closeModal();
 
