@@ -4,40 +4,32 @@ import {
   Input,
   Output,
   ElementRef,
-  ViewChild,
-  AfterViewInit,
   ChangeDetectorRef,
-  QueryList,
-  ViewChildren,
-  AfterContentInit,
 } from '@angular/core';
-import { NgForm } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-modal',
   templateUrl: './modal.component.html',
   styleUrls: ['./modal.component.css'],
 })
-export class ModalComponent implements AfterContentInit{
+export class ModalComponent {
   @Input() size? = '';
   @Input() title? = '';
+  @Input() type? = 'default';
   @Input() buttons? = [{ name: 'Submit', action: 'submit' }];
   @Output() closeEvent = new EventEmitter();
   @Output() submitEvent = new EventEmitter();
-
-  @ViewChildren(NgForm) dynamicForms!: QueryList<NgForm>;
-
-  constructor(private ElementRef: ElementRef, private cdr: ChangeDetectorRef) {}
-
-  ngAfterContentInit(): void {
-    setTimeout(() => {
-      this.cdr.detectChanges();
-      console.log(this.dynamicForms)
-    }, 1000);
-  }
-
+  constructor(
+    private ElementRef: ElementRef,
+    private cdr: ChangeDetectorRef,
+    private fb: FormBuilder
+  ) {}
   getAction(action: string) {
-    const actions:{[key: string]: () => void} = { submit: this.submit.bind(this), cancel: this.close.bind(this) };
+    const actions: { [key: string]: () => void } = {
+      submit: this.submit.bind(this),
+      cancel: this.close.bind(this),
+    };
     return actions[action]();
   }
 

@@ -16,19 +16,19 @@ import { Button } from './types';
 export class ModalService {
   private modalNotifier?: Subject<any>;
 
-  constructor(@Inject(DOCUMENT) private document: Document, private environmentInjector: EnvironmentInjector
-    ) {}
+  constructor(@Inject(DOCUMENT) private document: Document, private environmentInjector: EnvironmentInjector) {}
 
-  open(content: TemplateRef<unknown>, options?: { size?: string; title?: string, buttons?: Button[]}
+  open(content: TemplateRef<unknown>, options?: { size?: string; title?: string, buttons?: Button[], type?: string}
   ) {
 
-    const conetentViewRef = content.createEmbeddedView(null);
-    const contentNodes = conetentViewRef.rootNodes;
+    const contentViewRef = content.createEmbeddedView(null);
+    const contentNodes = contentViewRef.rootNodes;
     const modalComponentRef = createComponent(ModalComponent, {environmentInjector: this.environmentInjector, projectableNodes: [contentNodes]});
 
     modalComponentRef.instance.buttons = options?.buttons;
     modalComponentRef.instance.size = options?.size;
     modalComponentRef.instance.title = options?.title;
+    modalComponentRef.instance.type = options?.type;
     modalComponentRef.instance.closeEvent.subscribe(() => {
       this.closeModal();
     })

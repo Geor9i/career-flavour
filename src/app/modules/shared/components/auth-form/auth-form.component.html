@@ -1,0 +1,18 @@
+ <div class="container">
+  <form #loginForm="ngForm" (ngSubmit)="submitHandler(loginForm)">
+    <div class="inputbox">
+      <label for="email">Email</label>
+      <div>
+        <input appGlowFields appString appEmail type="text" id="email" name="email" placeholder="user@email.com" #email="ngModel"ngModel />
+      </div>
+    </div>
+    <div class="inputbox">
+      <label for="password">Password</label>
+      <div>
+        <input appString type="password" id="password" name="password" placeholder="*******" #password="ngModel" minlength="6" ngModel />
+      </div>
+    </div>
+    <input type="submit" value="Login">
+  </form>
+
+ </div>

@@ -1,0 +1,5 @@
+<div  [class.inactive]="!isActive" (click)="close()" class="backdrop"></div>
+<div  [class.inactive]="!isActive" class="container">
+  <ng-container *ngComponentOutlet="template"></ng-container>
+</div>
+

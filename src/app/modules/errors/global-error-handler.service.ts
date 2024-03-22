@@ -10,6 +10,8 @@ export class GlobalErrorHandler implements ErrorHandler {
   constructor(private errorMessageService: ErrorMessageService) {}
 
   handleError(error: Error): void {
+    console.log('Global Error: ', error);
+
     this.errorMessageService.setMessage(error);
   }
 }
