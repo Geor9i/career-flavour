@@ -1,27 +1,69 @@
 # CareerFlavour
 
+## This is project is Hosted on [Firebase ](https://career-flavour.web.app)
+
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 16.2.12.
 
 ## Development server
 
 Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
 
-## Code scaffolding
-
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
-
 ## Build
 
 Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
 
-## Running unit tests
+The project is an Angular application that will allow the user to build a resume.
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+## Getting Started
 
-## Running end-to-end tests
+### Prerequisites
 
-Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To use this command, you need to first add a package that implements end-to-end testing capabilities.
+Before running the application, ensure you have the following installed:
 
-## Further help
+- Node.js and npm
+- Angular CLI
 
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
+### Development Server
+
+To start the development server, follow these steps:
+
+1. Clone the repository to your local machine:
+
+   ```bash
+   git clone <repository-url>
+   ```
+
+2. Navigate to the project directory:
+
+   ```bash
+   cd career-flavour
+   ```
+
+3. Install dependencies:
+
+   ```bash
+   npm install
+   ```
+
+4. Run the development server:
+
+   ```bash
+   ng serve
+   ```
+
+5. Open your browser and navigate to [http://localhost:4200/](http://localhost:4200/). The application will automatically reload if you make any changes to the source files.
+
+### Build
+
+To build the project for production, run:
+
+```bash
+ng build
+```
+
+The build artifacts will be stored in the `dist/` directory.
+
+## Acknowledgements
+
+- This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 16.2.12.
+- Special thanks to the Angular community for their contributions and support.
