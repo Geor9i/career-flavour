@@ -130,6 +130,18 @@ form input[type="submit"] {
   color: white;
 }
 
+.delete-modal {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.delete-modal p {
+  font-size: 1.2em;
+}
+
+
 .modal-text {
   font-size: 22px;
   font-weight: bold;

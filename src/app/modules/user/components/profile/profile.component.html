@@ -161,8 +161,10 @@
   <a (click)="deleteAccountHandler()">Delete Account</a>
 
   <ng-template #deleteAccountModal>
-    <p>Are you sure?</p>
-    <p>This action cannot be reverted</p>
+    <div class="delete-modal">
+      <p>Are you sure?</p>
+      <p>This action cannot be reverted</p>
+    </div>
   </ng-template>
 
   </section>
