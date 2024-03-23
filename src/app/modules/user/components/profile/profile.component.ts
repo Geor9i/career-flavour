@@ -70,8 +70,11 @@ export class ProfileComponent implements OnInit, OnDestroy {
   }
 
   passwordUpdateSubmitHandler(form: NgForm) {
-    // this.templateModalSubscription =
-    this.templateModalService.open(AuthFormComponent)
+
+    this.templateModalSubscription = this.templateModalService.open(AuthFormComponent).subscribe(data => {
+      console.log(data);
+
+    })
 
     // const { password, repeatPassword } = form.value;
     // if (password === repeatPassword) {

@@ -1,4 +1,4 @@
-import { Component, ViewContainerRef } from '@angular/core';
+import { Component } from '@angular/core';
 
 @Component({
   selector: 'app-root',
@@ -7,5 +7,5 @@ import { Component, ViewContainerRef } from '@angular/core';
 })
 export class AppComponent {
   title = 'career-flavour';
-  constructor(public viewContainerRef: ViewContainerRef){}
+  constructor(){}
 }

@@ -5,12 +5,14 @@ import {
   UserCredential,
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
+  reauthenticateWithCredential,
   updateProfile,
   signOut,
   onAuthStateChanged,
   User,
   updatePassword,
   updateEmail,
+  EmailAuthProvider,
 } from '@angular/fire/auth';
 import { Observable, from } from 'rxjs';
 import {
@@ -58,6 +60,22 @@ export class FireService {
     const { email, password } = userData;
     const promise = signInWithEmailAndPassword(this.fireAuth, email, password);
     return from(promise);
+  }
+
+  reAuth(userData: UserInterface) {
+    return new Observable((observer) => {
+      if (this.fireAuth.currentUser) {
+        const credential = EmailAuthProvider.credential(userData.email, userData.password);
+        reauthenticateWithCredential(this.fireAuth.currentUser, credential)
+        .then(() => {
+          observer.next();
+          observer.complete();
+        })
+        .catch((err: Error) => {
+          observer.error(err);
+        });
+      }
+    })
   }
 
   logout() {
