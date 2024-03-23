@@ -13,6 +13,7 @@ import { Button } from 'src/app/modules/shared/modal/types';
 import { Subscription } from 'rxjs';
 import { TemplateModalService } from 'src/app/modules/shared/templateModal/templateModal.service';
 import { AuthFormComponent } from 'src/app/modules/shared/components/auth-form/auth-form.component';
+import { BusData } from 'src/app/modules/event-bus/types';
 
 @Component({
   selector: 'app-profile',
@@ -70,40 +71,43 @@ export class ProfileComponent implements OnInit, OnDestroy {
   }
 
   passwordUpdateSubmitHandler(form: NgForm) {
+    this.templateModalSubscription = this.templateModalService
+      .open(AuthFormComponent)
+      .subscribe((observer) => {
+        if (observer.data && observer.data['confirm']) {
+          const { password, repeatPassword } = form.value;
+          if (password === repeatPassword) {
+            this.fireservice.changePassword(password).subscribe({
+              next: () => {
+                this.router.navigateByUrl('/');
+              },
+              error: (err) => {
+                throw new Error(err);
+              },
+            });
+          }
+        }
 
-    this.templateModalSubscription = this.templateModalService.open(AuthFormComponent).subscribe(data => {
-      console.log(data);
-
-    })
-
-    // const { password, repeatPassword } = form.value;
-    // if (password === repeatPassword) {
-    //   this.fireservice.changePassword(password).subscribe({
-    //     next: () => {
-    //       this.router.navigateByUrl('/');
-    //     },
-    //     error: (err) => {
-    //       throw new Error(err);
-    //     },
-    //   });
-    // }
+        this.templateModalSubscription?.unsubscribe();
+      });
   }
 
   emailUpdateSubmitHandler(form: NgForm) {
-    // this.modalSubscription = this.modalService
-    //   .open(this.authModal, { buttons: this.authButton })
-    //   .subscribe((action) => {
-    //     if (action === 'confirm') {
-    //       const { email } = form.value;
-    //       this.fireservice.changeEmail(email).subscribe({
-    //         next: () => {
-    //           this.router.navigateByUrl('/');
-    //         },
-    //         error: (err) => {
-    //           throw new Error(err);
-    //         },
-    //       });
-    //     }
-    //   });
+    this.templateModalSubscription = this.templateModalService
+      .open(AuthFormComponent)
+      .subscribe((observer) => {
+        if (observer.data && observer.data['confirm']) {
+          const { email } = form.value;
+          this.fireservice.changeEmail(email).subscribe({
+            next: () => {
+              this.router.navigateByUrl('/');
+            },
+            error: (err) => {
+              throw new Error(err);
+            },
+          });
+        }
+        this.templateModalSubscription?.unsubscribe();
+      });
   }
 }

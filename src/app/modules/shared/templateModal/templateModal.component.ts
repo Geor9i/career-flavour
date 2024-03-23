@@ -1,8 +1,15 @@
-import { Component, ChangeDetectorRef, OnInit, OnDestroy, Type } from '@angular/core';
+import {
+  Component,
+  ChangeDetectorRef,
+  OnInit,
+  OnDestroy,
+  Type,
+  ViewContainerRef,
+  inject,
+} from '@angular/core';
 import { TemplateModalService } from './templateModal.service';
 import { EventBusService } from '../../event-bus/event-bus.service';
 import { Subscription } from 'rxjs';
-import { TMCO } from '../types';
 
 @Component({
   selector: 'app-template-modal',
@@ -15,6 +22,7 @@ export class TemplateModalComponent implements OnInit, OnDestroy {
     private cdr: ChangeDetectorRef,
     private eventBus: EventBusService
   ) {}
+  private vcr = inject(ViewContainerRef);
   private templateModalServiceSubscription: Subscription | undefined;
   private eventBusSubscription: Subscription | undefined;
   template: any;
@@ -22,8 +30,9 @@ export class TemplateModalComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.templateModalServiceSubscription =
-      this.templateModalService.modalMessenger$?.subscribe((component) => {
+      this.templateModalService.modalCompMessenger$?.subscribe((component) => {
         if (component instanceof Type) {
+          this.template = null;
           this.template = component;
           this.isActive = true;
         }
@@ -31,8 +40,11 @@ export class TemplateModalComponent implements OnInit, OnDestroy {
     this.eventBusSubscription = this.eventBus
       .on('TemplateModalContentOutput')
       .subscribe((observer) => {
-        if (observer.data && observer.data.hasOwnProperty('confirm')) {
-          (observer.data as TMCO).confirm ? this.submit() : this.close();
+
+        if (!observer) return
+
+        if (observer && observer.hasOwnProperty('data') && observer.data?.hasOwnProperty('confirm')) {
+          observer.data['confirm'] ? this.submit() : this.close();
         }
       });
   }

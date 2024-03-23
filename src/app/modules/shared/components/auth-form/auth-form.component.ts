@@ -1,8 +1,6 @@
 import { EventBusService } from './../../../event-bus/event-bus.service';
-import { Component, OnInit, inject } from '@angular/core';
+import { Component,  inject } from '@angular/core';
 import { NgForm } from '@angular/forms';
-import { Router } from '@angular/router';
-import { Subscription } from 'rxjs';
 import { FireService } from 'src/app/modules/fire/fire-service';
 
 @Component({
@@ -12,10 +10,11 @@ import { FireService } from 'src/app/modules/fire/fire-service';
 })
 export class AuthFormComponent {
   private fireService = inject(FireService);
-  private router = inject(Router);
   constructor(private eventBus: EventBusService) {}
   submitHandler(form: NgForm) {
+
     const { email, password } = form.value;
+    form.reset();
     this.fireService.reAuth({ email, password }).subscribe({
       next: () => {
         this.eventBus.emit({

@@ -1,24 +1,20 @@
 import { Injectable } from '@angular/core';
 import { Observable, Subject } from 'rxjs';
 import { filter } from 'rxjs/operators';
-
-interface Event {
-  event: string;
-  data?: unknown;
-}
+import { BusData } from './types';
 
 @Injectable({
   providedIn: 'root',
 })
 export class EventBusService {
-  private transmitter$$ = new Subject<Event>()
+  private transmitter$$ = new Subject<BusData>()
   constructor() {}
 
-  emit(event: Event) {
+  emit(event: BusData) {
     this.transmitter$$.next(event);
   }
 
-  on(eventType: string): Observable<Event> {
+  on(eventType: string): Observable<BusData> {
     return this.transmitter$$
       .asObservable()
       .pipe(filter((data) => data.event === eventType));
