@@ -20,7 +20,6 @@
 
 main {
   width: 100%;
-  padding: 6em;
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
@@ -36,11 +35,8 @@ main section {
   flex-direction: column;
   align-items: center;
   background: linear-gradient(to right, rgb(85, 85, 85), rgb(102, 102, 102));
-  box-shadow:
-  3px 3px 8px black,
-  -20px 10px 0 0 black inset,
-  -1000px 10px 0 0 linear-gradient(to right, black, blue) inset;
-
+  box-shadow: 3px 3px 8px black, -20px 10px 0 0 black inset,
+    -1000px 10px 0 0 linear-gradient(to right, black, blue) inset;
 }
 
 main section .container {
@@ -51,18 +47,17 @@ main section .container {
   align-items: center;
 }
 
-main section .container p:first-child{
+main section .container p:first-child {
   font-size: 18px;
   font-weight: bold;
   color: #8cffb4;
 }
 
-main section .container p:last-child{
+main section .container p:last-child {
   font-size: 22px;
   font-weight: bold;
   color: #00ffc4;
   text-shadow: var(--text-outline);
-
 }
 
 .title {
@@ -108,7 +103,31 @@ form input[type="submit"] {
   padding: 0.5em 1em;
   border-radius: 7px;
   font-weight: bold;
-  cursor: pointer;
+}
+
+.delete-account {
+  padding: 8em;
+  width: 80%;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2em;
+}
+.delete-account a {
+  border-radius: 13px;
+  padding: 0.5em 1em;
+  font-size: 1em;
+  font-weight: bold;
+  color: white;
+  border: 3px solid black;
+  background: linear-gradient(to top, orange, red, orange);
+  transition: background 0.5s ease-in;
+}
+
+.delete-account a:hover {
+  background: black;
+  color: white;
 }
 
 .modal-text {
@@ -116,4 +135,3 @@ form input[type="submit"] {
   font-weight: bold;
   color: red;
 }
-

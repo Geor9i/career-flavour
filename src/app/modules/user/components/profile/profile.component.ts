@@ -22,6 +22,7 @@ import { BusData } from 'src/app/modules/event-bus/types';
 })
 export class ProfileComponent implements OnInit, OnDestroy {
   @ViewChild('detailsModal') detailsModal!: TemplateRef<any>;
+  @ViewChild('deleteAccountModal') deleteAccountModal!: TemplateRef<any>;
 
   firstName: string = '';
   lastName: string = '';
@@ -109,5 +110,25 @@ export class ProfileComponent implements OnInit, OnDestroy {
         }
         this.templateModalSubscription?.unsubscribe();
       });
+  }
+
+  deleteAccountHandler() {
+    this.modalSubscription = this.modalService
+    .open(this.deleteAccountModal, { buttons: this.authButton, title: 'Delete Account' })
+    .subscribe((action) => {
+      if (action === 'confirm') {
+        this.templateModalSubscription = this.templateModalService
+      .open(AuthFormComponent)
+      .subscribe((observer) => {
+        if (observer.data && observer.data['confirm']) {
+          this.fireservice.deleteAccount();
+          this.router.navigateByUrl('/');
+        }
+        this.templateModalSubscription?.unsubscribe();
+      });
+      }
+
+    })
+
   }
 }

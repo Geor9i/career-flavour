@@ -153,4 +153,19 @@
       </form>
     </section>
   </main>
+
+  <section class="delete-account">
+
+  <p>"If you're ready to say goodbye, simply click 'Delete Account' below. We'll miss you, but your happiness is what matters most. Thanks for being a part of our community!"</p>
+
+  <a (click)="deleteAccountHandler()">Delete Account</a>
+
+  <ng-template #deleteAccountModal>
+    <p>Are you sure?</p>
+    <p>This action cannot be reverted</p>
+  </ng-template>
+
+  </section>
+
+
 </div>

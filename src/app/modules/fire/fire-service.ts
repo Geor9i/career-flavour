@@ -13,6 +13,7 @@ import {
   updatePassword,
   updateEmail,
   EmailAuthProvider,
+  deleteUser
 } from '@angular/fire/auth';
 import { Observable, from } from 'rxjs';
 import {
@@ -76,6 +77,12 @@ export class FireService {
         });
       }
     })
+  }
+
+  deleteAccount() {
+    if (this.fireAuth.currentUser) {
+      deleteUser(this.fireAuth.currentUser)
+    }
   }
 
   logout() {
