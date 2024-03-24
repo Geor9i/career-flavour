@@ -26,7 +26,7 @@ export class HomeComponent {
           }
         });
     } else {
+      this.router.navigateByUrl('/resume-templates');
     }
-    this.router.navigateByUrl('/resume-templates');
   }
 }

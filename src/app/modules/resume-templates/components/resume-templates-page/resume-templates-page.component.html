@@ -1,7 +1,11 @@
 <div class="container">
   <p class="page-title" title="Resume Templates">Resume Templates</p>
-
   <section class="resume-select">
-    <div [style]="templateStyles" #template *ngFor="let template of templates" class="template"></div>
+    <div
+      *ngFor="let template of templates; let i = index"
+      #template
+      class="template"
+      [style]="templateStyles[i]"
+    ></div>
   </section>
 </div>

@@ -9,9 +9,10 @@ import { ProfileComponent } from './components/profile/profile.component';
 import { UtilsModule } from '../utils/utils.module';
 import { AnimationsModule } from '../animations/animations.module';
 import { SharedModule } from '../shared/shared.module';
+import { ResetAccountPasswordComponent } from './components/reset-account-password/reset-account-password.component';
 
 @NgModule({
-  declarations: [LoginComponent, RegisterComponent, ProfileComponent],
+  declarations: [LoginComponent, RegisterComponent, ProfileComponent, ResetAccountPasswordComponent],
   imports: [
     CommonModule,
     UserRoutingModule,

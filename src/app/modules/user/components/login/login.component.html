@@ -8,10 +8,15 @@
     </div>
     <div class="inputbox">
       <label for="password">Password</label>
-      <div>
+      <div class="pass-container">
         <input appString type="password" id="password" name="password" placeholder="*******" #password="ngModel" minlength="6" ngModel />
+        <i [routerLink]="['/reset-account-password']" routerLinkActive="router-link-active"  class="fa-solid fa-passport fa-2x"></i>
       </div>
     </div>
     <input type="submit" value="Login">
+    <div class="to-reg-div">
+      <p>Don't have an account yet?</p>
+<p>Register <a [routerLink]="['/register']" routerLinkActive="router-link-active" >here</a></p>
+    </div>
   </form>
 </div>

@@ -13,7 +13,8 @@ import {
   updatePassword,
   updateEmail,
   EmailAuthProvider,
-  deleteUser
+  deleteUser,
+  sendPasswordResetEmail
 } from '@angular/fire/auth';
 import { Observable, from } from 'rxjs';
 import {
@@ -86,6 +87,23 @@ export class FireService {
         });
       }
     })
+  }
+
+  resetPassword(email: string): Observable<void> {
+    return new Observable<void>((observer) => {
+      if (!this.fireAuth.currentUser) {
+        sendPasswordResetEmail(this.fireAuth, email)
+          .then(() => {
+            observer.next();
+            observer.complete();
+          })
+          .catch((err: Error) => {
+            observer.error(err);
+          });
+      } else {
+        observer.error(new Error('No user is currently logged in.'));
+      }
+    });
   }
 
   deleteAccount() {
