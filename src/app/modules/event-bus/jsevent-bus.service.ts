@@ -4,6 +4,7 @@ import {
   Subscriber,
   PublishParams,
   Subscribers,
+  JSEvent,
 } from './types';
 
 @Injectable({
@@ -16,7 +17,7 @@ export class JSEventBusService {
   subscribe(
     subscriberId: string,
     eventType: string,
-    callback: () => void,
+    callback: (e: JSEvent) => void,
     options?: JSEventOptions
   ) {
     const eventId = this.eventId++;
@@ -45,8 +46,8 @@ export class JSEventBusService {
     };
     return unsubscribe;
   }
-  buildSubscription(
-    callback: () => void,
+  private buildSubscription(
+    callback: (() => void) | ((e: JSEvent) => void),
     id: number,
     options?: JSEventOptions
   ) {

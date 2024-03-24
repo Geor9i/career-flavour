@@ -81,7 +81,8 @@
   aspect-ratio: 0.707;
   background-color: rgb(255, 255, 255);
   box-shadow: 3px 3px 10px black, inset -2px 0px 1px rgba(0, 0, 0, 0.425);
-  transform: perspective(400px) rotateY(85deg);
+  transition: transform 0.2s ease-in;
+  transform: perspective(600px) rotateY(0deg);
 }
 
 .template:hover {

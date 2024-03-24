@@ -1,4 +1,4 @@
-import { EventType } from './types';
+import { EventType, JSEvent } from './types';
 import { Inject, Injectable } from '@angular/core';
 import { JSEventBusService } from './jsevent-bus.service';
 import { eventTypes } from './constants';
@@ -34,7 +34,7 @@ export class JSEventManagerService {
     });
   }
 
-  getRelatives(e: Event, eventHost: HTMLElement) {
+  getRelatives(e: JSEvent, eventHost: HTMLElement) {
     let currentElement: HTMLElement | null = e.target as HTMLElement;
     const parents = [];
     if (e.target) {

@@ -12,9 +12,11 @@ export interface Subscriber {
   getSubEvents?: (params: PublishParams) => number[] | null;
 }
 
+export type SubCallback = (e: JSEvent) => void;
+
 export interface Subscription {
   options: JSEventOptions;
-  callback: (e: JSEvent) => void;
+  callback: SubCallback;
   id: number;
 }
 
