@@ -6,7 +6,8 @@ import { authGuard } from 'src/app/route-guards/auth.guard';
 const routes = [
   {
     path: 'resume-templates',
-    component: ResumeTemplatesPageComponent},
+    component: ResumeTemplatesPageComponent,
+  }
 ];
 
 @NgModule({

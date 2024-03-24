@@ -16,6 +16,8 @@ import { JSEvent } from 'src/app/modules/event-bus/types';
   styleUrls: ['./resume-templates-page.component.css'],
 })
 export class ResumeTemplatesPageComponent implements AfterViewInit, OnDestroy {
+  public templates = [1,2,3,4,5];
+  public templateStyles: { [key: string]: string } = {};
   private jSEventSubId = 'ResumeTemplatesPageComponent';
   private jsEventUnsubscribeArr: (() => void)[] = [];
   private eventUt = this.utilService.eventUtil;
@@ -23,8 +25,7 @@ export class ResumeTemplatesPageComponent implements AfterViewInit, OnDestroy {
     private jSEventBusService: JSEventBusService,
     private utilService: UtilService
   ) {}
-  public templates = [1,2,3,4, 5];
-  public templateStyles: { [key: string]: string } = {};
+
 
   @ViewChildren('template') template!: QueryList<ElementRef>;
   ngAfterViewInit(): void {
@@ -45,8 +46,7 @@ export class ResumeTemplatesPageComponent implements AfterViewInit, OnDestroy {
       { target: templateElements }
     );
 
-    this.jsEventUnsubscribeArr.push(unsubscribe);
-    console.log(this.eventUt);
+    this.jsEventUnsubscribeArr.push(unsubscribe, unsubscribe2);
   }
 
 
@@ -71,11 +71,12 @@ export class ResumeTemplatesPageComponent implements AfterViewInit, OnDestroy {
     this.templateStyles = {
       transform: `perspective(600px) rotateX(${rotateX}deg) rotateY(${rotateY}deg`
     };
-    // console.log({ centerX, centerY, offsetX, offsetY, width: rect.width, height: rect.height });
+    console.log({ centerX, centerY, offsetX, offsetY, width: rect.width, height: rect.height });
   }
 
 
   resetTemplateStyles() {
+    console.log('here');
       this.templateStyles = {
         transform: 'perspective(600px) rotateX(0deg) rotateY(0deg)'
       };
