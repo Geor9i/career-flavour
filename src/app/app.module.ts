@@ -11,6 +11,7 @@ import { SharedModule } from './modules/shared/shared.module';
 import { GlobalErrorHandler } from './modules/errors/global-error-handler.service';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations'; // Import BrowserAnimationsModule
 import { ResumeBuilderModule } from './modules/resume-builder/resume-builder.module';
+import { ResumeTemplatesModule } from './modules/resume-templates/resume-templates.module';
 
 
 @NgModule({
@@ -23,6 +24,7 @@ import { ResumeBuilderModule } from './modules/resume-builder/resume-builder.mod
     SharedModule,
     BrowserAnimationsModule,
     ResumeBuilderModule,
+    ResumeTemplatesModule,
     AppRoutingModule,
   ],
   providers: [{ provide: ErrorHandler, useClass: GlobalErrorHandler }],

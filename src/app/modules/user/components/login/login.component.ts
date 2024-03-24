@@ -11,7 +11,6 @@ import { FireService } from 'src/app/modules/fire/fire-service';
 export class LoginComponent {
   private fireService = inject(FireService);
   private router = inject(Router);
-
   submitHandler(form: NgForm) {
     const { email, password } = form.value;
     this.fireService.login({ email, password }).subscribe({

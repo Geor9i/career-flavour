@@ -85,8 +85,10 @@
   font-weight: 700;
   padding: 0.5em 1em;
   border-radius: 13px;
-  box-shadow: 4px 3px 5px black;
+  box-shadow: 2px 1px 5px black;
   transition: background-color 0.2s ease-in;
+  border-right: 2px solid black;
+  border-bottom: 2px solid black;
 }
 
 

@@ -40,9 +40,7 @@ export class TemplateModalComponent implements OnInit, OnDestroy {
     this.eventBusSubscription = this.eventBus
       .on('TemplateModalContentOutput')
       .subscribe((observer) => {
-
         if (!observer) return
-
         if (observer && observer.hasOwnProperty('data') && observer.data?.hasOwnProperty('confirm')) {
           observer.data['confirm'] ? this.submit() : this.close();
         }

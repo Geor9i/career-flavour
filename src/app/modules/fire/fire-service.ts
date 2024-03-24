@@ -75,6 +75,15 @@ export class FireService {
         .catch((err: Error) => {
           observer.error(err);
         });
+      } else {
+        signInWithEmailAndPassword(this.fireAuth, userData.email, userData.password)
+        .then(() => {
+          observer.next();
+          observer.complete();
+        })
+        .catch((err: Error) => {
+          observer.error(err);
+        });
       }
     })
   }
