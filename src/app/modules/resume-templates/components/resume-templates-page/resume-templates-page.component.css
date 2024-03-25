@@ -83,7 +83,10 @@
   box-shadow: 3px 3px 10px black, inset -2px 0px 1px rgba(0, 0, 0, 0.425);
   transition: transform 0.2s ease-in;
   transform: perspective(600px) rotateY(0deg) rotateX(0deg);
+  transition: box-shadow 0.1s ease-in;
+  cursor: pointer;
 }
 
 .template:hover {
+  box-shadow: 1px 1px 10px gold;
 }

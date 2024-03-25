@@ -2,6 +2,7 @@
   <p class="page-title" title="Resume Templates">Resume Templates</p>
   <section class="resume-select">
     <div
+    [routerLink]="['/resume-editor', i]"
       *ngFor="let template of templates; let i = index"
       #template
       class="template"

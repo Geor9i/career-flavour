@@ -49,13 +49,12 @@ export class ResumeTemplatesPageComponent implements AfterViewInit, OnDestroy {
   }
   onMouseMoveTemplate(event: JSEvent): void {
     const targetIndex = this.template.toArray().findIndex((ref) => ref.nativeElement === event.target);
-    console.log(targetIndex);
 
     if (targetIndex !== -1) {
       const { offsetX, offsetY, rect } = this.utilService.eventUtil.eventData(event);
       const containerWidth = rect.width;
       const containerHeight = rect.height;
-      const tiltFactor = 50; // Adjust the tilt factor as needed
+      const tiltFactor = 10; // Adjust the tilt factor as needed
 
       const distanceToLeft = offsetX;
       const distanceToRight = containerWidth - offsetX;

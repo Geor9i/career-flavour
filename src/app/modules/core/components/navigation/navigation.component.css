@@ -1,7 +1,7 @@
-
 :host {
   width: 100%;
-  display: block; 
+  display: block;
+  --blue: rgb(36, 104, 136);
 }
 
 .guest-nav {
@@ -33,4 +33,120 @@
 
 .guest-nav ul li:hover {
   background-color: black;
+}
+
+.user-nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  min-height: 8vh;
+  max-height: 100px;
+  width: 100%;
+  z-index: 100;
+}
+
+.user-container {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1em;
+  right: 3vw;
+  top: 3vh;
+}
+
+.user-icon {
+  width: 3vw;
+  height: 3vw;
+  max-height: 50px;
+  max-width: 50px;
+  box-shadow: -4px 0 10px rgba(0, 0, 0, 0.3) inset;
+  background-color: var(--theme-color);
+  color: white;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  transition: background-color 0.2s ease-in, box-shadow 0.1s ease-in;
+  user-select: none;
+}
+
+.user-icon:hover {
+  box-shadow: inset -6px 0 15px rgba(0, 0, 0, 0.3);
+}
+
+.user-icon:hover > p {
+  text-shadow: 0 0 5px white;
+}
+
+.user-icon p {
+  font-weight: bold;
+  font-size: 2em;
+  position: relative;
+}
+
+.user-menu {
+  position: absolute;
+  top: 120%;
+  border-radius: 7px;
+  border: 1px solid black;
+  border-top: 3px solid black;
+  border-bottom: 3px solid black;
+  display: flex;
+  flex-direction: column;
+}
+
+.user-menu p {
+  width: auto;
+  padding: 1em 2em;
+  background-color: var(--blue);
+  cursor: pointer;
+  font-size: 1.2em;
+  font-weight: bold;
+  color: white;
+}
+
+.user-menu p:hover {
+  background-color: red;
+  color: white;
+}
+
+.navigation-container {
+  position: absolute;
+  left: 3vw;
+  top: 3vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  list-style: none;
+  border-radius: 13px;
+  overflow: clip;
+  box-shadow: 0 0 5px var(--blue) inset;
+  background-color: var(--theme-color);
+
+}
+
+.navigation-container li {
+  box-shadow: 0 0 5px var(--blue) inset;
+  padding: 1em 2em;
+  color: white;
+  font-weight: bold;
+  border-radius: 5px;
+  text-align: center;
+  cursor: pointer;
+
+}
+
+.navigation-container li:hover {
+  background-color: var(--blue);
+  color: white;
+}
+
+
+.backdrop {
+  position: absolute;
+  inset: 0;
+  z-index: 99;
+  backdrop-filter: blur(1px);
 }

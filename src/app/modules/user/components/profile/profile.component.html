@@ -133,6 +133,7 @@
             <div>
               <input
                 appGlowFields
+                appString
                 appEmail
                 type="text"
                 id="email"
@@ -155,19 +156,19 @@
   </main>
 
   <section class="delete-account">
+    <p>
+      "If you're ready to say goodbye, simply click 'Delete Account' below.
+      We'll miss you, but your happiness is what matters most. Thanks for being
+      a part of our community!"
+    </p>
 
-  <p>"If you're ready to say goodbye, simply click 'Delete Account' below. We'll miss you, but your happiness is what matters most. Thanks for being a part of our community!"</p>
+    <a (click)="deleteAccountHandler()">Delete Account</a>
 
-  <a (click)="deleteAccountHandler()">Delete Account</a>
-
-  <ng-template #deleteAccountModal>
-    <div class="delete-modal">
-      <p>Are you sure?</p>
-      <p>This action cannot be reverted</p>
-    </div>
-  </ng-template>
-
+    <ng-template #deleteAccountModal>
+      <div class="delete-modal">
+        <p>Are you sure?</p>
+        <p>This action cannot be reverted</p>
+      </div>
+    </ng-template>
   </section>
-
-
 </div>
