@@ -15,7 +15,6 @@ export class LoginComponent {
     const { email, password } = form.value;
     this.fireService.login({ email, password }).subscribe({
       next: (data) => {
-        console.log(data);
         this.router.navigateByUrl('/');
       },
       error: (err) => {

@@ -42,3 +42,22 @@ input[type="submit"] {
   cursor: pointer;
 }
 
+
+.to-login-div {
+  text-align: center;
+}
+
+.to-login-div p {
+  font-size: 14px;
+}
+
+.to-login-div a {
+  color: blue;
+  border-radius: 5px;
+}
+
+.to-login-div a:hover {
+  color: rgb(38, 0, 255);
+  font-weight: bold;
+  font-size: 16px;
+}

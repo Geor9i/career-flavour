@@ -19,6 +19,17 @@ export const resumeConstants = {
     'Cormorant Garamond',
     'Rochester',
     'Sorts Mill Goudy',
-    
+
   ],
+  INITIAL_STYLES: {
+    width: '595px',
+    height: '842px',
+    backgroundColor: 'lightgray',
+    color: 'black',
+    fontFamily: 'Arial, sans-serif',
+    fontSize: '12px',
+    padding: '2em',
+    borderRadius: '5px',
+  }
+
 };

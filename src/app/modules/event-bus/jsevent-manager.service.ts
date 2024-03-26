@@ -23,7 +23,6 @@ export class JSEventManagerService {
       if (eventHost) {
         const eventRef = eventHost.addEventListener(type, (e) => {
           const {parents, children} = this.getRelatives(e)
-          // const { parents, children } = this.getRelatives(e);
           this.jSEventBus.publish({ e, parents, children });
 
         });

@@ -1,8 +1,10 @@
+import { JSEventBusService } from './../../../event-bus/jsevent-bus.service';
 import { resumeConstants } from './../../../../constants/resume-constants';
 import { UtilService } from './../../../utils/util.service';
 import { PageManagerService } from './../../page-manager.service';
-import { Component, OnInit } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, OnInit, Renderer2, ViewChild } from '@angular/core';
 import { PageValues } from '../../types';
+import { JSEvent } from 'src/app/modules/event-bus/types';
 
 @Component({
   selector: 'app-resume-page',
@@ -11,27 +13,26 @@ import { PageValues } from '../../types';
 })
 export class ResumePageComponent implements OnInit {
   constructor(
+    private jsEventBusService: JSEventBusService,
     private pageManager: PageManagerService,
-    private utilService: UtilService
+    private utilService: UtilService,
+    private rendered: Renderer2,
+    private elRef: ElementRef
   ) {}
+  @ViewChild('sheet') sheet!: ElementRef;
+  private eventId = 'ResumePageComponent';
+  public pageClick = false;
   private resumeBuilderUtil = this.utilService.resumeBuilderUtil;
   public resumeConstants = resumeConstants;
   public selectedOption: Event | string = '';
-  resumeStyles = {
-    width: '595px',
-    height: '842px',
-    backgroundColor: 'lightgray',
-    color: 'black',
-    fontFamily: 'Arial, sans-serif',
-    fontSize: '12px',
-    padding: '2em',
-    borderRadius: '5px',
-  };
+  resumeStyles = resumeConstants.INITIAL_STYLES;
 
   ngOnInit(): void {
+    this.rendered.setStyle(document.documentElement, 'background-color', '#444457')
     this.pageManager.messenger$.subscribe((data) => {
       this.delegateTask(data);
     });
+
   }
 
   change(value: PageValues) {

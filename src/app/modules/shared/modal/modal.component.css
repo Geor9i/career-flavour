@@ -37,7 +37,7 @@
   border-radius: 7px;
   color: rgb(0, 0, 0);
   align-self: flex-end;
-  transition: box-shadow 0.1s ease-in, color 0.1s ease-in;
+  transition: box-shadow var(--pointer-transition) ease-in, color var(--pointer-transition) ease-in;
 }
 
 .modal-header span i:hover {
@@ -72,7 +72,7 @@
   box-shadow: 0 0 3px;
   font-weight: bold;
   cursor: pointer;
-  transition: box-shadow 0.1s ease-in;
+  transition: box-shadow var(--pointer-transition) ease-in;
 }
 
 .modal-footer a:hover {

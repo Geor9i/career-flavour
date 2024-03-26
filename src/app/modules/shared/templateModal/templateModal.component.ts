@@ -19,10 +19,8 @@ import { Subscription } from 'rxjs';
 export class TemplateModalComponent implements OnInit, OnDestroy {
   constructor(
     private templateModalService: TemplateModalService,
-    private cdr: ChangeDetectorRef,
     private eventBus: EventBusService
   ) {}
-  private vcr = inject(ViewContainerRef);
   private templateModalServiceSubscription: Subscription | undefined;
   private eventBusSubscription: Subscription | undefined;
   template: any;

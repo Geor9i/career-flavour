@@ -1,0 +1,52 @@
+.container {
+  width: 50vw;
+  height: 40vw;
+  max-width: 1000px;
+  max-height: 1000px;
+  padding: 2em;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.container header{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+header {
+  background-color: red;
+  height: 30%;
+}
+
+.container main {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  background-color: gray;
+}
+
+main section {
+display: flex;
+justify-content: center;
+align-items: center;
+gap: 1em;
+}
+
+.resume-layout {
+  --height: 30vw;
+  max-height: 80%;
+  max-width: 50%;
+  height: var(--height);
+  width: calc((var(--height) * 0.70721357850070));
+  background-color: rgb(255, 255, 255);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.section-editor {
+  background-color: blue;
+  width: 50%;
+}

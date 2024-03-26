@@ -2,8 +2,8 @@ import { LoginComponent } from './components/login/login.component';
 import { NgModule } from '@angular/core';
 import { RegisterComponent } from './components/register/register.component';
 import { RouterModule } from '@angular/router';
-import { guestGuard } from 'src/app/route-guards/guest.guard';
 import { ProfileComponent } from './components/profile/profile.component';
+import { guestGuard } from 'src/app/route-guards/guest.guard';
 import { authGuard } from 'src/app/route-guards/auth.guard';
 import { ResetAccountPasswordComponent } from './components/reset-account-password/reset-account-password.component';
 

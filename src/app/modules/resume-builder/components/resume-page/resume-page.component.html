@@ -1,43 +1,15 @@
-<div [ngStyle]="resumeStyles" class="page">
-  <p>
-    Lorem ipsum dolor sit amet consectetur, adipisicing elit. Ex ducimus
-    distinctio nesciunt debitis, fuga rem consequuntur, assumenda asperiores ut
-    provident cumque. Obcaecati, voluptates sapiente voluptas accusantium quas
-    mollitia quasi iure! At architecto expedita ut corporis aliquid tempora
-    itaque repellendus! Praesentium voluptatum non iusto, nostrum temporibus
-    asperiores aperiam fuga placeat quod. Dolorum at deleniti repudiandae
-    deserunt praesentium. Quam incidunt repellendus ullam? Voluptate eveniet
-    corrupti suscipit architecto itaque harum obcaecati animi, culpa, voluptas
-    dicta, quod facilis? Ipsum, consequuntur eius reiciendis id vero nisi libero
-    ducimus voluptates, mollitia sunt aut officiis, rerum velit? Quasi atque in
-    vitae velit cum quaerat, hic ad reiciendis! Modi rem dolorem consequuntur
-    ipsam et aliquid. Itaque veniam natus optio corporis dolorum dolor, deleniti
-    ipsa architecto quod laboriosam quo? Repellat ipsam quo fugiat ab iusto
-    perspiciatis magni rerum vitae libero ea! Atque cum rerum saepe, iusto
-    adipisci, aut nam vitae cumque voluptatem a sapiente minus dolore enim
-    tempore iure! Culpa quas officiis minus facilis optio itaque consequatur, id
-    nulla sint, iusto possimus odio et laboriosam enim ea corporis quod totam.
-    Saepe tempora maiores architecto reiciendis et fugit, impedit quos! Dolor,
-    illum. Nisi consectetur rerum dolor quidem reprehenderit voluptate minima
-    voluptatibus odio id voluptatem dolorum numquam praesentium similique eum
-    quae magnam molestias est, nemo ipsum perspiciatis accusantium deserunt at!
-    Libero. Maxime ipsam modi voluptates veniam culpa ullam, facere
-    reprehenderit iure molestiae doloribus sapiente cum iste et quam optio ut
-    recusandae velit sed possimus quos quia? Doloribus eligendi voluptas minima
-    eaque. Numquam quisquam quam veritatis quae, harum rem illo perspiciatis
-    sequi id delectus eveniet consequatur officiis enim, perferendis beatae
-    similique voluptatibus vel, quia aliquid amet. Praesenium at adipisci
-    officia distinctio suscipit. Harum praesentium dolorum, deserunt sequi
-    inventore excepturi enim placeat consectetur odio accusantium. Vitae cum
-    provident ipsum, aliquid totam reiciendis tempora facilis optio alias enim
-    possimus quos maiores aut ex assumenda!
-  </p>
-</div>
+<div class="container">
+  <div [ngStyle]="resumeStyles" #sheet class="page">
+    <app-p></app-p>
 
-<aside>
-  <a (click)="change({resize: '+'})">+</a>
-  <a (click)="change({resize: '-'})">-</a>
-  <select (change)="changeFont()" [(ngModel)]="selectedOption" ngModel>
-    <option *ngFor="let font of resumeConstants.FONTS" [value]="font">{{ font }}</option>
-  </select>
-</aside>
+  </div>
+
+  <aside>
+    <a (click)="change({resize: '+'})">+</a>
+    <a (click)="change({resize: '-'})">-</a>
+    <select (change)="changeFont()" [(ngModel)]="selectedOption" ngModel>
+      <option *ngFor="let font of resumeConstants.FONTS" [value]="font">{{ font }}</option>
+    </select>
+  </aside>
+
+</div>

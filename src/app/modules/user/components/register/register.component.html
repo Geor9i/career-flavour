@@ -3,33 +3,93 @@
     <div class="inputbox">
       <label for="firstName">First Name</label>
       <div>
-        <input appGlowFields appString #firstName="ngModel" type="text" id="firstName" name="firstName" placeholder="John" ngModel minlength="2"/>
+        <input
+          appGlowFields
+          appString
+          #firstName="ngModel"
+          type="text"
+          id="firstName"
+          name="firstName"
+          placeholder="John"
+          ngModel
+          minlength="2"
+        />
       </div>
     </div>
     <div class="inputbox">
       <label for="lastName">Last Name</label>
       <div>
-        <input appGlowFields appString #lastName="ngModel" type="text" id="lastName" name="lastName" placeholder="Smith" ngModel minlength="2"/>
+        <input
+          appGlowFields
+          appString
+          #lastName="ngModel"
+          type="text"
+          id="lastName"
+          name="lastName"
+          placeholder="Smith"
+          ngModel
+          minlength="2"
+        />
       </div>
     </div>
     <div class="inputbox">
       <label for="email">Email</label>
       <div>
-        <input appGlowFields appEmail appString #email="ngModel" type="text" id="email" name="email" placeholder="user@email.com" ngModel/>
+        <input
+          appGlowFields
+          appEmail
+          appString
+          #email="ngModel"
+          type="text"
+          id="email"
+          name="email"
+          placeholder="user@email.com"
+          ngModel
+        />
       </div>
     </div>
     <div class="inputbox">
       <label for="password">Password</label>
       <div>
-        <input appGlowFields appPassword appString #password="ngModel" type="password" id="password" name="password" placeholder="*******" ngModel minlength="6"/>
+        <input
+          appGlowFields
+          appPassword
+          appString
+          #password="ngModel"
+          type="password"
+          id="password"
+          name="password"
+          placeholder="*******"
+          ngModel
+          minlength="6"
+        />
       </div>
     </div>
     <div class="inputbox">
       <label for="repeatPassword">Repeat password</label>
       <div>
-        <input appGlowFields appPassword appString #repeatPassword="ngModel" type="password" id="repeatPassword" name="repeatPassword" placeholder="*******" ngModel/>
+        <input
+          appGlowFields
+          appPassword
+          appString
+          #repeatPassword="ngModel"
+          type="password"
+          id="repeatPassword"
+          name="repeatPassword"
+          placeholder="*******"
+          ngModel
+        />
       </div>
     </div>
-    <input type="submit" value="Register">
+    <input type="submit" value="Register" />
+    <div class="to-login-div">
+      <p>Already have an account?</p>
+      <p>
+        Login
+        <a [routerLink]="['/login']" routerLinkActive="router-link-active"
+          >here</a
+        >
+      </p>
+    </div>
   </form>
 </div>

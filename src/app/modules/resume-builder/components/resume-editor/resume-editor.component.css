@@ -1,0 +1,52 @@
+:host {
+  width: 100%;
+  height: 100%;
+}
+
+.container {
+  position: absolute;
+  inset: 0;
+  z-index: 10;
+  pointer-events:none;
+}
+
+
+.container nav {
+  position: fixed;
+  top: 0;
+  left: 50%;
+  transform: translate(-50%);
+  pointer-events: all;
+}
+
+.container nav ul {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  list-style: none;
+  gap: 1em;
+  background-color: var(--theme-blue);
+  backdrop-filter: blur(4px);
+  border-radius: 1.5vw;
+}
+
+.container nav ul li {
+  color: white;
+  font-weight: bold;
+  font-size: 18px;
+  padding: 0.5em 1em;
+  cursor: pointer;
+  transition: color var(--pointer-transition) ease-in;
+}
+.container nav ul li:hover, .arrow-container i:hover {
+  color: var(--theme-color);
+}
+
+.arrow-container {
+  display: flex;
+  gap: 1em;
+}
+.arrow-container i {
+  color: black;
+  transition: color var(--pointer-transition) ease-in;
+}

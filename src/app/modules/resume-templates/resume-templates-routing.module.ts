@@ -7,6 +7,7 @@ const routes = [
   {
     path: 'resume-templates',
     component: ResumeTemplatesPageComponent,
+    canActivate: [authGuard]
   }
 ];
 

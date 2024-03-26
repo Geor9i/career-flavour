@@ -14,7 +14,7 @@ import {
   updateEmail,
   EmailAuthProvider,
   deleteUser,
-  sendPasswordResetEmail
+  sendPasswordResetEmail,
 } from '@angular/fire/auth';
 import { Observable, from } from 'rxjs';
 import {
