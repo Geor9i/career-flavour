@@ -1,1 +1,6 @@
-<p #editableP contenteditable (blur)="onBlur()" (input)="onInput()">{{ text }}</p>
+<!-- <pre #editableP contenteditable (blur)="onBlur()" (input)="onInput()">{{ text }}</pre> -->
+<!-- <pre #editablePre contenteditable (blur)="onBlur()" (input)="onInput()">{{ text }}</pre>
+<pre #editablePre contenteditable (blur)="onBlur()" (input)="onInput()">{{ text }}</pre>
+<pre #editablePre contenteditable (blur)="onBlur()" (input)="onInput()">{{ text }}</pre>
+<pre #editablePre contenteditable (blur)="onBlur()" (input)="onInput()">{{ text }}</pre> -->
+<pre contenteditable="true" [textContent]="textContent" (blur)="onBlur()" (input)="onInput($event)"></pre>

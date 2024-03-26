@@ -1,8 +1,8 @@
-p {
+pre {
   outline: none;
   max-width: 100px;
 }
 
-p:focus{
+pre:focus{
 border-bottom: 1px solid rgba(0, 0, 0, 0.5);
 }

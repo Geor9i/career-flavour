@@ -6,37 +6,16 @@ import { Component, ElementRef, ViewChild } from '@angular/core';
   styleUrls: ['./editable-text.component.css'],
 })
 export class EditableTextComponent {
-  @ViewChild('editableP') editableP!: ElementRef;
   public isInput = false;
-  public text = 'Ldddddddddddddd';
-  private inputBuffer = '';
+  public textContent: string | null = 'Some text...';
+  private inputBuffer: string | null = '';
 
   constructor() {}
-  onInput() {
-    this.inputBuffer = this.extractTextContent(this.editableP.nativeElement);
-  }
-
-  private extractTextContent(element: HTMLElement): string {
-    let textContent = '';
-
-    // Traverse child nodes
-    for (let node of Array.from(element.childNodes)) {
-      if (node.nodeType === Node.TEXT_NODE) {
-        // If it's a text node, append its text content
-        textContent += node.textContent ?? '';
-      } else if (node.nodeType === Node.ELEMENT_NODE) {
-        // If it's an element node, recursively extract text content from its descendants
-        textContent += this.extractTextContent(node as HTMLElement);
-      }
-    }
-
-    return textContent;
+  onInput(e: Event) {
+    this.inputBuffer = (e.target as HTMLElement).innerText
   }
 
   onBlur() {
-    this.text = this.inputBuffer;
-    this.inputBuffer = '';
-    console.log(this.text);
-
+    this.textContent = this.inputBuffer;
   }
 }
