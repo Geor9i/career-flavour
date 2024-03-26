@@ -1,6 +1,8 @@
-import { resumeConstants } from 'src/app/constants/resume-constants';
+import { layoutConstants } from 'src/app/constants/layoutConstants';
+import { JSEventBusService } from './../../../event-bus/jsevent-bus.service';
 import { UtilService } from './../../../utils/util.service';
 import { AfterViewInit, Component, ElementRef, ViewChild } from '@angular/core';
+import { NgForm } from '@angular/forms';
 
 @Component({
   selector: 'app-layout-selector',
@@ -10,8 +12,15 @@ import { AfterViewInit, Component, ElementRef, ViewChild } from '@angular/core';
 export class LayoutSelectorComponent implements AfterViewInit {
   @ViewChild('sheetWrapper') sheetWrapper!: ElementRef;
   @ViewChild('sheet') sheet!: ElementRef;
-  constructor(private utilService: UtilService) {}
+  constructor(
+    private utilService: UtilService,
+    private jsEventBusService: JSEventBusService
+  ) {}
+  private stringUtil = this.utilService.stringUtil;
   private resumeUtil = this.utilService.resumeBuilderUtil;
+  private eventId = 'LayoutSelectorComponent';
+  private jsEventUnsubscribeArr: (() => void)[] = [];
+  public generalSections = layoutConstants.generalSections;
   sheetStyles = {
     width: '0',
     height: '0',
@@ -19,6 +28,15 @@ export class LayoutSelectorComponent implements AfterViewInit {
 
   ngAfterViewInit(): void {
     this.setSheetDimensions();
+  }
+
+  addSection(form: NgForm) {
+    let { name } = form.value;
+    if (!name) return
+    name = this.stringUtil.format(name);
+    name = this.stringUtil.toPascalCase(name);
+    this.generalSections.push(name)
+    form.reset();
   }
 
   setSheetDimensions() {
@@ -29,9 +47,9 @@ export class LayoutSelectorComponent implements AfterViewInit {
       height: adjustdheight,
     });
     this.sheetStyles = {
+      ...this.sheetStyles,
       width: width + 'px',
       height: height + 'px',
-    }
-
+    };
   }
 }

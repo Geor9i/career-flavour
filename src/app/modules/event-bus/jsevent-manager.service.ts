@@ -2,15 +2,13 @@ import { EventType, JSEvent } from './types';
 import { Inject, Injectable } from '@angular/core';
 import { JSEventBusService } from './jsevent-bus.service';
 import { eventTypes } from './constants';
-@Injectable({providedIn: 'root'})
+@Injectable({ providedIn: 'root' })
 export class JSEventManagerService {
   private eventTypes: EventType[] = eventTypes;
   private hasInitilized = false;
   private defaultHost = document.body.querySelector('app-root');
   private maxParentCounter = 50;
-  constructor(
-    private jSEventBus: JSEventBusService,
-  ) {
+  constructor(private jSEventBus: JSEventBusService) {
     this._init();
   }
 
@@ -22,9 +20,8 @@ export class JSEventManagerService {
       eventHost = eventHost ? eventHost : this.defaultHost;
       if (eventHost) {
         const eventRef = eventHost.addEventListener(type, (e) => {
-          const {parents, children} = this.getRelatives(e)
+          const { parents, children } = this.getRelatives(e);
           this.jSEventBus.publish({ e, parents, children });
-
         });
       }
     });
@@ -37,12 +34,12 @@ export class JSEventManagerService {
       const target: HTMLElement | null = e.target as HTMLElement;
       const children = target.children ? Array.from(target.children) : [];
       let counter = this.maxParentCounter;
-      while (currentElement  && currentElement.parentElement && counter > 0) {
+      while (currentElement && currentElement.parentElement && counter > 0) {
         currentElement = currentElement.parentElement;
         parents.push(currentElement);
         counter--;
         if (currentElement === e.currentTarget) {
-          break
+          break;
         }
       }
       return { parents, children };

@@ -16,7 +16,7 @@ export default class StringUtil {
   }
   toPascalCase(string: string) {
     if (typeof string === "string") {
-      return string.slice(0, 1).toUpperCase() + string.toLowerCase().slice(1);
+      return string.split(' ').map(str => str.slice(0, 1).toUpperCase() + str.toLowerCase().slice(1)).join(' ');
     }
     throw new Error("Param is not a string!");
   }

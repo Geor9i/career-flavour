@@ -6,6 +6,8 @@ import { ResumeRoutingModule } from './resume-routing.module';
 import { ResumeEditorComponent } from './components/resume-editor/resume-editor.component';
 import { LayoutSelectorComponent } from './components/layout-selector/layout-selector.component';
 import { EditableTextComponent } from './components/editable-text/editable-text.component';
+import { UtilsModule } from '../utils/utils.module';
+import { AnimationsModule } from '../animations/animations.module';
 
 
 
@@ -18,8 +20,10 @@ import { EditableTextComponent } from './components/editable-text/editable-text.
   ],
   imports: [
     CommonModule,
+    FormsModule,
+    UtilsModule,
+    AnimationsModule,
     ResumeRoutingModule,
-    FormsModule
   ],
   exports: [ResumePageComponent, ResumeEditorComponent]
 })

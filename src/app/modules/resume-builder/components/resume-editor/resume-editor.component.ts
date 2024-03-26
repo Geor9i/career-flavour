@@ -1,3 +1,4 @@
+import { JSEventBusService } from 'src/app/modules/event-bus/jsevent-bus.service';
 import { UtilService } from './../../../utils/util.service';
 import { TemplateModalService } from './../../../shared/templateModal/templateModal.service';
 import { Component, OnInit } from '@angular/core';
@@ -13,31 +14,40 @@ export class ResumeEditorComponent implements OnInit {
   public resumePage: any;
   constructor(
     private templateModalService: TemplateModalService,
-    private utilService: UtilService
+    private utilService: UtilService,
+    private jsEventBusService: JSEventBusService
   ) {}
+  private jsEventUnsubscribeArr: (() => void)[] = []
   private eventUtil = this.utilService.eventUtil;
   ngOnInit(): void {
     this.resumePage = ResumePageComponent;
   }
+  private layoutEditorStyles: {} = {};
+  private backdropStyles: {} = {};
 
   openLayouts(e: Event) {
     const { clientX, clientY } = this.eventUtil.eventData(e);
-    const layoutEditorStyles = {
-      'background-color': 'rgb(90 108 135)',
+    const [width, height] = this.eventUtil.resizeToScreen(50, 50);
+    this.layoutEditorStyles = {
+      'background-color': 'rgb(36, 104, 136)',
       top: `${clientY}px`,
       left: `${clientX}px`,
-      transform: 'translate(-50%, 10%)',
+      transform: 'translate(-50%, 2em)',
+      'border-radius': '17px',
+      'box-shadow': 'none',
+      'width': `${width}px`,
+      'height': `${height}px`,
     };
-    const backdropStyles = {
+    this.backdropStyles = {
       backdropFilter: 'blur(0)',
     };
     this.templateModalService
       .open(LayoutSelectorComponent, {
-        styles: layoutEditorStyles,
-        backdropStyles,
+        styles: this.layoutEditorStyles,
+        backdropStyles: this.backdropStyles,
       })
       .subscribe((observable) => {
-        console.log(observable);
+        // console.log(observable);
       });
   }
 }

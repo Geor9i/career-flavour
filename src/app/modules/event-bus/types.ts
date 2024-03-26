@@ -30,7 +30,7 @@ export type JSEvent = MouseEvent | KeyboardEvent | TouchEvent | Event;
 
 export interface EventType {
   type: string;
-  eventHost?: Element | null;
+  eventHost?: Element | Window | null;
 }
 
 export interface PublishParams {
