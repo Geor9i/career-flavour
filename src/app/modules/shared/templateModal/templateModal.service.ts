@@ -1,8 +1,9 @@
+import { comp } from './../types';
 import { EventBusService } from './../../event-bus/event-bus.service';
-import { Injectable } from '@angular/core';
+import { Injectable, Type } from '@angular/core';
 import { Subject, Subscription } from 'rxjs';
 import { BusData } from '../../event-bus/types';
-import { comp } from '../types';
+import { templateModalOptions } from '../types';
 
 @Injectable({
   providedIn: 'root',
@@ -19,8 +20,8 @@ export class TemplateModalService {
       .subscribe((data) => this.modalDataSubject$$.next(data));
   }
 
-  open(component: comp) {
-    this.modalCompSubject$$?.next(component);
+  open(component: Type<any>, options?: templateModalOptions) {
+    this.modalCompSubject$$?.next({ component, options });
     return this.modalDataMessenger$;
   }
 }

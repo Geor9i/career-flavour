@@ -1,4 +1,4 @@
-import { Component, ElementRef, ViewChild } from '@angular/core';
+import { Component } from '@angular/core';
 
 @Component({
   selector: 'app-p',
@@ -8,7 +8,7 @@ import { Component, ElementRef, ViewChild } from '@angular/core';
 export class EditableTextComponent {
   public isInput = false;
   public textContent: string | null = 'Some text...';
-  private inputBuffer: string | null = '';
+  private inputBuffer: string | null = this.textContent;
 
   constructor() {}
   onInput(e: Event) {

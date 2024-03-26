@@ -1,9 +1,9 @@
 <div class="container">
-<!--
+
   <nav>
     <ul>
       <li>Font</li>
-      <li (click)="openLayouts()">Layout</li>
+      <li (click)="openLayouts($event)">Layout</li>
       <li>Themes</li>
       <li>Themes</li>
       <li class="arrow-container">
@@ -11,7 +11,7 @@
         <i class="fa-solid fa-circle-right fa-2x"></i>
       </li>
     </ul>
-  </nav> -->
+  </nav>
 
 </div>
 <ng-container *ngComponentOutlet="resumePage"></ng-container>

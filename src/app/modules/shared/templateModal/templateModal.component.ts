@@ -24,11 +24,19 @@ export class TemplateModalComponent implements OnInit, OnDestroy {
   private templateModalServiceSubscription: Subscription | undefined;
   private eventBusSubscription: Subscription | undefined;
   template: any;
+  modalStyles = {};
+  backdropStyles = {};
   isActive = false;
 
   ngOnInit(): void {
     this.templateModalServiceSubscription =
-      this.templateModalService.modalCompMessenger$?.subscribe((component) => {
+      this.templateModalService.modalCompMessenger$?.subscribe(({component, options}) => {
+        if (options?.styles) {
+          this.modalStyles = options.styles;
+        }
+        if (options?.backdropStyles) {
+          this.backdropStyles = options.backdropStyles;
+        }
         if (component instanceof Type) {
           this.template = null;
           this.template = component;

@@ -1,52 +1,37 @@
 .container {
   width: 50vw;
-  height: 40vw;
+  height: 30vw;
   max-width: 1000px;
   max-height: 1000px;
-  padding: 2em;
   display: flex;
-  flex-direction: column;
-  align-items: center;
 }
 
-.container header{
+main {
+  width: 100%;
+  height: 100%;
+  flex: 0 0 100%;
+  display: grid;
+  grid-template-columns: 40% 1fr;
+  /* justify-items: center; */
+}
+
+.container section {
   display: flex;
-  flex-direction: column;
-  justify-content: center;
+  border: 1px solid red;
 }
 
-header {
-  background-color: red;
-  height: 30%;
-}
-
-.container main {
+.sheet-wrapper {
   width: 100%;
   height: 100%;
   display: flex;
-  background-color: gray;
-}
-
-main section {
-display: flex;
-justify-content: center;
-align-items: center;
-gap: 1em;
-}
-
-.resume-layout {
-  --height: 30vw;
-  max-height: 80%;
-  max-width: 50%;
-  height: var(--height);
-  width: calc((var(--height) * 0.70721357850070));
-  background-color: rgb(255, 255, 255);
-  display: flex;
   justify-content: center;
-  align-items: center;
+  align-items: flex-end;
+  padding: 2em;
 }
 
-.section-editor {
-  background-color: blue;
-  width: 50%;
+
+.sheet {
+  background-color: rgb(167, 167, 167);
+  box-shadow: 2px 2px 10px black;
 }
+

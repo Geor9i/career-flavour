@@ -52,7 +52,7 @@ export class ResumePageComponent implements OnInit {
   }
 
   resizePage(size: string) {
-    let { width, height, unit} = this.resumeBuilderUtil.aspectRatio(size, this.resumeStyles);
+    let { width, height, unit} = this.resumeBuilderUtil.changeAspectRatio(size, this.resumeStyles, 'px');
     let fontSize = this.resumeBuilderUtil.fontRatio(width);
     this.resumeStyles.width = width + unit;
     this.resumeStyles.height = height + unit;

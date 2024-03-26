@@ -1,9 +1,9 @@
 <div class="container">
-  <header>
-    <p>Resume Layout</p>
-  </header>
   <main>
     <section class="resume-layout">
+      <div #sheetWrapper class="sheet-wrapper">
+        <div [ngStyle]="sheetStyles" #sheet class="sheet"></div>
+      </div>
     </section>
     <section class="section-editor"></section>
   </main>

@@ -4,4 +4,13 @@ export interface TempModal {
   confirm: boolean;
 }
 
-export type comp = Type<any>
+export interface comp {
+  component: Type<any>;
+  options?: templateModalOptions;
+}
+
+
+export interface templateModalOptions {
+  styles?: {[key: string]: string};
+  backdropStyles?: {[key: string]: string};
+}
