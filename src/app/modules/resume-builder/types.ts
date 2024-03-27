@@ -6,3 +6,8 @@ export interface PageValues {
 export interface Style {
   [key: string]: string;
 }
+
+export type Bin = {
+  element: HTMLElement;
+  classes: string[];
+}[];

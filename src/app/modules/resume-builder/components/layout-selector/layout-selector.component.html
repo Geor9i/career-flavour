@@ -2,11 +2,17 @@
   <main >
     <section class="resume-layout">
       <div #sheetWrapper class="sheet-wrapper">
-        <div [ngStyle]="sheetStyles" #sheet class="sheet-layout bin"></div>
+        <div draggable="false" [ngStyle]="sheetStyles"  #sheet class="sheet-layout bin"></div>
       </div>
     </section>
     <section class="section-editor">
       <div class="custom-section">
+        <div class="header-checkboxes">
+          <div class="checkbox-group" *ngFor="let checkboxName of headerCheckBoxes">
+            <label for="{{checkboxName}}">{{checkboxName}}</label>
+            <input type="checkbox" id="{{checkboxName}}" value="{{checkboxName}}">
+          </div>
+        </div>
           <form (submit)="addSection(customSectionForm)" #customSectionForm="ngForm">
             <div>
               <input appGlowFields ngModel #name="ngModel" name="name" minlength="3" maxlength="10" type="text" required placeholder="Custom section">
@@ -14,10 +20,14 @@
             <button [disabled]="customSectionForm.invalid">Add Section</button>
           </form>
       </div>
-      <div class="general-sections">
-        <p>Drag and drop in required sections</p>
+      <div draggable="false" class="general-sections">
+        <p>Drag and drop resume sections</p>
+        <div class="remove-sections-container">
+          <label for="remove-section">Delete Sections</label>
+          <input id="remove-section" type="checkbox" (change)="deleteMode($event)">
+        </div>
         <div #sectionsArea class="layout-sections-container bin" >
-          <p draggable="true" class="resume-section-draggable" *ngFor="let section of generalSections">{{section}}</p>
+          <p draggable="true" class="resume-section-draggable in-general-section" [attr.data-id]="section.title" [ngStyle]="section.styles" *ngFor="let section of generalSections">{{section.title}}</p>
         </div>
       </div>
     </section>
