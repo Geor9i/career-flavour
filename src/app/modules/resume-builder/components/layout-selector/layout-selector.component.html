@@ -1,8 +1,8 @@
 <div class="container">
-  <main>
+  <main >
     <section class="resume-layout">
       <div #sheetWrapper class="sheet-wrapper">
-        <div [ngStyle]="sheetStyles" #sheet class="sheet"></div>
+        <div [ngStyle]="sheetStyles" #sheet class="sheet-layout bin"></div>
       </div>
     </section>
     <section class="section-editor">
@@ -16,8 +16,8 @@
       </div>
       <div class="general-sections">
         <p>Drag and drop in required sections</p>
-        <div class="general-section-container">
-          <p class="section" *ngFor="let section of generalSections">{{section}}</p>
+        <div #sectionsArea class="layout-sections-container bin" >
+          <p draggable="true" class="resume-section-draggable" *ngFor="let section of generalSections">{{section}}</p>
         </div>
       </div>
     </section>

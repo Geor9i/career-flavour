@@ -121,11 +121,22 @@ export class JSEventBusService {
               (bubling && parents.includes(element)) ||
               (!bubling && children.includes(element))
             ) {
+
+              // console.log(`e.target === element`, e.target === element);
+              // console.log(`(bubling && parents.includes(element)`, bubling && parents.includes(element))
+              // console.log(`!bubling && children.includes(element)`, !bubling && children.includes(element));
+              // console.log("parents: ", parents);
+              // console.log("element: ", element);
+              // console.log("e.target: ", e.target);
+              // console.log("parents: ", parents);
+              // console.log("targetElements: ", targetElements);
+
               subscriberIds.push(subscription.id);
               break;
             }
           }
         } else {
+
           subscriberIds.push(subscription.id);
         }
       });

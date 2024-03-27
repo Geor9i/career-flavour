@@ -8,9 +8,6 @@ import { LayoutSelectorComponent } from './components/layout-selector/layout-sel
 import { EditableTextComponent } from './components/editable-text/editable-text.component';
 import { UtilsModule } from '../utils/utils.module';
 import { AnimationsModule } from '../animations/animations.module';
-
-
-
 @NgModule({
   declarations: [
     ResumePageComponent,
@@ -25,8 +22,6 @@ import { AnimationsModule } from '../animations/animations.module';
     AnimationsModule,
     ResumeRoutingModule,
   ],
-  exports: [ResumePageComponent, ResumeEditorComponent]
+  exports: [ResumePageComponent, ResumeEditorComponent],
 })
-export class ResumeBuilderModule {
-
-}
+export class ResumeBuilderModule {}
