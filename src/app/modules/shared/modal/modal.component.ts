@@ -4,9 +4,7 @@ import {
   Input,
   Output,
   ElementRef,
-  ChangeDetectorRef,
 } from '@angular/core';
-import { FormBuilder} from '@angular/forms';
 
 @Component({
   selector: 'app-modal',
@@ -22,8 +20,6 @@ export class ModalComponent {
   @Output() submitEvent = new EventEmitter();
   constructor(
     private ElementRef: ElementRef,
-    private cdr: ChangeDetectorRef,
-    private fb: FormBuilder
   ) {}
   getAction(action: string) {
     const actions: { [key: string]: () => void } = {

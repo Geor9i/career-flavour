@@ -6,23 +6,11 @@
       </div>
     </section>
     <section class="section-editor">
-      <div class="custom-section">
+      <div #customSection class="custom-section">
         <form #gridForm="ngForm" class="advanced-control">
-          <div class="control-group">
-            <label for="row-start">Row Start</label>
-            <input ngModel name="rowStart" disabled min="1" max="10" id="row-start" type="range">
-          </div>
-          <div class="control-group">
-            <label for="row-end">Row End</label>
-            <input ngModel name="rowEnd" disabled min="1" max="10" id="row-end" type="range">
-          </div>
-          <div class="control-group">
-            <label for="row-start">Column Start</label>
-            <input ngModel name="columnStart" disabled min="1" max="4" id="row-start" type="range">
-          </div>
-          <div class="control-group">
-            <label for="row-end">Column End</label>
-            <input ngModel name="columnEnd" disabled min="1" max="4" id="row-end" type="range">
+          <div class="control-group" *ngFor="let slider of object.keys(sliderValues)">
+            <label for="slider">{{slider | toPascalCase:true}}</label>
+            <input #slider ngModel name="{{slider}}" [attr.data-id]="slider" [disabled]="sectionControlDisabled" (change)="gridPosition()" [(ngModel)]="sliderValues[slider]"  min="0" [attr.max]="slider.toLowerCase().includes('row') ? 9 : 3"  id="slider" type="range">
           </div>
         </form>
           <form class="add-section" (submit)="addSection(customSectionForm)" #customSectionForm="ngForm">

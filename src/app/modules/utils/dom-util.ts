@@ -11,4 +11,16 @@ export default class DomUtil {
     return false;
 }
 
+getParents(child: HTMLElement, maxParentCount = 20) {
+  let currentParent = child.parentElement
+  let counter = 1;
+  const parents: HTMLElement[] = [];
+  while(currentParent && counter <= maxParentCount && currentParent !== document.body) {
+  parents.push(currentParent);
+  currentParent = currentParent.parentElement;
+    counter++;
+  }
+  return parents;
+}
+
 }

@@ -8,9 +8,8 @@ export interface comp {
   component: Type<any>;
   options?: templateModalOptions;
 }
-
-
 export interface templateModalOptions {
   styles?: {[key: string]: string};
   backdropStyles?: {[key: string]: string};
+  openTransmission?: boolean; // Change this line
 }

@@ -18,3 +18,7 @@ export type Bin = {
 export interface TemplateGridStyle {
   [key: string]: string
 }
+
+export interface SliderControl {
+  [key: string]: number
+}

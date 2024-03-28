@@ -1,3 +1,4 @@
+import { EventBusService } from './../../../event-bus/event-bus.service';
 import { layoutConstants } from 'src/app/constants/layoutConstants';
 import { JSEventBusService } from './../../../event-bus/jsevent-bus.service';
 import { UtilService } from './../../../utils/util.service';
@@ -7,12 +8,14 @@ import {
   ElementRef,
   OnDestroy,
   OnInit,
+  QueryList,
   Renderer2,
   ViewChild,
+  ViewChildren,
 } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { JSEvent } from 'src/app/modules/event-bus/types';
-import { Bin } from '../../types';
+import { Bin, SliderControl } from '../../types';
 @Component({
   selector: 'app-layout-selector',
   templateUrl: './layout-selector.component.html',
@@ -24,28 +27,37 @@ export class LayoutSelectorComponent
   @ViewChild('sheetWrapper') sheetWrapper!: ElementRef;
   @ViewChild('sheet') sheetArea!: ElementRef;
   @ViewChild('sectionsArea') sectionsArea!: ElementRef;
+  @ViewChild('customSection') customSection!: ElementRef;
+  @ViewChildren('slider') sliders!: QueryList<ElementRef>;
   constructor(
     private utilService: UtilService,
     private jsEventBusService: JSEventBusService,
+    private eventBusService: EventBusService,
     private renderer: Renderer2
   ) {}
   private bins!: Bin;
+  private activeSection: HTMLElement | null = null;
+  public sectionControlDisabled = true;
   private draggedElement: EventTarget | null = null;
   private onDragChildOverlapEl: EventTarget | null = null;
   private eventUtil = this.utilService.eventUtil;
-  private stringUtil = this.utilService.stringUtil;
+  public stringUtil = this.utilService.stringUtil;
   private resumeUtil = this.utilService.resumeBuilderUtil;
   private domUtil = this.utilService.domUtil;
   private eventId = 'LayoutSelectorComponent';
   private jsEventUnsubscribeArr: (() => void)[] = [];
   private timerInterval: number | null = null;
   private isAppendAllowed = false;
-  private customSectionsForDelete = [];
   public generalSections = [...layoutConstants.generalSections];
-  public headerCheckBoxes = ['Title', 'Summary', 'Image'];
   public deleteOn = false;
   public inDeleteMode = false;
-  private matrix = [[]];
+  public object = Object;
+  public sliderValues: SliderControl = {
+    gridRowStart: 0,
+    gridRowEnd: 0,
+    gridColumnStart: 0,
+    gridColumnEnd: 0,
+  }
   sheetStyles = {
     width: '0',
     height: '0',
@@ -72,7 +84,13 @@ export class LayoutSelectorComponent
       { target: `.resume-section-draggable` }
     );
 
-    this.jsEventUnsubscribeArr.push(unsubscribe1, unsubscribe2, unsubscribe3);
+    const unsubscribe4 = this.jsEventBusService.subscribe(
+      this.eventId,
+      'click',
+      this.activateAdvanceControls.bind(this),
+    );
+
+    this.jsEventUnsubscribeArr.push(unsubscribe1, unsubscribe2, unsubscribe3, unsubscribe4);
   }
 
   dragStart(e: JSEvent) {
@@ -102,21 +120,15 @@ export class LayoutSelectorComponent
 
     if (this.isAppendAllowed) {
 
-
-      const targetIsDragging = eTarget === this.draggedElement;
-    
-
     this.onDragChildOverlapEl = eTarget === parent || eTarget === this.draggedElement ? null : eTarget;
-    console.log(this.onDragChildOverlapEl);
-
     const isDraggedAppended = this.domUtil.hasChild(parent, this.draggedElement as HTMLElement);
     if (eTarget === this.draggedElement && isDraggedAppended) return
 
-
-
-      if (this.onDragChildOverlapEl) {
-        // const childOverlapPosition = this.gedDragPosition(e)
+      if (this.onDragChildOverlapEl && hoverOnSheet && this.dragIsBelowCenter(e)) {
         this.renderer.insertBefore(parent, this.draggedElement, eTarget);
+
+
+      } else if (this.onDragChildOverlapEl && !hoverOnSheet) {
       } else {
         this.renderer.appendChild(parent, this.draggedElement);
       }
@@ -139,15 +151,60 @@ export class LayoutSelectorComponent
     this.isAppendAllowed = false;
   }
 
-  gedDragPosition(e: JSEvent) {
-    const { width, height, top, left } =
-      this.sheetArea.nativeElement.getBoundingClientRect();
-      const { clientX, clientY, offsetX, offsetY } = this.eventUtil.eventData(e);
-      // console.log({ offsetX, offsetY });
+  dragIsBelowCenter(e: JSEvent) {
+    const {height} =
+      (this.onDragChildOverlapEl as HTMLElement).getBoundingClientRect();
+      const { offsetX, offsetY } = this.eventUtil.eventData(e);
+      return offsetY > height / 2;
+    }
+  activateAdvanceControls(e: JSEvent) {
+    const target = e.target as HTMLElement;
+    const parents = this.domUtil.getParents(target, 10);
+    const sections = Array.from(document.querySelectorAll('.resume-section-draggable.on-sheet'));
+    // If teh click is not relted to a section
+    if (!this.sectionControlDisabled && this.activeSection && !parents.includes(this.customSection.nativeElement) && !sections.includes(target)) {
+        this.sectionControlDisabled = true;
+        this.activeSection = null;
+        Object.keys(this.sliderValues).forEach(sliderName => {
+          this.sliderValues[sliderName] = 0;
+        })
+        // If the click is related to a section and prevois controls a disabled
+    } else {
 
-    // console.log({width, height, top, left});
+      const currentSection = this.generalSections.find(section => section.title === target.dataset['id'])
+      const sectionStyles = currentSection?.styles;
+        if (this.sectionControlDisabled && !this.activeSection && sections.includes(target)) {
+          Object.keys(this.sliderValues).forEach(sliderName => {
+            this.sliderValues[sliderName] = (Number(sectionStyles?.[sliderName]))
+          })
+            this.sectionControlDisabled = false;
+            this.activeSection = target;
+        }  else if (!this.sectionControlDisabled && this.activeSection && sections.includes(target) && this.activeSection !== target) {
+          const currentSection = this.generalSections.find(section => section.title === target.dataset['id'])
+          const sectionStyles = currentSection?.styles;
+        Object.keys(this.sliderValues).forEach(sliderName => {
+          this.sliderValues[sliderName] = (Number(sectionStyles?.[sliderName]))
+        })
+            this.sectionControlDisabled = false;
+            this.activeSection = target;
+        }
+    }
+  }
 
-    // console.log({clientX, clientY});
+
+  gridPosition() {
+    if (this.activeSection) {
+      const sectionConfig = this.generalSections.find(section => section.title === this.activeSection?.dataset['id'] );
+      Object.keys(this.sliderValues).forEach(styleProp => {
+        if (this.sliderValues[styleProp]) {
+          this.renderer.setStyle(this.activeSection, `${styleProp}`, `${this.sliderValues[styleProp]}`)
+          if (sectionConfig?.styles[styleProp]) {
+            sectionConfig.styles[styleProp] = `${this.sliderValues[styleProp]}`;
+          }
+        }
+      });
+    }
+
   }
 
   dragEnd(e: JSEvent) {
@@ -156,7 +213,13 @@ export class LayoutSelectorComponent
       window.clearInterval(this.timerInterval);
       this.timerInterval = null;
     }
+
     if (!this.onDragChildOverlapEl) {
+      this.eventBusService.emit({
+        event: 'TemplateModalContentOutput',
+        data: { templateLayout: 'a a a b c d' },
+      });
+
       return;
     }
     const parent = (e.target as HTMLElement).parentElement;
@@ -172,7 +235,6 @@ export class LayoutSelectorComponent
       let swappableIndex = children.findIndex(
         (child) => child === this.onDragChildOverlapEl
       );
-      console.log({ draggableIndex, swappableIndex });
       if (draggableIndex !== swappableIndex) {
         children.forEach((child) => child.remove());
         children.splice(
@@ -186,6 +248,10 @@ export class LayoutSelectorComponent
         this.renderer.appendChild(parent, fragment);
       }
     }
+    this.eventBusService.emit({
+      event: 'TemplateModalContentOutput',
+      data: { templateLayout: 'a a a b c d' },
+    });
   }
 
   ngAfterViewInit(): void {
@@ -207,16 +273,26 @@ export class LayoutSelectorComponent
   }
 
   addSection(form: NgForm) {
+
+    if (this.generalSections.length > 15) {
+      throw new Error('Cannot have more than 15 sections on the pool!')
+    }
     let { name } = form.value;
+    const alreadyExists = this.generalSections.find(section => section.title.toLowerCase() === name.toLowerCase());
+    if (alreadyExists) {
+      throw new Error('Section alredy exists!')
+    }
+
+
     if (!name) name = this.stringUtil.format(name);
     name = this.stringUtil.toPascalCase(name);
     this.generalSections.push({
       title: name as string,
       styles: {
-        'grid-column-start': '1',
-        'grid-column-end': '1',
-        'grid-row-start': '1',
-        'grid-row-end': '1',
+        gridRowStart: '0',
+        gridRowEnd: '0',
+        gridColumnStart: '0',
+        gridColumnEnd: '0',
       },
       position: [],
     });
@@ -224,25 +300,28 @@ export class LayoutSelectorComponent
   }
 
   deleteMode(e: Event) {
-    console.log('indeletemode');
-
-    const deleteMode = (e.target as HTMLInputElement).checked;
+    const target = e.target as HTMLInputElement
+    const deleteMode = target.checked;
     const customSections = this.generalSections.filter(
       (section) => !layoutConstants.generalSections.includes(section)
     );
-    if (!customSections.length) return;
+    if (!customSections.length ){
+      target.checked = false
+      return;
+    }
 
     if (deleteMode) {
       customSections.forEach((section) => {
-        const parent = document.querySelector(`[data-id="${section.title}"]`);
-        if (parent) {
+        const sectionElement = document.querySelector(`[data-id="${section.title}"]`);
+        const hasButton = sectionElement?.querySelector('.section-delete-btn');
+        if (sectionElement && !hasButton) {
           const deleteBtn = this.renderer.createElement('A');
           this.renderer.setProperty(deleteBtn, 'textContent', 'x');
           this.renderer.addClass(deleteBtn, 'section-delete-btn');
           this.renderer.listen(deleteBtn, 'click', () =>
-            this.removeSection(parent, section.title)
+            this.removeSection(sectionElement, section.title)
           );
-          this.renderer.appendChild(parent, deleteBtn);
+          this.renderer.appendChild(sectionElement, deleteBtn);
         }
       });
     } else {

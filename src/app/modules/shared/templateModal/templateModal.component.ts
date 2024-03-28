@@ -1,15 +1,13 @@
 import {
   Component,
-  ChangeDetectorRef,
   OnInit,
   OnDestroy,
   Type,
-  ViewContainerRef,
-  inject,
 } from '@angular/core';
 import { TemplateModalService } from './templateModal.service';
 import { EventBusService } from '../../event-bus/event-bus.service';
 import { Subscription } from 'rxjs';
+import { TransmissionData } from '../../event-bus/types';
 
 @Component({
   selector: 'app-template-modal',
@@ -19,10 +17,11 @@ import { Subscription } from 'rxjs';
 export class TemplateModalComponent implements OnInit, OnDestroy {
   constructor(
     private templateModalService: TemplateModalService,
-    private eventBus: EventBusService
+    private eventBus: EventBusService,
   ) {}
   private templateModalServiceSubscription: Subscription | undefined;
   private eventBusSubscription: Subscription | undefined;
+  private openTransmission = false;
   template: any;
   modalStyles = {};
   backdropStyles = {};
@@ -42,13 +41,23 @@ export class TemplateModalComponent implements OnInit, OnDestroy {
           this.template = component;
           this.isActive = true;
         }
+        if (options?.openTransmission) {
+          this.openTransmission = true;
+        }
+
       });
     this.eventBusSubscription = this.eventBus
       .on('TemplateModalContentOutput')
       .subscribe((observer) => {
+
         if (!observer) return
-        if (observer && observer.hasOwnProperty('data') && observer.data?.hasOwnProperty('confirm')) {
-          observer.data['confirm'] ? this.submit() : this.close();
+
+        if (observer.data) {
+          if (this.openTransmission && !observer.data.hasOwnProperty('confirm')) {
+            this.send(observer.data);
+          } else if (observer.data?.hasOwnProperty('confirm')) {
+            observer.data['confirm'] ? this.submit(observer.data) : this.close();
+          }
         }
       });
   }
@@ -58,13 +67,13 @@ export class TemplateModalComponent implements OnInit, OnDestroy {
     this.eventBusSubscription?.unsubscribe();
   }
 
-  getAction(action: string) {
-    const actions: { [key: string]: () => void } = {
-      submit: this.submit.bind(this),
-      cancel: this.close.bind(this),
-    };
-    return actions[action]();
-  }
+  // getAction(action: string) {
+  //   const actions: { [key: string]: () => void } = {
+  //     submit: this.submit.bind(this),
+  //     cancel: this.close.bind(this),
+  //   };
+  //   return actions[action]();
+  // }
 
   close(): void {
     this.isActive = false;
@@ -74,11 +83,18 @@ export class TemplateModalComponent implements OnInit, OnDestroy {
     });
   }
 
-  submit(): void {
+  send(data: TransmissionData): void {
+    this.eventBus.emit({
+      event: 'templateModalOutput',
+      data,
+    });
+  }
+
+  submit(data: object): void {
     this.isActive = false;
     this.eventBus.emit({
       event: 'templateModalOutput',
-      data: { confirm: true },
+      data: { confirm: true, data },
     });
   }
 }

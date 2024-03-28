@@ -1,6 +1,10 @@
+export interface TransmissionData {
+  [key: string]: boolean | string | object | number;
+}
+
 export interface BusData {
   event: string;
-  data?: { [key: string]: boolean | string };
+  data?: { [key: string]: boolean | string | object | TransmissionData | number};
 }
 
 export interface Subscribers {
