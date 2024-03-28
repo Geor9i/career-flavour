@@ -4,6 +4,7 @@ import FormUtil from './form-util';
 import ObjectUtil from './object.util';
 import ResumeBuilderUtil from './resume-util';
 import EventUtil from './event-util';
+import DomUtil from './dom-util';
 
 @Injectable({
   providedIn: 'root',
@@ -14,6 +15,7 @@ export class UtilService {
     public formUtil: FormUtil,
     public objectUtil: ObjectUtil,
     public resumeBuilderUtil: ResumeBuilderUtil,
-    public eventUtil: EventUtil
+    public eventUtil: EventUtil,
+    public domUtil: DomUtil
   ) {}
 }

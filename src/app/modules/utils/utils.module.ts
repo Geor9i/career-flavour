@@ -8,11 +8,12 @@ import ObjectUtil from './object.util';
 import ResumeBuilderUtil from './resume-util';
 import FormUtil from './form-util';
 import EventUtil from './event-util';
+import DomUtil from './dom-util';
 
 @NgModule({
   declarations: [EmailDirective, StringDirective, RepeatPasswordDirective],
   imports: [CommonModule],
   exports: [EmailDirective, StringDirective, RepeatPasswordDirective],
-  providers: [StringUtil, ObjectUtil, ResumeBuilderUtil, FormUtil, EventUtil]
+  providers: [StringUtil, ObjectUtil, ResumeBuilderUtil, FormUtil, EventUtil, DomUtil]
 })
 export class UtilsModule {}

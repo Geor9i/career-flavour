@@ -1,8 +1,10 @@
-const initialStyles = {
+import { TemplateGridStyle } from "../modules/resume-builder/types"
+
+const initialStyles: TemplateGridStyle = {
   'grid-column-start': '1',
-  'grid-column-end': '1',
-  'grid-row-start': '1',
-  'grid-row-end': '1',
+  'grid-column-end': '3',
+  // 'grid-row-start': '1',
+  // 'grid-row-end': '1',
 }
 
 export const layoutConstants = {

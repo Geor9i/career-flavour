@@ -7,24 +7,36 @@
     </section>
     <section class="section-editor">
       <div class="custom-section">
-        <div class="header-checkboxes">
-          <div class="checkbox-group" *ngFor="let checkboxName of headerCheckBoxes">
-            <label for="{{checkboxName}}">{{checkboxName}}</label>
-            <input type="checkbox" id="{{checkboxName}}" value="{{checkboxName}}">
+        <form #gridForm="ngForm" class="advanced-control">
+          <div class="control-group">
+            <label for="row-start">Row Start</label>
+            <input ngModel name="rowStart" disabled min="1" max="10" id="row-start" type="range">
           </div>
-        </div>
-          <form (submit)="addSection(customSectionForm)" #customSectionForm="ngForm">
+          <div class="control-group">
+            <label for="row-end">Row End</label>
+            <input ngModel name="rowEnd" disabled min="1" max="10" id="row-end" type="range">
+          </div>
+          <div class="control-group">
+            <label for="row-start">Column Start</label>
+            <input ngModel name="columnStart" disabled min="1" max="4" id="row-start" type="range">
+          </div>
+          <div class="control-group">
+            <label for="row-end">Column End</label>
+            <input ngModel name="columnEnd" disabled min="1" max="4" id="row-end" type="range">
+          </div>
+        </form>
+          <form class="add-section" (submit)="addSection(customSectionForm)" #customSectionForm="ngForm">
+            <button [disabled]="customSectionForm.invalid">ADD</button>
             <div>
-              <input appGlowFields ngModel #name="ngModel" name="name" minlength="3" maxlength="10" type="text" required placeholder="Custom section">
+              <input appGlowFields ngModel #name="ngModel" name="name" minlength="3" maxlength="25" type="text" required placeholder="Custom section">
             </div>
-            <button [disabled]="customSectionForm.invalid">Add Section</button>
           </form>
       </div>
       <div draggable="false" class="general-sections">
         <p>Drag and drop resume sections</p>
         <div class="remove-sections-container">
           <label for="remove-section">Delete Sections</label>
-          <input id="remove-section" type="checkbox" (change)="deleteMode($event)">
+          <input id="remove-section" type="checkbox"[(ngModel)]="inDeleteMode" (change)="deleteMode($event)">
         </div>
         <div #sectionsArea class="layout-sections-container bin" >
           <p draggable="true" class="resume-section-draggable in-general-section" [attr.data-id]="section.title" [ngStyle]="section.styles" *ngFor="let section of generalSections">{{section.title}}</p>

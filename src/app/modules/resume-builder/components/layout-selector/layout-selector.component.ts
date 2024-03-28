@@ -29,12 +29,13 @@ export class LayoutSelectorComponent
     private jsEventBusService: JSEventBusService,
     private renderer: Renderer2
   ) {}
-  private bins: Bin = [];
-  private draggedElement!: EventTarget;
-  private draggableSwapElement: EventTarget | null = null;
+  private bins!: Bin;
+  private draggedElement: EventTarget | null = null;
+  private onDragChildOverlapEl: EventTarget | null = null;
   private eventUtil = this.utilService.eventUtil;
   private stringUtil = this.utilService.stringUtil;
   private resumeUtil = this.utilService.resumeBuilderUtil;
+  private domUtil = this.utilService.domUtil;
   private eventId = 'LayoutSelectorComponent';
   private jsEventUnsubscribeArr: (() => void)[] = [];
   private timerInterval: number | null = null;
@@ -43,6 +44,7 @@ export class LayoutSelectorComponent
   public generalSections = [...layoutConstants.generalSections];
   public headerCheckBoxes = ['Title', 'Summary', 'Image'];
   public deleteOn = false;
+  public inDeleteMode = false;
   private matrix = [[]];
   sheetStyles = {
     width: '0',
@@ -75,55 +77,77 @@ export class LayoutSelectorComponent
 
   dragStart(e: JSEvent) {
     this.renderer.addClass(e.target, 'dragging');
-    if (e.target) {
-      this.draggedElement = e.target;
-    }
+    this.draggedElement = e.target ? e.target : null;
   }
 
   dragOver(e: JSEvent) {
+
     e.preventDefault();
     const eTarget = e.target as HTMLElement;
+    const parentName = Object.keys(this.bins).find(
+      (bin) =>
+        this.bins[bin].element === eTarget ||
+        this.bins[bin].element === eTarget.parentElement
+    );
+    const parent = this.bins[parentName as string].element;
+    const hoverOnSheet = parent === this.sheetArea.nativeElement;
+
+    if (!parent) return;
+
     if (!this.timerInterval) {
       this.timerInterval = window.setInterval(() => {
         this.isAppendAllowed = true;
       }, 80);
     }
+
     if (this.isAppendAllowed) {
-      let parentBin = eTarget.parentElement;
-      // If you are directly inside a bin area
-      if (this.bins.some((obj) => obj.element === eTarget)) {
-        parentBin = eTarget;
-        this.renderer.appendChild(eTarget, this.draggedElement);
-        this.draggableSwapElement = null;
-        // If you are on top of an element contained in a bin
-      } else if (this.bins.some((obj) => obj.element === parentBin)) {
-        this.renderer.insertBefore(parentBin, this.draggedElement, eTarget);
-        this.draggableSwapElement = eTarget;
+
+
+      const targetIsDragging = eTarget === this.draggedElement;
+    
+
+    this.onDragChildOverlapEl = eTarget === parent || eTarget === this.draggedElement ? null : eTarget;
+    console.log(this.onDragChildOverlapEl);
+
+    const isDraggedAppended = this.domUtil.hasChild(parent, this.draggedElement as HTMLElement);
+    if (eTarget === this.draggedElement && isDraggedAppended) return
+
+
+
+      if (this.onDragChildOverlapEl) {
+        // const childOverlapPosition = this.gedDragPosition(e)
+        this.renderer.insertBefore(parent, this.draggedElement, eTarget);
+      } else {
+        this.renderer.appendChild(parent, this.draggedElement);
       }
-      let parentBinIndex = this.bins.findIndex(
-        (bin) => bin.element === parentBin
-      );
-      this.bins[parentBinIndex].classes.forEach((classStr) =>
-        this.renderer.addClass(this.draggedElement, classStr)
-      );
-      this.bins[this.bins.length - 1 - parentBinIndex].classes.forEach(
-        (classStr) => this.renderer.removeClass(this.draggedElement, classStr)
-      );
-      if (parentBin === this.sheetArea.nativeElement) {
-        const className = this.getSheetAreaClass(e);
+      if (hoverOnSheet) {
+        this.bins['sheet'].classes.forEach((className) => {
+          this.renderer.addClass(this.draggedElement, className);
+        });
+        this.bins['storage'].classes.forEach((className) => {
+          this.renderer.removeClass(this.draggedElement, className);
+        });
+      } else {
+        this.bins['storage'].classes.forEach((className) => {
+          this.renderer.addClass(this.draggedElement, className);
+        });
+        this.bins['sheet'].classes.forEach((className) => {
+          this.renderer.removeClass(this.draggedElement, className);
+        });
       }
-      this.isAppendAllowed = false;
     }
+    this.isAppendAllowed = false;
   }
 
-  getSheetAreaClass(e: JSEvent) {
+  gedDragPosition(e: JSEvent) {
     const { width, height, top, left } =
       this.sheetArea.nativeElement.getBoundingClientRect();
+      const { clientX, clientY, offsetX, offsetY } = this.eventUtil.eventData(e);
+      // console.log({ offsetX, offsetY });
+
     // console.log({width, height, top, left});
 
-    const { clientX, clientY, offsetX, offsetY } = this.eventUtil.eventData(e);
     // console.log({clientX, clientY});
-    // console.log({ offsetX, offsetY });
   }
 
   dragEnd(e: JSEvent) {
@@ -132,7 +156,7 @@ export class LayoutSelectorComponent
       window.clearInterval(this.timerInterval);
       this.timerInterval = null;
     }
-    if (!this.draggableSwapElement) {
+    if (!this.onDragChildOverlapEl) {
       return;
     }
     const parent = (e.target as HTMLElement).parentElement;
@@ -146,7 +170,7 @@ export class LayoutSelectorComponent
       const children = Array.from(parent?.children);
       let draggableIndex = children.findIndex((child) => child === e.target);
       let swappableIndex = children.findIndex(
-        (child) => child === this.draggableSwapElement
+        (child) => child === this.onDragChildOverlapEl
       );
       console.log({ draggableIndex, swappableIndex });
       if (draggableIndex !== swappableIndex) {
@@ -154,7 +178,7 @@ export class LayoutSelectorComponent
         children.splice(
           draggableIndex,
           1,
-          this.draggableSwapElement as HTMLElement
+          this.onDragChildOverlapEl as HTMLElement
         );
         children.splice(swappableIndex, 1, e.target as HTMLElement);
         const fragment = document.createDocumentFragment();
@@ -166,16 +190,16 @@ export class LayoutSelectorComponent
 
   ngAfterViewInit(): void {
     this.setSheetDimensions();
-    this.bins = [
-      {
+    this.bins = {
+      storage: {
         element: this.sectionsArea.nativeElement as HTMLElement,
         classes: ['in-general-section'],
       },
-      {
+      sheet: {
         element: this.sheetArea.nativeElement as HTMLElement,
         classes: ['on-sheet', 'resizeable'],
       },
-    ];
+    };
   }
 
   ngOnDestroy(): void {
@@ -200,6 +224,8 @@ export class LayoutSelectorComponent
   }
 
   deleteMode(e: Event) {
+    console.log('indeletemode');
+
     const deleteMode = (e.target as HTMLInputElement).checked;
     const customSections = this.generalSections.filter(
       (section) => !layoutConstants.generalSections.includes(section)
@@ -220,11 +246,11 @@ export class LayoutSelectorComponent
         }
       });
     } else {
-      customSections.forEach(section => {
+      customSections.forEach((section) => {
         const parent = document.querySelector(`[data-id="${section.title}"]`);
         const button = parent?.querySelector('.section-delete-btn');
         this.renderer.removeChild(parent, button);
-      })
+      });
     }
   }
 
@@ -232,6 +258,12 @@ export class LayoutSelectorComponent
     parent.remove();
     const index = this.generalSections.findIndex((obj) => obj.title === title);
     this.generalSections.splice(index, 1);
+    const customSections = this.generalSections.filter(
+      (section) => !layoutConstants.generalSections.includes(section)
+    );
+    if (!customSections.length) {
+      this.inDeleteMode = false;
+    }
   }
 
   setSheetDimensions() {

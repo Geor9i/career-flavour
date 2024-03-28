@@ -8,6 +8,13 @@ export interface Style {
 }
 
 export type Bin = {
-  element: HTMLElement;
-  classes: string[];
-}[];
+  [key: string]: {
+    element: HTMLElement;
+    classes: string[];
+  }
+};
+
+
+export interface TemplateGridStyle {
+  [key: string]: string
+}
