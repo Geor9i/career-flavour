@@ -36,18 +36,7 @@ export class ResumePageComponent implements OnInit, OnDestroy {
   public selectedOption: Event | string = '';
   public sections: any[]= [];
   resumeStyles = INITIAL_STYLES;
-  public sectionStyles: Style = {
-    gridRowStart: '0',
-    gridRowEnd: '0',
-    gridColumnStart: '1',
-    gridColumnEnd: '2',
-  };
-  public sectionStyles1: Style = {
-    gridRowStart: '0',
-    gridRowEnd: '0',
-    gridColumnStart: '2',
-    gridColumnEnd: '3',
-  };
+  public textStyles: Style = {};
 
   ngOnInit(): void {
     this.renderer.setStyle(
@@ -104,6 +93,7 @@ export class ResumePageComponent implements OnInit, OnDestroy {
     this.resumeStyles['width'] = width + unit;
     this.resumeStyles['height'] = height + unit;
     this.resumeStyles['fontSize'] = fontSize + unit;
+    this.textStyles['fontSize'] = fontSize + unit;
   }
 
   changeFont() {

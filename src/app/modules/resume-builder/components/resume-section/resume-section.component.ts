@@ -9,6 +9,8 @@ import { Style, layoutData } from '../../types';
 export class ResumeSectionComponent implements OnChanges {
   @Input('gridStyles')styles: Style = {}
   @Input('data')data: layoutData | null = null;
+  @Input('contentStyle') contentStyles: Style = {};
+  @Input('textStyles') textStyles: Style = {};
   @HostBinding('style') sectionStyles: Style = this.styles
 
   ngOnChanges(changes: SimpleChanges) {

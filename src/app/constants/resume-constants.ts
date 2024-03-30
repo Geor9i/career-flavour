@@ -28,13 +28,8 @@ export const resumeConstants = {
 
 export const INITIAL_STYLES: Style = {
   display: 'grid',
-  // gridAutoColumns: 'minmax(0, 1fr)',
-  // gridAutoRows: 'minmax(0, 1fr)',
-  // gridTemplateColumns: '1fr 1fr',
   width: '595px',
   height: '842px',
-  maxWidth: '595px',
-  maxHeight: '842px',
   backgroundColor: 'lightgray',
   color: 'black',
   fontFamily: 'Arial, sans-serif',

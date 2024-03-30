@@ -2,7 +2,7 @@
   <div [ngStyle]="resumeStyles" #sheet class="page">
     <!-- <app-resume-section [gridStyles]="sectionStyles" /> -->
     <ng-container *ngIf="sections">
-      <app-resume-section class="section" [gridStyles]="section['styles']" [data]="section" *ngFor="let section of sections" />
+      <app-resume-section class="section" [textStyles]="textStyles" [gridStyles]="section['styles']" [data]="section" *ngFor="let section of sections" />
     </ng-container>
   </div>
   <aside>

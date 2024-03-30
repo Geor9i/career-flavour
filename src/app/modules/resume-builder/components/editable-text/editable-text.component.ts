@@ -8,7 +8,6 @@ import {
   SimpleChanges,
 } from '@angular/core';
 import { Style } from '../../types';
-import { INITIAL_STYLES } from 'src/app/constants/resume-constants';
 
 @Component({
   selector: 'app-p',
@@ -19,7 +18,6 @@ export class EditableTextComponent implements OnChanges, AfterViewInit {
   @Output('textChanged') textChanged: EventEmitter<string> =
     new EventEmitter<string>();
   @Input('text') text: any = '';
-  @Input('size') size: string = INITIAL_STYLES['fontSize'] || '';
   @Input('textStyles') styles: Style = {};
   public isInput = false;
   public textContent: string | null = this.text;
@@ -29,10 +27,7 @@ export class EditableTextComponent implements OnChanges, AfterViewInit {
 
   ngAfterViewInit(): void {
     this.textContent, this.inputBuffer = this.text;
-    this.styles = {
-      ...this.styles,
-      fontSize: this.size
-    }
+   
   }
 
   ngOnChanges(changes: SimpleChanges): void {
