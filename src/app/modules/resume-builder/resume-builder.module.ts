@@ -9,12 +9,14 @@ import { EditableTextComponent } from './components/editable-text/editable-text.
 import { UtilsModule } from '../utils/utils.module';
 import { AnimationsModule } from '../animations/animations.module';
 import { PipesModule } from '../pipes/pipes.module';
+import { ResumeSectionComponent } from './components/resume-section/resume-section.component';
 @NgModule({
   declarations: [
     ResumePageComponent,
     ResumeEditorComponent,
     LayoutSelectorComponent,
     EditableTextComponent,
+    ResumeSectionComponent,
   ],
   imports: [
     CommonModule,

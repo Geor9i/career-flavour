@@ -2,8 +2,8 @@ import { JSEventBusService } from './../../../event-bus/jsevent-bus.service';
 import { resumeConstants } from './../../../../constants/resume-constants';
 import { UtilService } from './../../../utils/util.service';
 import { PageManagerService } from './../../page-manager.service';
-import { AfterViewInit, Component, ElementRef, OnInit, Renderer2, ViewChild } from '@angular/core';
-import { PageValues } from '../../types';
+import { Component, ElementRef, OnDestroy, OnInit, Renderer2, ViewChild } from '@angular/core';
+import { PageValues, Style } from '../../types';
 import { JSEvent } from 'src/app/modules/event-bus/types';
 
 @Component({
@@ -11,12 +11,12 @@ import { JSEvent } from 'src/app/modules/event-bus/types';
   templateUrl: './resume-page.component.html',
   styleUrls: ['./resume-page.component.css'],
 })
-export class ResumePageComponent implements OnInit {
+export class ResumePageComponent implements OnInit, OnDestroy {
   constructor(
     private jsEventBusService: JSEventBusService,
     private pageManager: PageManagerService,
     private utilService: UtilService,
-    private rendered: Renderer2,
+    private renderer: Renderer2,
     private elRef: ElementRef
   ) {}
   @ViewChild('sheet') sheet!: ElementRef;
@@ -26,13 +26,29 @@ export class ResumePageComponent implements OnInit {
   public resumeConstants = resumeConstants;
   public selectedOption: Event | string = '';
   resumeStyles = resumeConstants.INITIAL_STYLES;
+  public sectionStyles: Style = {
+    gridRowStart: '0',
+    gridRowEnd: '0',
+    gridColumnStart: '1',
+    gridColumnEnd: '2',
+  }
+  public sectionStyles1: Style = {
+    gridRowStart: '0',
+    gridRowEnd: '0',
+    gridColumnStart: '2',
+    gridColumnEnd: '3',
+  }
 
   ngOnInit(): void {
-    this.rendered.setStyle(document.documentElement, 'background-color', '#444457')
+    this.renderer.setStyle(document.documentElement, 'background-color', '#444457')
     this.pageManager.messenger$.subscribe((data) => {
       this.delegateTask(data);
     });
 
+  }
+
+  ngOnDestroy(): void {
+    this.renderer.removeStyle(document.documentElement, 'background-color')
   }
 
   change(value: PageValues) {
@@ -52,7 +68,7 @@ export class ResumePageComponent implements OnInit {
   }
 
   resizePage(size: string) {
-    let { width, height, unit} = this.resumeBuilderUtil.changeAspectRatio(size, this.resumeStyles, 'px');
+    let { width, height, unit} = this.resumeBuilderUtil.calcAspectRatio(size, this.resumeStyles, 'px');
     let fontSize = this.resumeBuilderUtil.fontRatio(width);
     this.resumeStyles.width = width + unit;
     this.resumeStyles.height = height + unit;

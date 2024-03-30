@@ -15,7 +15,7 @@ import {
 } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { JSEvent } from 'src/app/modules/event-bus/types';
-import { Bin, SliderControl } from '../../types';
+import { Bin, GridData, SliderControl, TemplateGridStyle, layoutData } from '../../types';
 @Component({
   selector: 'app-layout-selector',
   templateUrl: './layout-selector.component.html',
@@ -48,6 +48,7 @@ export class LayoutSelectorComponent
   private jsEventUnsubscribeArr: (() => void)[] = [];
   private timerInterval: number | null = null;
   private isAppendAllowed = false;
+  private gridData: GridData = {}
   public generalSections = [...layoutConstants.generalSections];
   public deleteOn = false;
   public inDeleteMode = false;
@@ -57,7 +58,7 @@ export class LayoutSelectorComponent
     gridRowEnd: 0,
     gridColumnStart: 0,
     gridColumnEnd: 0,
-  }
+  };
   sheetStyles = {
     width: '0',
     height: '0',
@@ -80,17 +81,22 @@ export class LayoutSelectorComponent
     const unsubscribe3 = this.jsEventBusService.subscribe(
       this.eventId,
       'dragend',
-      this.dragEnd.bind(this),
+      this.dragEndTransmit.bind(this),
       { target: `.resume-section-draggable` }
     );
 
     const unsubscribe4 = this.jsEventBusService.subscribe(
       this.eventId,
       'click',
-      this.activateAdvanceControls.bind(this),
+      this.activateAdvanceControls.bind(this)
     );
 
-    this.jsEventUnsubscribeArr.push(unsubscribe1, unsubscribe2, unsubscribe3, unsubscribe4);
+    this.jsEventUnsubscribeArr.push(
+      unsubscribe1,
+      unsubscribe2,
+      unsubscribe3,
+      unsubscribe4
+    );
   }
 
   dragStart(e: JSEvent) {
@@ -99,7 +105,6 @@ export class LayoutSelectorComponent
   }
 
   dragOver(e: JSEvent) {
-
     e.preventDefault();
     const eTarget = e.target as HTMLElement;
     const parentName = Object.keys(this.bins).find(
@@ -119,15 +124,20 @@ export class LayoutSelectorComponent
     }
 
     if (this.isAppendAllowed) {
+      this.onDragChildOverlapEl =
+        eTarget === parent || eTarget === this.draggedElement ? null : eTarget;
+      const isDraggedAppended = this.domUtil.hasChild(
+        parent,
+        this.draggedElement as HTMLElement
+      );
+      if (eTarget === this.draggedElement && isDraggedAppended) return;
 
-    this.onDragChildOverlapEl = eTarget === parent || eTarget === this.draggedElement ? null : eTarget;
-    const isDraggedAppended = this.domUtil.hasChild(parent, this.draggedElement as HTMLElement);
-    if (eTarget === this.draggedElement && isDraggedAppended) return
-
-      if (this.onDragChildOverlapEl && hoverOnSheet && this.dragIsBelowCenter(e)) {
+      if (
+        this.onDragChildOverlapEl &&
+        hoverOnSheet &&
+        this.dragIsBelowCenter(e)
+      ) {
         this.renderer.insertBefore(parent, this.draggedElement, eTarget);
-
-
       } else if (this.onDragChildOverlapEl && !hoverOnSheet) {
       } else {
         this.renderer.appendChild(parent, this.draggedElement);
@@ -152,62 +162,86 @@ export class LayoutSelectorComponent
   }
 
   dragIsBelowCenter(e: JSEvent) {
-    const {height} =
-      (this.onDragChildOverlapEl as HTMLElement).getBoundingClientRect();
-      const { offsetX, offsetY } = this.eventUtil.eventData(e);
-      return offsetY > height / 2;
-    }
+    const { height } = (
+      this.onDragChildOverlapEl as HTMLElement
+    ).getBoundingClientRect();
+    const { offsetX, offsetY } = this.eventUtil.eventData(e);
+    return offsetY > height / 2;
+  }
   activateAdvanceControls(e: JSEvent) {
     const target = e.target as HTMLElement;
     const parents = this.domUtil.getParents(target, 10);
-    const sections = Array.from(document.querySelectorAll('.resume-section-draggable.on-sheet'));
+    const sections = Array.from(
+      document.querySelectorAll('.resume-section-draggable.on-sheet')
+    );
     // If teh click is not relted to a section
-    if (!this.sectionControlDisabled && this.activeSection && !parents.includes(this.customSection.nativeElement) && !sections.includes(target)) {
-        this.sectionControlDisabled = true;
-        this.activeSection = null;
-        Object.keys(this.sliderValues).forEach(sliderName => {
-          this.sliderValues[sliderName] = 0;
-        })
-        // If the click is related to a section and prevois controls a disabled
+    if (
+      !this.sectionControlDisabled &&
+      this.activeSection &&
+      !parents.includes(this.customSection.nativeElement) &&
+      !sections.includes(target)
+    ) {
+      this.sectionControlDisabled = true;
+      this.activeSection = null;
+      Object.keys(this.sliderValues).forEach((sliderName) => {
+        this.sliderValues[sliderName] = 0;
+      });
+      // If the click is related to a section and prevois controls a disabled
     } else {
-
-      const currentSection = this.generalSections.find(section => section.title === target.dataset['id'])
+      const currentSection = this.generalSections.find(
+        (section) => section.title === target.dataset['id']
+      );
       const sectionStyles = currentSection?.styles;
-        if (this.sectionControlDisabled && !this.activeSection && sections.includes(target)) {
-          Object.keys(this.sliderValues).forEach(sliderName => {
-            this.sliderValues[sliderName] = (Number(sectionStyles?.[sliderName]))
-          })
-            this.sectionControlDisabled = false;
-            this.activeSection = target;
-        }  else if (!this.sectionControlDisabled && this.activeSection && sections.includes(target) && this.activeSection !== target) {
-          const currentSection = this.generalSections.find(section => section.title === target.dataset['id'])
-          const sectionStyles = currentSection?.styles;
-        Object.keys(this.sliderValues).forEach(sliderName => {
-          this.sliderValues[sliderName] = (Number(sectionStyles?.[sliderName]))
-        })
-            this.sectionControlDisabled = false;
-            this.activeSection = target;
-        }
+      if (
+        this.sectionControlDisabled &&
+        !this.activeSection &&
+        sections.includes(target)
+      ) {
+        Object.keys(this.sliderValues).forEach((sliderName) => {
+          this.sliderValues[sliderName] = Number(sectionStyles?.[sliderName]);
+        });
+        this.sectionControlDisabled = false;
+        this.activeSection = target;
+      } else if (
+        !this.sectionControlDisabled &&
+        this.activeSection &&
+        sections.includes(target) &&
+        this.activeSection !== target
+      ) {
+        const currentSection = this.generalSections.find(
+          (section) => section.title === target.dataset['id']
+        );
+        const sectionStyles = currentSection?.styles;
+        Object.keys(this.sliderValues).forEach((sliderName) => {
+          this.sliderValues[sliderName] = Number(sectionStyles?.[sliderName]);
+        });
+        this.sectionControlDisabled = false;
+        this.activeSection = target;
+      }
     }
   }
 
-
   gridPosition() {
     if (this.activeSection) {
-      const sectionConfig = this.generalSections.find(section => section.title === this.activeSection?.dataset['id'] );
-      Object.keys(this.sliderValues).forEach(styleProp => {
+      const sectionConfig = this.generalSections.find(
+        (section) => section.title === this.activeSection?.dataset['id']
+      );
+      Object.keys(this.sliderValues).forEach((styleProp) => {
         if (this.sliderValues[styleProp]) {
-          this.renderer.setStyle(this.activeSection, `${styleProp}`, `${this.sliderValues[styleProp]}`)
+          this.renderer.setStyle(
+            this.activeSection,
+            `${styleProp}`,
+            `${this.sliderValues[styleProp]}`
+          );
           if (sectionConfig?.styles[styleProp]) {
             sectionConfig.styles[styleProp] = `${this.sliderValues[styleProp]}`;
           }
         }
       });
     }
-
   }
 
-  dragEnd(e: JSEvent) {
+  dragEndTransmit(e: JSEvent) {
     this.renderer.removeClass(e.target, 'dragging');
     if (this.timerInterval) {
       window.clearInterval(this.timerInterval);
@@ -215,9 +249,10 @@ export class LayoutSelectorComponent
     }
 
     if (!this.onDragChildOverlapEl) {
+      this.harvestLayoutData();
       this.eventBusService.emit({
         event: 'TemplateModalContentOutput',
-        data: { templateLayout: 'a a a b c d' },
+        data: this.gridData,
       });
 
       return;
@@ -248,10 +283,38 @@ export class LayoutSelectorComponent
         this.renderer.appendChild(parent, fragment);
       }
     }
-    this.eventBusService.emit({
-      event: 'TemplateModalContentOutput',
-      data: { templateLayout: 'a a a b c d' },
+    this.harvestLayoutData();
+      this.eventBusService.emit({
+        event: 'TemplateModalContentOutput',
+        data: this.gridData,
+      });
+  }
+
+  harvestLayoutData() {
+    const gridData = this.domUtil.getGridRelativeStyles(
+      this.bins['sheet'].element
+    );
+    const gridChildren = Array.from(this.bins['sheet'].element.children);
+    const childData: layoutData[] = [];
+    gridChildren.forEach((child) => {
+      const styles = this.domUtil.getGridChildStyles(child);
+      const { id: name } = (child as HTMLElement).dataset;
+      const templateData = this.generalSections.find(
+        (section) => section.title.toLowerCase() === name?.toLowerCase()
+      );
+      childData.push({
+        ...templateData,
+        styles,
+      });
     });
+    this.gridData = {
+      ...gridData,
+      childData,
+    };
+  }
+
+  transmitData() {
+
   }
 
   ngAfterViewInit(): void {
@@ -273,16 +336,16 @@ export class LayoutSelectorComponent
   }
 
   addSection(form: NgForm) {
-
     if (this.generalSections.length > 15) {
-      throw new Error('Cannot have more than 15 sections on the pool!')
+      throw new Error('Cannot have more than 15 sections on the pool!');
     }
     let { name } = form.value;
-    const alreadyExists = this.generalSections.find(section => section.title.toLowerCase() === name.toLowerCase());
+    const alreadyExists = this.generalSections.find(
+      (section) => section.title.toLowerCase() === name.toLowerCase()
+    );
     if (alreadyExists) {
-      throw new Error('Section alredy exists!')
+      throw new Error('Section alredy exists!');
     }
-
 
     if (!name) name = this.stringUtil.format(name);
     name = this.stringUtil.toPascalCase(name);
@@ -294,25 +357,26 @@ export class LayoutSelectorComponent
         gridColumnStart: '0',
         gridColumnEnd: '0',
       },
-      position: [],
     });
     form.reset();
   }
 
   deleteMode(e: Event) {
-    const target = e.target as HTMLInputElement
+    const target = e.target as HTMLInputElement;
     const deleteMode = target.checked;
     const customSections = this.generalSections.filter(
       (section) => !layoutConstants.generalSections.includes(section)
     );
-    if (!customSections.length ){
-      target.checked = false
+    if (!customSections.length) {
+      target.checked = false;
       return;
     }
 
     if (deleteMode) {
       customSections.forEach((section) => {
-        const sectionElement = document.querySelector(`[data-id="${section.title}"]`);
+        const sectionElement = document.querySelector(
+          `[data-id="${section.title}"]`
+        );
         const hasButton = sectionElement?.querySelector('.section-delete-btn');
         if (sectionElement && !hasButton) {
           const deleteBtn = this.renderer.createElement('A');

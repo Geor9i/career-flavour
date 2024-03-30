@@ -5,8 +5,8 @@ import StringUtil from './string-util';
 export default class ResumeBuilderUtil {
   private resumeConstants = resumeConstants;
   private stringUtil: StringUtil = new StringUtil();
-  changeAspectRatio(sign: string, pageStyles: Style, measureUnit?: string) {
-    let widthValue = pageStyles['width'];
+  calcAspectRatio(sign: string, pageStyles: Style, measureUnit?: string) {
+    let widthValue = pageStyles['width'] || '';
     let [widthValueString, defaultUnit] = this.getUnitValue(widthValue);
     let unit = measureUnit || defaultUnit || 'px';
     let width = Number(widthValueString);

@@ -9,14 +9,14 @@ const initialStyles: TemplateGridStyle = {
 
 export const layoutConstants = {
   generalSections: [
-    {title: 'Header', styles: {...initialStyles}, position: []},
-    {title: 'Contacts', styles: {...initialStyles}, position: []},
-    {title: 'Education', styles: {...initialStyles}, position: []},
-    {title: 'Work Experience', styles: {...initialStyles}, position: []},
-    {title: 'Skills', styles: {...initialStyles}, position: []},
-    {title: 'Soft Skills', styles: {...initialStyles}, position: []},
-    {title: 'Projects', styles: {...initialStyles}, position: []},
-    {title: 'Hobbies', styles: {...initialStyles}, position: []},
-    {title: 'Certificates', styles: {...initialStyles}, position: []},
+    {title: 'Header', styles: {...initialStyles}},
+    {title: 'Contacts', styles: {...initialStyles}},
+    {title: 'Education', styles: {...initialStyles}},
+    {title: 'Work Experience', styles: {...initialStyles}},
+    {title: 'Skills', styles: {...initialStyles}},
+    {title: 'Soft Skills', styles: {...initialStyles}},
+    {title: 'Projects', styles: {...initialStyles}},
+    {title: 'Hobbies', styles: {...initialStyles}},
+    {title: 'Certificates', styles: {...initialStyles}},
   ]
 }

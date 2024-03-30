@@ -1,7 +1,7 @@
 import { JSEventBusService } from 'src/app/modules/event-bus/jsevent-bus.service';
 import { UtilService } from './../../../utils/util.service';
 import { TemplateModalService } from './../../../shared/templateModal/templateModal.service';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Type } from '@angular/core';
 import { ResumePageComponent } from '../resume-page/resume-page.component';
 import { LayoutSelectorComponent } from '../layout-selector/layout-selector.component';
 import { Subscription } from 'rxjs';
@@ -12,7 +12,7 @@ import { Subscription } from 'rxjs';
   styleUrls: ['./resume-editor.component.css'],
 })
 export class ResumeEditorComponent implements OnInit {
-  public resumePage: any;
+  public resumePage!: Type<any>;
   constructor(
     private templateModalService: TemplateModalService,
     private utilService: UtilService,
@@ -50,6 +50,8 @@ export class ResumeEditorComponent implements OnInit {
         openTransmission: true
       })
       .subscribe((observable) => {
+        console.log(observable);
+
         if (observable.data && observable.data.hasOwnProperty('confirm')) {
           this.eventBusSubscription.unsubscribe();
         }

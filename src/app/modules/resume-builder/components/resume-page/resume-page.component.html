@@ -1,9 +1,9 @@
 <div class="container">
   <div [ngStyle]="resumeStyles" #sheet class="page">
-    <app-p></app-p>
-
+    <app-resume-section [gridStyles]="sectionStyles" />
+    <app-resume-section [gridStyles]="sectionStyles1" />
+    <app-resume-section [gridStyles]="sectionStyles" />
   </div>
-
   <aside>
     <a (click)="change({resize: '+'})">+</a>
     <a (click)="change({resize: '-'})">-</a>
@@ -11,5 +11,6 @@
       <option *ngFor="let font of resumeConstants.FONTS" [value]="font">{{ font }}</option>
     </select>
   </aside>
+
 
 </div>

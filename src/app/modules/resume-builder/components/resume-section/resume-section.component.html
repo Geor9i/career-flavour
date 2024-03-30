@@ -1,0 +1,8 @@
+<section class="resume-section">
+  <!-- <app-p [text]="'This is some text'" /> -->
+  <ng-container *ngFor="let item of test">
+      <app-p *ngIf="item.type === 'text'" [textStyles]="item.styles" [text]="item.content" (textChanged)="textEdit($event, item.id)"></app-p>
+      <input *ngIf="item.type === 'date'" [value]="item.content">
+  </ng-container>
+<app-p></app-p>
+</section>

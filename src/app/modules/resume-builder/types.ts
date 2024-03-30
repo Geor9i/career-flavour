@@ -4,7 +4,7 @@ export interface PageValues {
 }
 
 export interface Style {
-  [key: string]: string;
+  [key: string]: string | undefined;
 }
 
 export type Bin = {
@@ -22,3 +22,14 @@ export interface TemplateGridStyle {
 export interface SliderControl {
   [key: string]: number
 }
+
+
+export interface layoutData {
+  [key: string]: string | TemplateGridStyle
+}
+
+
+export interface GridData {
+  [key: string]: string | layoutData[];
+}
+
