@@ -313,10 +313,6 @@ export class LayoutSelectorComponent
     };
   }
 
-  transmitData() {
-
-  }
-
   ngAfterViewInit(): void {
     this.setSheetDimensions();
     this.bins = {

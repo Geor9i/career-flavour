@@ -1,6 +1,7 @@
 export interface PageValues {
   resize?: string;
   changeFont?: string;
+  layout?: GridData;
 }
 
 export interface Style {
@@ -30,6 +31,6 @@ export interface layoutData {
 
 
 export interface GridData {
-  [key: string]: string | layoutData[];
+  [key: string]: string | layoutData[] | layoutData;
 }
 

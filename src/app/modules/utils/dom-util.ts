@@ -81,11 +81,11 @@ export default class DomUtil {
 
   getGridChildStyles(child: Element) {
     const styles = getComputedStyle(child);
+    const gridRowEnd = styles.getPropertyValue('grid-row-end');
     const gridRowStart = styles.getPropertyValue('grid-row-start');
-    const gridColumnEnd = styles.getPropertyValue('grid-row-end');
-    const templateRows = styles.getPropertyValue('grid-column-start');
     const gridColumnStart = styles.getPropertyValue('grid-column-start');
-    return { gridRowStart, gridColumnEnd, templateRows, gridColumnStart };
+    const gridColumnEnd = styles.getPropertyValue('grid-column-end');
+    return { gridRowStart, gridColumnEnd, gridRowEnd, gridColumnStart };
 
   }
 }

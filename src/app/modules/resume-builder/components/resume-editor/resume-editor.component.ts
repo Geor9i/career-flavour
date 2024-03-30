@@ -1,22 +1,25 @@
 import { JSEventBusService } from 'src/app/modules/event-bus/jsevent-bus.service';
 import { UtilService } from './../../../utils/util.service';
 import { TemplateModalService } from './../../../shared/templateModal/templateModal.service';
-import { Component, OnInit, Type } from '@angular/core';
+import { Component, OnDestroy, OnInit, Type } from '@angular/core';
 import { ResumePageComponent } from '../resume-page/resume-page.component';
 import { LayoutSelectorComponent } from '../layout-selector/layout-selector.component';
 import { Subscription } from 'rxjs';
+import { PageManagerService } from '../../page-manager.service';
+import { GridData } from '../../types';
 
 @Component({
   selector: 'app-resume-editor',
   templateUrl: './resume-editor.component.html',
   styleUrls: ['./resume-editor.component.css'],
 })
-export class ResumeEditorComponent implements OnInit {
+export class ResumeEditorComponent implements OnInit, OnDestroy {
   public resumePage!: Type<any>;
   constructor(
     private templateModalService: TemplateModalService,
     private utilService: UtilService,
-    private jsEventBusService: JSEventBusService
+    private jsEventBusService: JSEventBusService,
+    private pageManager: PageManagerService,
   ) {}
   private eventBusSubscription!: Subscription;
   private jsEventUnsubscribeArr: (() => void)[] = []
@@ -50,11 +53,18 @@ export class ResumeEditorComponent implements OnInit {
         openTransmission: true
       })
       .subscribe((observable) => {
-        console.log(observable);
-
         if (observable.data && observable.data.hasOwnProperty('confirm')) {
           this.eventBusSubscription.unsubscribe();
+        } else if (observable) {
+          const obj = {
+            layout: observable.data
+          }
+          this.pageManager.modifyPage(obj as unknown as GridData)
         }
       });
+  }
+
+  ngOnDestroy(): void {
+    this.eventBusSubscription.unsubscribe()
   }
 }

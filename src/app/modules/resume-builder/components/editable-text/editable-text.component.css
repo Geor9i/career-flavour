@@ -1,8 +1,5 @@
 :host {
   display: block;
-  width: auto;
-  box-sizing: border-box;
-  width: 100%;
 }
 
 pre {

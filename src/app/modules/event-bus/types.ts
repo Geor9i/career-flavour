@@ -1,10 +1,12 @@
+import { GridData } from "../resume-builder/types";
+
 export interface TransmissionData {
   [key: string]: boolean | string | object | number;
 }
 
 export interface BusData {
   event: string;
-  data?: { [key: string]: boolean | string | object | TransmissionData | number};
+  data?: { [key: string]: boolean | string | object | TransmissionData | number | GridData};
 }
 
 export interface Subscribers {
