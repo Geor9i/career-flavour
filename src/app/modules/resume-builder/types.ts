@@ -2,6 +2,12 @@ export interface Styling {
   [key: string]: string;
 }
 
+export interface CellRatios {
+  rows: number[];
+  columns: number[];
+}
+
+
 export interface FontConfig {
   sectionHeading?: Styling;
   topicHeading?: Styling;

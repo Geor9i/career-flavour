@@ -34,6 +34,6 @@ export const INITIAL_STYLES: Style = {
   color: 'black',
   fontFamily: 'Arial, sans-serif',
   fontSize: '12px',
-  padding: '2em',
+  padding: '24px',
   borderRadius: '5px',
 }

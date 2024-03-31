@@ -26,6 +26,8 @@ export class ResumeSectionComponent implements OnChanges {
   };
 
   ngOnChanges(changes: SimpleChanges) {
+    console.log(this.data);
+
     if (changes['styles']) {
       this.sectionStyles = { ...this.styles }; // Update sectionStyles when styles input changes
     }

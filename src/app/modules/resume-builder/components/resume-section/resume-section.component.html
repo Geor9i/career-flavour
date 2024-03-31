@@ -1,8 +1,4 @@
 <section class="resume-section">
-  <div class="text-container">
-    <div *ngIf="data?.['title']">
-      <app-p [text]="data?.['title'] || ''" />
+      <app-p *ngIf="data?.['title']"[text]="data?.['title'] || ''" />
       <!-- [textStyles]="textStyling"  -->
-    </div>
-  </div>
 </section>

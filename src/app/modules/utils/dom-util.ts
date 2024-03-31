@@ -31,8 +31,8 @@ export default class DomUtil {
     return parents;
   }
 
-  getUnitValue(size: string) {
-    let valueString = this.stringUtil.filterString(size, [
+  getUnitValue(value: string, valueOnly: boolean = false) {
+    let valueString = this.stringUtil.filterString(value, [
       {
         symbol: '\\d',
       },
@@ -40,13 +40,13 @@ export default class DomUtil {
         symbol: '.',
       },
     ]);
-    let unit = this.stringUtil.filterString(size, [
+    let unit = this.stringUtil.filterString(value, [
       {
         symbol: '\\w',
         remove: true,
       },
     ]);
-    return [valueString, unit];
+    return valueOnly ? valueString : [valueString, unit];
   }
 
   elementData(element: Element) {
@@ -77,6 +77,10 @@ export default class DomUtil {
     const gridTemplateColumns = averagedCols.map((col) => `${col}%`).join(' ');
 
     return { gridTemplateColumns, gridTemplateRows };
+  }
+
+  getRawGridValue(gridProp: string) {
+    return gridProp.split(' ').map(val => this.getUnitValue(val, true));
   }
 
   getGridChildStyles(child: Element) {
