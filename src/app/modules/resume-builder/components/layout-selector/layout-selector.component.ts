@@ -189,7 +189,7 @@ export class LayoutSelectorComponent
       // If the click is related to a section and prevois controls a disabled
     } else {
       const currentSection = this.generalSections.find(
-        (section) => section.title === target.dataset['id']
+        (section) => section.type === target.dataset['id']
       );
       const sectionStyles = currentSection?.styles;
       if (
@@ -209,7 +209,7 @@ export class LayoutSelectorComponent
         this.activeSection !== target
       ) {
         const currentSection = this.generalSections.find(
-          (section) => section.title === target.dataset['id']
+          (section) => section.type === target.dataset['id']
         );
         const sectionStyles = currentSection?.styles;
         Object.keys(this.sliderValues).forEach((sliderName) => {
@@ -224,7 +224,7 @@ export class LayoutSelectorComponent
   gridPosition() {
     if (this.activeSection) {
       const sectionConfig = this.generalSections.find(
-        (section) => section.title === this.activeSection?.dataset['id']
+        (section) => section.type === this.activeSection?.dataset['id']
       );
       Object.keys(this.sliderValues).forEach((styleProp) => {
         if (this.sliderValues[styleProp]) {
@@ -300,7 +300,7 @@ export class LayoutSelectorComponent
       const styles = this.domUtil.getGridChildStyles(child);
       const { id: name } = (child as HTMLElement).dataset;
       const templateData = this.generalSections.find(
-        (section) => section.title.toLowerCase() === name?.toLowerCase()
+        (section) => section.type.toLowerCase() === name?.toLowerCase()
       );
       childData.push({
         ...templateData,
@@ -337,7 +337,7 @@ export class LayoutSelectorComponent
     }
     let { name } = form.value;
     const alreadyExists = this.generalSections.find(
-      (section) => section.title.toLowerCase() === name.toLowerCase()
+      (section) => section.type.toLowerCase() === name.toLowerCase()
     );
     if (alreadyExists) {
       throw new Error('Section alredy exists!');
@@ -346,7 +346,7 @@ export class LayoutSelectorComponent
     if (!name) name = this.stringUtil.format(name);
     name = this.stringUtil.toPascalCase(name);
     this.generalSections.push({
-      title: name as string,
+      type: name as string,
       styles: {
         gridRowStart: '0',
         gridRowEnd: '0',
@@ -371,7 +371,7 @@ export class LayoutSelectorComponent
     if (deleteMode) {
       customSections.forEach((section) => {
         const sectionElement = document.querySelector(
-          `[data-id="${section.title}"]`
+          `[data-id="${section.type}"]`
         );
         const hasButton = sectionElement?.querySelector('.section-delete-btn');
         if (sectionElement && !hasButton) {
@@ -379,14 +379,14 @@ export class LayoutSelectorComponent
           this.renderer.setProperty(deleteBtn, 'textContent', 'x');
           this.renderer.addClass(deleteBtn, 'section-delete-btn');
           this.renderer.listen(deleteBtn, 'click', () =>
-            this.removeSection(sectionElement, section.title)
+            this.removeSection(sectionElement, section.type)
           );
           this.renderer.appendChild(sectionElement, deleteBtn);
         }
       });
     } else {
       customSections.forEach((section) => {
-        const parent = document.querySelector(`[data-id="${section.title}"]`);
+        const parent = document.querySelector(`[data-id="${section.type}"]`);
         const button = parent?.querySelector('.section-delete-btn');
         this.renderer.removeChild(parent, button);
       });
@@ -395,7 +395,7 @@ export class LayoutSelectorComponent
 
   removeSection(parent: Element, title: string) {
     parent.remove();
-    const index = this.generalSections.findIndex((obj) => obj.title === title);
+    const index = this.generalSections.findIndex((obj) => obj.type === title);
     this.generalSections.splice(index, 1);
     const customSections = this.generalSections.filter(
       (section) => !layoutConstants.generalSections.includes(section)

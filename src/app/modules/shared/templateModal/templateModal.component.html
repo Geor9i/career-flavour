@@ -1,7 +1,7 @@
 <div [ngStyle]="backdropStyles"  [class.inactive]="!isActive" (click)="close()" class="backdrop"></div>
 <div [ngStyle]="modalStyles"  [class.inactive]="!isActive" class="container">
   <div *ngIf="isActive">
-    <ng-container *ngComponentOutlet="template"></ng-container>
+    <ng-container class="content" *ngComponentOutlet="template"></ng-container>
   </div>
 </div>
 

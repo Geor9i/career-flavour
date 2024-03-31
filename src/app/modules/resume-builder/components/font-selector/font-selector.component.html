@@ -1,0 +1,45 @@
+<div class="container">
+  <section class="application">
+    <div *ngFor="let key of Object.keys(fontApplicators)" class="input-group">
+      <input
+        [(ngModel)]="fontApplicators[key]['checked']"
+        #applicator
+        type="checkbox"
+        id="{{ fontApplicators[key]['id'] }}"
+        (change)="switchApply($event)"
+      />
+      <label for="{{ fontApplicators[key]['id'] }}">{{
+        key | toPascalCase : true
+      }}</label>
+    </div>
+  </section>
+
+  <section class="font-selector">
+    <div class="input-group vertical">
+      <label for="font-select">Select Font</label>
+      <select
+        id="font-select"
+        (change)="transmit()"
+        [(ngModel)]="selectedFont"
+        ngModel
+      >
+        <option *ngFor="let font of fonts" [value]="font">{{ font }}</option>
+      </select>
+    </div>
+
+    <div class="font-size-selector">
+      <div class="input-group vertical">
+        <label for="font-size">Font Increment</label>
+        <input
+          #fontSizeValue
+          min="0"
+          max="12"
+          type="range"
+          [(ngModel)]="fontSize"
+          (input)="transmit()"
+        />
+      </div>
+      <p>{{ fontSizeValue.value }} <span>px</span></p>
+    </div>
+  </section>
+</div>

@@ -1,0 +1,80 @@
+:host {
+  width: 100%;
+  height: 100%;
+}
+
+input[type="checkbox"] {
+  width: 1.5em;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  cursor: pointer;
+}
+input[type="range"]{
+  width: 100%;
+  max-width: 200px;
+}
+
+label, p {
+  color: white;
+  font-weight: bold;
+  font-size: 1.2em;
+  text-shadow: 0 0 2px black;
+}
+
+.container {
+  width: 100%;
+  height: 100%;
+  padding: 1em;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 13px;
+}
+
+section {
+  flex: 1 1 45%;
+}
+
+.application {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5em;
+}
+
+.input-group {
+  display: flex;
+  gap: 0.5em;
+}
+
+.font-selector {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 1em;
+}
+
+.vertical {
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+
+#font-select {
+  width: 100%;
+}
+
+.font-size-selector {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.font-size-selector p span {
+  color: rgb(255, 17, 0);
+}
+
+.font-selector select {
+  width: 50%;
+}
+

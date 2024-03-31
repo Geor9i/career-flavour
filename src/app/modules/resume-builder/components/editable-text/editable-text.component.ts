@@ -27,7 +27,7 @@ export class EditableTextComponent implements OnChanges, AfterViewInit {
 
   ngAfterViewInit(): void {
     this.textContent, this.inputBuffer = this.text;
-   
+
   }
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -35,7 +35,8 @@ export class EditableTextComponent implements OnChanges, AfterViewInit {
   }
 
   onInput(e: Event) {
-    this.inputBuffer = (e.target as HTMLElement).innerText;
+    const text = (e.target as HTMLElement).innerText;
+      this.inputBuffer = text;
   }
 
   onBlur() {

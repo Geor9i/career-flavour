@@ -27,7 +27,7 @@
           <input id="remove-section" type="checkbox"[(ngModel)]="inDeleteMode" (change)="deleteMode($event)">
         </div>
         <div #sectionsArea class="layout-sections-container bin" >
-          <p draggable="true" class="resume-section-draggable in-general-section" [attr.data-id]="section.title" [ngStyle]="section.styles" *ngFor="let section of generalSections">{{section.title}}</p>
+          <p draggable="true" class="resume-section-draggable in-general-section" [attr.data-id]="section.type" [ngStyle]="section.styles" *ngFor="let section of generalSections">{{section.type}}</p>
         </div>
       </div>
     </section>

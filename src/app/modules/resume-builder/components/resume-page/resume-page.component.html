@@ -1,17 +1,8 @@
-<div class="container">
+<div #container class="container">
   <div [ngStyle]="resumeStyles" #sheet class="page">
-    <!-- <app-resume-section [gridStyles]="sectionStyles" /> -->
     <ng-container *ngIf="sections">
-      <app-resume-section class="section" [textStyles]="textStyles" [gridStyles]="section['styles']" [data]="section" *ngFor="let section of sections" />
+      <app-resume-section class="section" [textStyling]="textStyling" [gridStyles]="section['styles']" [data]="section" *ngFor="let section of testSections" />
     </ng-container>
   </div>
-  <aside>
-    <a (click)="change({resize: '+'})">+</a>
-    <a (click)="change({resize: '-'})">-</a>
-    <select (change)="changeFont()" [(ngModel)]="selectedOption" ngModel>
-      <option *ngFor="let font of resumeConstants.FONTS" [value]="font">{{ font }}</option>
-    </select>
-  </aside>
-
 
 </div>

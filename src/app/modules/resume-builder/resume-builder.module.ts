@@ -10,6 +10,7 @@ import { UtilsModule } from '../utils/utils.module';
 import { AnimationsModule } from '../animations/animations.module';
 import { PipesModule } from '../pipes/pipes.module';
 import { ResumeSectionComponent } from './components/resume-section/resume-section.component';
+import { FontSelectorComponent } from './components/font-selector/font-selector.component';
 @NgModule({
   declarations: [
     ResumePageComponent,
@@ -17,6 +18,7 @@ import { ResumeSectionComponent } from './components/resume-section/resume-secti
     LayoutSelectorComponent,
     EditableTextComponent,
     ResumeSectionComponent,
+    FontSelectorComponent,
   ],
   imports: [
     CommonModule,
