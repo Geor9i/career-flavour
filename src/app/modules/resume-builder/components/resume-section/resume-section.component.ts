@@ -1,3 +1,4 @@
+import { FontGroup } from './../../types';
 import {
   Component,
   HostBinding,
@@ -5,8 +6,7 @@ import {
   OnChanges,
   SimpleChanges,
 } from '@angular/core';
-import { FontConfig, PageValues, Style, StylesGroup, layoutData } from '../../types';
-import { FONT_APPLICATORS } from 'src/app/constants/fontConstants';
+import { FontConfig, PageValues, Style, layoutData } from '../../types';
 
 @Component({
   selector: 'app-resume-section',
@@ -17,29 +17,41 @@ export class ResumeSectionComponent implements OnChanges {
   @Input('gridStyles') styles: Style = {};
   @Input('data') data: layoutData | null = null;
   @Input('contentStyle') contentStyles: Style = {};
-  @Input('textStyling') textStyling: FontConfig = {};
+  @Input('textStyling') fontStyling: FontConfig = {};
   @HostBinding('style') sectionStyles: Style = this.styles;
-  public textStyles: StylesGroup = {
-    sectionHeading: {},
-    topicHeading: {},
-    paragraph: {},
-  };
+
+  public fontStyles: FontGroup = {
+    "sectionHeading": {
+        "fontSize": "18px",
+        "fontFamily": "Calibri"
+    },
+    "topicHeading": {
+        "fontSize": "14px",
+        "fontFamily": "Calibri"
+    },
+    "paragraph": {
+        "fontSize": "12px",
+        "fontFamily": "Calibri"
+    }
+};
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes['styles']) {
-      this.sectionStyles = { ...this.styles }; // Update sectionStyles when styles input changes
+      this.sectionStyles = { ...this.styles };
     }
-    if (changes['textStyling']) {
-      this.changeFontHandler(changes['textStyling'].currentValue);
+    if (changes['fontStyling']) {
+      this.changeFontHandler(changes['fontStyling'].currentValue);
     }
   }
 
   changeFontHandler(values: PageValues) {
-    if (values.changeFont) {
-
-    }
+    let styleGoups = values as FontConfig
+    Object.keys(values).forEach((section) => {
+      if (styleGoups[section]) {
+        let { ...style } = styleGoups[section];
+        delete style['baseSize'];
+          this.fontStyles[section] = style as unknown as Style
+      }
+    });
   }
-
-
-  
 }

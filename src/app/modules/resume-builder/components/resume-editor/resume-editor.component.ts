@@ -2,7 +2,7 @@ import { IdObj, PageValues } from './../../types';
 import { JSEventBusService } from 'src/app/modules/event-bus/jsevent-bus.service';
 import { UtilService } from './../../../utils/util.service';
 import { TemplateModalService } from './../../../shared/templateModal/templateModal.service';
-import { Component, OnDestroy, OnInit, Type } from '@angular/core';
+import { Component, OnDestroy, OnInit, Type, ViewChild } from '@angular/core';
 import { ResumePageComponent } from '../resume-page/resume-page.component';
 import { LayoutSelectorComponent } from '../layout-selector/layout-selector.component';
 import { Subscription } from 'rxjs';
@@ -48,6 +48,7 @@ export class ResumeEditorComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.resumePage = ResumePageComponent;
+    // @ViewChild('resumePageComponent', { static: false }) resumePageComponent!: ResumePageComponent;
     this.jsEventBusService.subscribe(this.jsEventBusId, 'click', this.resumeHelper.bind(this), {
       target: 'app-p'
     })
@@ -155,5 +156,9 @@ export class ResumeEditorComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.eventBusSubscription.unsubscribe()
+  }
+
+  print() {
+    this.resumePage
   }
 }

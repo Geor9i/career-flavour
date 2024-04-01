@@ -1,28 +1,43 @@
-export interface Styling {
-  [key: string]: string;
-}
+
 
 export interface CellRatios {
   rows: number[];
   columns: number[];
 }
 
-
-export interface FontConfig {
-  sectionHeading?: Styling;
-  topicHeading?: Styling;
-  paragraph?: Styling;
+export interface FontStyling {
+  fontFamily: string;
+  fontSize: string;
+  applicators?: string[];
+  baseSize?: string;
+  font?: string;
 }
 
+export interface FontConfig {
+  [key: string]: FontStyling | undefined;
+  sectionHeading?: FontStyling;
+  topicHeading?: FontStyling;
+  paragraph?: FontStyling;
+}
+
+export interface FontGroup {
+  [key: string]: Style ;
+  sectionHeading: Style;
+  topicHeading: Style;
+  paragraph: Style;
+}
+
+
 export interface valueObj {
-  [key: string]: string | Styling;
+  [key: string]: string | FontStyling;
 }
 
 export interface PageValues {
   resize?: string;
-  changeFont?: valueObj;
+  changeFont?: FontStyling;
   layout?: GridData;
 }
+
 
 export interface StylesGroup {
   [key: string]: Style;

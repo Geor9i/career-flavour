@@ -1,3 +1,4 @@
+import { FONT_APPLICATORS } from 'src/app/constants/fontConstants';
 import { FONT_SETTINGS } from './../../../../constants/fontConstants';
 import { JSEventBusService } from './../../../event-bus/jsevent-bus.service';
 import {
@@ -18,6 +19,7 @@ import {
 import {
   CellRatios,
   FontConfig,
+  FontStyling,
   GridData,
   PageValues,
   layoutData,
@@ -46,11 +48,12 @@ export class ResumePageComponent implements OnInit, AfterViewInit, OnDestroy {
   private dragOffsetX = 0;
   private dragOffsetY = 0;
   private cellRatios: CellRatios = {
-    rows : [],
-    columns : [],
-  }
+    rows: [],
+    columns: [],
+  };
   private eventUtil = this.utilService.eventUtil;
   private domUtil = this.utilService.domUtil;
+  private zoom = 1;
   private eventId = 'ResumePageComponent';
   public pageClick = false;
   private isDraggin = false;
@@ -59,106 +62,7 @@ export class ResumePageComponent implements OnInit, AfterViewInit, OnDestroy {
   public selectedOption: Event | string = '';
   resumeStyles = INITIAL_STYLES;
   public textStyling: FontConfig = FONT_SETTINGS;
-  public sections: any[] = [
-    {
-        "type": "Header",
-        "name": "Test name",
-        "position": "Applying for...",
-        "summary": "Something about me...",
-        "contentPlacement": "list",
-        "contentFlow": "vertical",
-        "styles": {
-            "gridRowStart": "auto",
-            "gridColumnEnd": "3",
-            "gridRowEnd": "auto",
-            "gridColumnStart": "1"
-        }
-    },
-    {
-        "type": "Education",
-        "title": "Education",
-        "contentPlacement": "chronological",
-        "contentFlow": "vertical",
-        "styles": {
-            "gridRowStart": "auto",
-            "gridColumnEnd": "auto",
-            "gridRowEnd": "auto",
-            "gridColumnStart": "auto"
-        }
-    },
-    {
-        "type": "Work Experience",
-        "title": "Work Experience",
-        "contentPlacement": "chronological",
-        "contentFlow": "horizontal",
-        "styles": {
-            "gridRowStart": "auto",
-            "gridColumnEnd": "auto",
-            "gridRowEnd": "auto",
-            "gridColumnStart": "auto"
-        }
-    },
-    {
-        "type": "Soft Skills",
-        "title": "Soft Skills",
-        "contentPlacement": "list",
-        "contentFlow": "horizontal",
-        "styles": {
-            "gridRowStart": "auto",
-            "gridColumnEnd": "auto",
-            "gridRowEnd": "auto",
-            "gridColumnStart": "auto"
-        }
-    },
-    {
-        "type": "Skills",
-        "title": "Skills",
-        "contentPlacement": "list",
-        "contentFlow": "vertical",
-        "styles": {
-            "gridRowStart": "auto",
-            "gridColumnEnd": "auto",
-            "gridRowEnd": "auto",
-            "gridColumnStart": "auto"
-        }
-    },
-    {
-        "type": "Contacts",
-        "styles": {
-            "gridRowStart": "auto",
-            "gridColumnEnd": "auto",
-            "gridRowEnd": "auto",
-            "gridColumnStart": "auto"
-        }
-    },
-    {
-        "type": "Hobbies",
-        "styles": {
-            "gridRowStart": "auto",
-            "gridColumnEnd": "auto",
-            "gridRowEnd": "auto",
-            "gridColumnStart": "auto"
-        }
-    },
-    {
-        "type": "Projects",
-        "styles": {
-            "gridRowStart": "auto",
-            "gridColumnEnd": "auto",
-            "gridRowEnd": "auto",
-            "gridColumnStart": "auto"
-        }
-    },
-    {
-        "type": "Certificates",
-        "styles": {
-            "gridRowStart": "auto",
-            "gridColumnEnd": "auto",
-            "gridRowEnd": "auto",
-            "gridColumnStart": "auto"
-        }
-    }
-];
+  public sections: any[] = []
 
   ngOnInit(): void {
     this.renderer.setStyle(
@@ -189,7 +93,7 @@ export class ResumePageComponent implements OnInit, AfterViewInit, OnDestroy {
     const unsubscribe3 = this.jsEventBusService.subscribe(
       this.eventId,
       'mouseup',
-      this.dragEnd.bind(this),
+      this.dragEnd.bind(this)
     );
     this.jsEventBusSubscribtionArr.push(
       unsubscribe1,
@@ -201,13 +105,12 @@ export class ResumePageComponent implements OnInit, AfterViewInit, OnDestroy {
   dragStart(event: JSEvent) {
     const e = event as MouseEvent;
     if (e.target !== this.sheet.nativeElement) return;
-    
+
     this.isDraggin = true;
-    const {clientX, clientY} = e;
-    const { rect } =  this.eventUtil.elementData(this.sheet.nativeElement);
+    const { clientX, clientY } = e;
+    const { rect } = this.eventUtil.elementData(this.sheet.nativeElement);
     this.dragOffsetX = clientX - rect.left;
     this.dragOffsetY = clientY - rect.top;
-
   }
 
   dragOver(event: JSEvent) {
@@ -216,7 +119,7 @@ export class ResumePageComponent implements OnInit, AfterViewInit, OnDestroy {
       let e = event as MouseEvent;
       const { clientX, clientY } = this.eventUtil.eventData(e);
       this.resumeStyles['left'] = clientX - this.dragOffsetX + 'px';
-      this.resumeStyles['top'] = clientY - this.dragOffsetY  + 'px';
+      this.resumeStyles['top'] = clientY - this.dragOffsetY + 'px';
     }
   }
 
@@ -246,12 +149,26 @@ export class ResumePageComponent implements OnInit, AfterViewInit, OnDestroy {
       'layout'
     ] as layoutData;
 
-    this.cellRatios.columns = this.domUtil.getRawGridValue(gridTemplateColumns as string).map(Number);
-    this.cellRatios.rows = this.domUtil.getRawGridValue(gridTemplateRows as string).map(Number);
-    const sheetWidth = Number(this.domUtil.getUnitValue(this.resumeStyles['width'] as string, true));
-    const sheetHeight = Number(this.domUtil.getUnitValue(this.resumeStyles['height'] as string, true));
-    const padding = Number(this.domUtil.getUnitValue(this.resumeStyles['padding'] as string, true));
-    const { rows, colums } = this.calcGridCells(sheetWidth, sheetHeight, padding);
+    this.cellRatios.columns = this.domUtil
+      .getRawGridValue(gridTemplateColumns as string)
+      .map(Number);
+    this.cellRatios.rows = this.domUtil
+      .getRawGridValue(gridTemplateRows as string)
+      .map(Number);
+    const sheetWidth = Number(
+      this.domUtil.getUnitValue(this.resumeStyles['width'] as string, true)
+    );
+    const sheetHeight = Number(
+      this.domUtil.getUnitValue(this.resumeStyles['height'] as string, true)
+    );
+    const padding = Number(
+      this.domUtil.getUnitValue(this.resumeStyles['padding'] as string, true)
+    );
+    const { rows, colums } = this.calcGridCells(
+      sheetWidth,
+      sheetHeight,
+      padding
+    );
     this.resumeStyles = {
       ...this.resumeStyles,
       gridTemplateColumns: colums,
@@ -259,36 +176,59 @@ export class ResumePageComponent implements OnInit, AfterViewInit, OnDestroy {
     };
     this.sections = childData as unknown as layoutData[];
     // console.log(this.resumeStyles);
-    // console.log(this.sections);
-
+    console.log(this.sections);
   }
 
   calcGridCells(sheetWidth: number, sheetHeight: number, padding?: number) {
     let paddingSize = (padding ?? 0) * 2;
-    let colums = this.cellRatios.columns.map(col => ((sheetWidth - paddingSize) * (col / 100)) + 'px').join(' ');
-    let rows = this.cellRatios.rows.map(row => ((sheetHeight - paddingSize) * (row / 100)) + 'px').join(' ');
-    return {rows, colums}
+    let colums = this.cellRatios.columns
+      .map((col) => (sheetWidth - paddingSize) * (col / 100) + 'px')
+      .join(' ');
+    let rows = this.cellRatios.rows
+      .map((row) => (sheetHeight - paddingSize) * (row / 100) + 'px')
+      .join(' ');
+    return { rows, colums };
   }
 
   processTextStyling(values: PageValues) {
-    console.log(values);
+    const { applicators, font, fontSize } =
+      values.changeFont as FontStyling;
+    if (this.textStyling) {
+      Object.keys(this.textStyling).forEach((selector) => {
+        if (applicators?.includes(FONT_APPLICATORS['all']['id']) || applicators?.includes(FONT_APPLICATORS[selector]['id'])) {
+          const fontObj = this.textStyling[selector];
+          if (fontObj) {
+            const baseSize = fontObj['baseSize'] ?? '12px';
+            let numBaseSize = this.domUtil.getUnitValue(baseSize, true);
+            (this.textStyling[selector] as FontStyling)['fontSize'] = `${Number(numBaseSize) + fontSize}px`;
+            (this.textStyling[selector] as FontStyling)['fontFamily'] = font as string;
+          }
+        }
+      });
+    }
+    this.textStyling = {...this.textStyling};
   }
 
   resizePage(size: string) {
-    let { width, height, unit } = this.resumeBuilderUtil.calcAspectRatio(
-      size,
-      this.resumeStyles,
-      'px'
-    );
-    let fontSize = this.resumeBuilderUtil.fontRatio(width);
-    this.resumeStyles['width'] = width + unit;
-    this.resumeStyles['height'] = height + unit;
-    this.resumeStyles['fontSize'] = fontSize + unit;
-    if (this.resumeStyles['gridTemplateColumns'] && this.resumeStyles['gridTemplateRows']) {
-      const padding = Number(this.domUtil.getUnitValue(this.resumeStyles['padding'] as string, true));
-      const { rows, colums } = this.calcGridCells(width, height, padding);
-      this.resumeStyles['gridTemplateRows'] = rows;
-      this.resumeStyles['gridTemplateColumns'] = colums;
-    }
+    const sign = size === '+' ? 1 : -1;
+    this.zoom = Math.min(Math.max(0.5, this.zoom + 0.1 * sign), 3);
+    this.resumeStyles['transform'] = `scale(${this.zoom})`;
+    console.log(this.resumeStyles);
+
+    // let { width, height, unit } = this.resumeBuilderUtil.calcAspectRatio(
+    //   size,
+    //   this.resumeStyles,
+    //   'px'
+    // );
+    // let fontSize = this.resumeBuilderUtil.fontRatio(width);
+    // this.resumeStyles['width'] = width + unit;
+    // this.resumeStyles['height'] = height + unit;
+    // this.resumeStyles['fontSize'] = fontSize + unit;
+    // if (this.resumeStyles['gridTemplateColumns'] && this.resumeStyles['gridTemplateRows']) {
+    //   const padding = Number(this.domUtil.getUnitValue(this.resumeStyles['padding'] as string, true));
+    //   const { rows, colums } = this.calcGridCells(width, height, padding);
+    //   this.resumeStyles['gridTemplateRows'] = rows;
+    //   this.resumeStyles['gridTemplateColumns'] = colums;
+    // }
   }
 }

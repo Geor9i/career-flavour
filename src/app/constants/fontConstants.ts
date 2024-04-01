@@ -8,7 +8,7 @@ export const FONT_APPLICATORS: FontApplicator = {
 };
 
 export const FONT_SETTINGS: FontConfig = {
-  sectionHeading: { fontSize: '18px', fontFamily: 'Calibri' },
-  topicHeading: { fontSize: '14px', fontFamily: 'Calibri' },
-  paragraph: { fontSize: '12px', fontFamily: 'Calibri' },
+  sectionHeading: { baseSize: '18px', fontSize: '18px', fontFamily: 'Calibri' },
+  topicHeading: { baseSize: '14px', fontSize: '14px', fontFamily: 'Calibri' },
+  paragraph: { baseSize: '12px', fontSize: '12px', fontFamily: 'Calibri' },
 };
