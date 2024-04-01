@@ -19,14 +19,10 @@ export class HomeComponent {
     private busSubscription!: Subscription
   toResumeBuilder() {
     const isAuth = this.authService.auth.currentUser;
-    console.log(isAuth);
-
     if (!isAuth) {
       this.busSubscription = this.templateModalService
         .open(AuthFormComponent)
         .subscribe((observer) => {
-          console.log(observer);
-
           if (observer.data && observer.data['confirm']) {
             this.router.navigateByUrl('/resume-templates');
           }

@@ -2,26 +2,44 @@ import { Injectable, inject } from '@angular/core';
 import {
   DocumentData,
   Firestore,
-  collection,
-  collectionData,
   doc,
   getDoc,
   setDoc,
+  onSnapshot,
 } from '@angular/fire/firestore';
 import { Storage, ref, getDownloadURL } from '@angular/fire/storage';
-import { Observable } from 'rxjs';
+import { BehaviorSubject, Observable, Subscription } from 'rxjs';
 import { AuthService } from './auth-service';
 import { dbs } from 'src/app/constants/dbConstants';
 import { UserData } from './types/interfaces';
+import { Unsubscribe } from '@angular/fire/auth';
 @Injectable({
   providedIn: 'root',
 })
 export class FireService {
   private firestore = inject(Firestore);
   private storage = inject(Storage);
-  constructor(private authService: AuthService) {}
+  private onSnapshotInitialised = false;
+  private userData$$ = new BehaviorSubject<DocumentData | undefined>(undefined);
+  private userDataUnsubscribe: Unsubscribe = () => {};
+  constructor(private authService: AuthService) {
+    this.authService.userObservable$.subscribe((user) => {
+      if (user && !this.onSnapshotInitialised) {
+        const docRef = doc(this.firestore, dbs.USERS, user.uid);
+        this.userDataUnsubscribe = onSnapshot(docRef, (observer) => {
+          console.log(observer.data());
+          this.userData$$.next(observer.data());
+        });
+      } else if (!user) {
+        this.userDataUnsubscribe();
+        this.userData$$.next(undefined);
+      }
+    });
+  }
 
-  testCollection = collection(this.firestore, 'test');
+  get userData() {
+    return this.userData$$.asObservable()
+  }
 
   getUserData(): Observable<DocumentData> {
     return new Observable((observer) => {
@@ -75,10 +93,6 @@ export class FireService {
           observer.complete();
         });
     });
-  }
-
-  getData<T>() {
-    return collectionData(this.testCollection) as Observable<T[]>;
   }
 
   getFileUrl(filePath: string) {
