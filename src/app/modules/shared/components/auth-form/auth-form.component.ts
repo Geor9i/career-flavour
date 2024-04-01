@@ -1,7 +1,7 @@
 import { EventBusService } from './../../../event-bus/event-bus.service';
 import { Component, inject } from '@angular/core';
 import { NgForm } from '@angular/forms';
-import { FireService } from 'src/app/modules/fire/fire-service';
+import { AuthService } from 'src/app/modules/fire/auth-service';
 
 @Component({
   selector: 'app-auth-form',
@@ -9,12 +9,12 @@ import { FireService } from 'src/app/modules/fire/fire-service';
   styleUrls: ['./auth-form.component.css'],
 })
 export class AuthFormComponent {
-  private fireService = inject(FireService);
+  private authService = inject(AuthService);
   constructor(private eventBus: EventBusService) {}
   submitHandler(form: NgForm) {
     const { email, password } = form.value;
     form.reset();
-    this.fireService.reAuth({ email, password }).subscribe({
+    this.authService.reAuth({ email, password }).subscribe({
       next: () => {
         this.eventBus.emit({
           event: 'TemplateModalContentOutput',

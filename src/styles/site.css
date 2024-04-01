@@ -11,3 +11,17 @@
   --pointer-transition: 0.1s;
   --slider-color: #ff2600;
 }
+
+/*
+@media print {
+  html {
+    background-color: white;
+  }
+  app-resume-editor .container {
+    display: none;
+  }
+
+  app-resume-page {
+    display: block;
+  }
+} */

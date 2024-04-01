@@ -8,12 +8,12 @@ import {
 } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { Router } from '@angular/router';
-import { FireService } from 'src/app/modules/fire/fire-service';
 import { Button } from 'src/app/modules/shared/modal/types';
 import { Subscription } from 'rxjs';
 import { TemplateModalService } from 'src/app/modules/shared/templateModal/templateModal.service';
 import { AuthFormComponent } from 'src/app/modules/shared/components/auth-form/auth-form.component';
 import { BusData } from 'src/app/modules/event-bus/types';
+import { AuthService } from 'src/app/modules/fire/auth-service';
 
 @Component({
   selector: 'app-profile',
@@ -29,7 +29,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
   email: string | null | undefined = '';
   selectedOption: string = '';
   constructor(
-    private fireservice: FireService,
+    private authService: AuthService,
     private router: Router,
     private modalService: ModalService,
     private templateModalService: TemplateModalService
@@ -45,9 +45,9 @@ export class ProfileComponent implements OnInit, OnDestroy {
   public authButton: Button[] = [{ name: 'Authorise', action: 'submit' }];
 
   ngOnInit(): void {
-    const displayName = this.fireservice.auth.currentUser?.displayName || '';
+    const displayName = this.authService.user?.displayName || '';
     [this.firstName, this.lastName] = displayName.split(' ');
-    this.email = this.fireservice.auth.currentUser?.email;
+    this.email = this.authService.user?.email;
   }
   ngOnDestroy(): void {
     this.modalSubscription?.unsubscribe();
@@ -59,7 +59,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
       .open(this.detailsModal, { buttons: this.buttons })
       .subscribe((action) => {
         if (action === 'confirm') {
-          this.fireservice.updateDisplayName(form.value).subscribe({
+          this.authService.updateDisplayName(form.value).subscribe({
             next: () => {
               this.router.navigateByUrl('/');
             },
@@ -78,7 +78,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
         if (observer.data && observer.data['confirm']) {
           const { password, repeatPassword } = form.value;
           if (password === repeatPassword) {
-            this.fireservice.changePassword(password).subscribe({
+            this.authService.changePassword(password).subscribe({
               next: () => {
                 this.router.navigateByUrl('/');
               },
@@ -99,7 +99,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
       .subscribe((observer) => {
         if (observer.data && observer.data['confirm']) {
           const { email } = form.value;
-          this.fireservice.changeEmail(email).subscribe({
+          this.authService.changeEmail(email).subscribe({
             next: () => {
               this.router.navigateByUrl('/');
             },
@@ -121,7 +121,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
       .open(AuthFormComponent)
       .subscribe((observer) => {
         if (observer.data && observer.data['confirm']) {
-          this.fireservice.deleteAccount();
+          this.authService.deleteAccount();
           this.router.navigateByUrl('/');
         }
         this.templateModalSubscription?.unsubscribe();

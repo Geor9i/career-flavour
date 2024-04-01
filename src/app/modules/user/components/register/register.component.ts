@@ -1,7 +1,7 @@
 import { Component, inject } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { Router } from '@angular/router';
-import { FireService } from 'src/app/modules/fire/fire-service';
+import { AuthService } from 'src/app/modules/fire/auth-service';
 
 @Component({
   selector: 'app-register',
@@ -11,14 +11,13 @@ import { FireService } from 'src/app/modules/fire/fire-service';
 export class RegisterComponent {
   router = inject(Router);
   errorMessage: string | null = null;
-  private fireservice =  inject(FireService);
-  // constructor(private fireservice: FireService) {}
+  private authService =  inject(AuthService);
 
   submitHandler(form: NgForm) {
     const { firstName, lastName, email, password, repeatPassword } =
       form?.value;
 
-    this.fireservice
+    this.authService
       .register({ firstName, lastName, email, password })
       .subscribe({
         next: () => {

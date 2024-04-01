@@ -30,6 +30,10 @@ export class TemplateModalComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.templateModalServiceSubscription =
       this.templateModalService.modalCompMessenger$?.subscribe(({component, options}) => {
+        // Reset styles
+        this.modalStyles = {};
+        this.backdropStyles = {};
+
         if (options?.styles) {
           this.modalStyles = options.styles;
         }
@@ -66,14 +70,6 @@ export class TemplateModalComponent implements OnInit, OnDestroy {
     this.templateModalServiceSubscription?.unsubscribe();
     this.eventBusSubscription?.unsubscribe();
   }
-
-  // getAction(action: string) {
-  //   const actions: { [key: string]: () => void } = {
-  //     submit: this.submit.bind(this),
-  //     cancel: this.close.bind(this),
-  //   };
-  //   return actions[action]();
-  // }
 
   close(): void {
     this.isActive = false;

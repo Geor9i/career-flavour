@@ -23,17 +23,17 @@ export class ResumeEditorComponent implements OnInit, OnDestroy {
     private templateModalService: TemplateModalService,
     private utilService: UtilService,
     private jsEventBusService: JSEventBusService,
-    private pageManager: PageManagerService,
+    private pageManager: PageManagerService
   ) {}
 
   private eventBusSubscription!: Subscription;
-  private jsEventUnsubscribeArr: (() => void)[] = []
+  private jsEventUnsubscribeArr: (() => void)[] = [];
   private eventUtil = this.utilService.eventUtil;
   public modalIds: IdObj = {
     font: 'font',
     layout: 'layout',
-    helper: 'helper'
-  }
+    helper: 'helper',
+  };
   private modalId: string = '';
 
   private layoutEditorStyles: {} = {
@@ -47,38 +47,42 @@ export class ResumeEditorComponent implements OnInit, OnDestroy {
   };
 
   ngOnInit(): void {
-    this.resumePage = ResumePageComponent;
-    // @ViewChild('resumePageComponent', { static: false }) resumePageComponent!: ResumePageComponent;
-    this.jsEventBusService.subscribe(this.jsEventBusId, 'click', this.resumeHelper.bind(this), {
-      target: 'app-p'
-    })
+    const unsubscribe = this.jsEventBusService.subscribe(
+      this.jsEventBusId,
+      'click',
+      this.resumeHelper.bind(this),
+      {
+        target: 'app-p',
+      }
+    );
+    this.jsEventUnsubscribeArr.push(unsubscribe)
   }
 
-  openLayouts(e: Event,  id: string) {
+  openLayouts(e: Event, id: string) {
     const { clientX, clientY } = this.eventUtil.eventData(e);
     const [width, height] = this.eventUtil.resizeToScreen(50, 60);
     this.layoutEditorStyles = {
       ...this.layoutEditorStyles,
       top: `${clientY}px`,
       left: `${clientX}px`,
-      'width': `${width}px`,
-      'height': `${height}px`,
+      width: `${width}px`,
+      height: `${height}px`,
     };
-    this.modalSubscriptionHandler(id)
+    this.modalSubscriptionHandler(id);
     this.eventBusSubscription = this.templateModalService
       .open(LayoutSelectorComponent, {
         styles: this.layoutEditorStyles,
         backdropStyles: this.backdropStyles,
-        openTransmission: true
+        openTransmission: true,
       })
       .subscribe((observable) => {
         if (observable.data && observable.data.hasOwnProperty('confirm')) {
           this.eventBusSubscription.unsubscribe();
         } else if (observable) {
           const obj = {
-            layout: observable.data
-          }
-          this.pageManager.modifyPage(obj as unknown as GridData)
+            layout: observable.data,
+          };
+          this.pageManager.modifyPage(obj as unknown as GridData);
         }
       });
   }
@@ -90,24 +94,24 @@ export class ResumeEditorComponent implements OnInit, OnDestroy {
       ...this.layoutEditorStyles,
       top: `${clientY}px`,
       left: `${clientX}px`,
-      'width': `${width}px`,
-      'height': `${height}px`,
+      width: `${width}px`,
+      height: `${height}px`,
     };
-    this.modalSubscriptionHandler(id)
+    this.modalSubscriptionHandler(id);
     this.eventBusSubscription = this.templateModalService
       .open(FontSelectorComponent, {
         styles: this.layoutEditorStyles,
         backdropStyles: this.backdropStyles,
-        openTransmission: true
+        openTransmission: true,
       })
       .subscribe((observable) => {
         if (observable.data && observable.data.hasOwnProperty('confirm')) {
           this.eventBusSubscription.unsubscribe();
         } else if (observable) {
           const obj = {
-            changeFont: observable.data
-          }
-          this.pageManager.modifyPage(obj as PageValues)
+            changeFont: observable.data,
+          };
+          this.pageManager.modifyPage(obj as PageValues);
         }
       });
   }
@@ -117,18 +121,18 @@ export class ResumeEditorComponent implements OnInit, OnDestroy {
     const [width, height] = this.eventUtil.resizeToScreen(3, 20);
     this.layoutEditorStyles = {
       ...this.layoutEditorStyles,
-      top: `${clientY - (height / 2)}px`,
+      top: `${clientY - height / 2}px`,
       left: `${clientX - width}px`,
-      'width': `${width}px`,
-      'height': `${height}px`,
+      width: `${width}px`,
+      height: `${height}px`,
       'border-radius': `${13}px`,
     };
-    this.modalSubscriptionHandler(this.modalIds['helper'])
+    this.modalSubscriptionHandler(this.modalIds['helper']);
     this.eventBusSubscription = this.templateModalService
       .open(ResumeHelperComponent, {
         styles: this.layoutEditorStyles,
         backdropStyles: this.backdropStyles,
-        openTransmission: true
+        openTransmission: true,
       })
       .subscribe((observable) => {
         console.log(observable);
@@ -136,29 +140,32 @@ export class ResumeEditorComponent implements OnInit, OnDestroy {
           this.eventBusSubscription.unsubscribe();
         } else if (observable) {
           const obj = {
-            changeFont: observable.data
-          }
-          this.pageManager.modifyPage(obj as PageValues)
+            changeFont: observable.data,
+          };
+          this.pageManager.modifyPage(obj as PageValues);
         }
       });
   }
 
   modalSubscriptionHandler(id: string) {
     if (id !== this.modalId && this.eventBusSubscription) {
-      this.eventBusSubscription.unsubscribe()
+      this.eventBusSubscription.unsubscribe();
     }
     this.modalId = id;
   }
 
   resize(sign: string) {
-    this.pageManager.modifyPage({resize: sign})
+    this.pageManager.modifyPage({ resize: sign });
   }
 
   ngOnDestroy(): void {
-    this.eventBusSubscription.unsubscribe()
+    if (this.eventBusSubscription) {
+      this.eventBusSubscription.unsubscribe();
+    }
+    this.jsEventUnsubscribeArr.forEach(unsubscribe => unsubscribe());
   }
+   print() {
+    window.print()
+    }
 
-  print() {
-    this.resumePage
-  }
 }

@@ -1,7 +1,7 @@
 import { Component, inject } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { Router } from '@angular/router';
-import { FireService } from 'src/app/modules/fire/fire-service';
+import { AuthService } from 'src/app/modules/fire/auth-service';
 
 @Component({
   selector: 'app-reset-account-password',
@@ -9,12 +9,12 @@ import { FireService } from 'src/app/modules/fire/fire-service';
   styleUrls: ['./reset-account-password.component.css']
 })
 export class ResetAccountPasswordComponent {
-  private fireService = inject(FireService);
+  private authService = inject(AuthService);
   private router = inject(Router);
   public activeForm = true;
   submitHandler(form: NgForm) {
     const { email } = form.value;
-    this.fireService.resetPassword(email).subscribe({
+    this.authService.resetPassword(email).subscribe({
       next: (data) => {
         this.activeForm = false;
       },

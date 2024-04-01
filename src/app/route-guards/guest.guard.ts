@@ -1,16 +1,23 @@
-import { ActivatedRouteSnapshot, CanActivateFn, Router, RouterStateSnapshot } from '@angular/router';
-import { FireService } from '../modules/fire/fire-service';
-import { inject } from '@angular/core';
-import { authState } from '@angular/fire/auth';
+import { ActivatedRouteSnapshot, Router, RouterStateSnapshot } from '@angular/router';
+import { AuthService } from '../modules/fire/auth-service';
+import { Injectable } from '@angular/core';
 
-export const guestGuard: CanActivateFn = (route: ActivatedRouteSnapshot, state: RouterStateSnapshot) => {
-  const router = inject(Router);
-  const fireservice = inject(FireService);
+@Injectable({
+  providedIn: 'root'
+})
+export class guestGuard {
+  constructor(private authService: AuthService, private router: Router) {}
 
-
-
-
-  return true
-
-};
-
+  canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Promise<boolean> {
+    return new Promise((resolve, reject) => {
+      this.authService.getCurrentUser()
+        .then(user => {
+          this.router.navigateByUrl('/')
+          resolve(false)
+        })
+        .catch(err => {
+          resolve(true);
+        });
+    });
+  }
+}

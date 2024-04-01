@@ -1,9 +1,9 @@
 import { Router } from '@angular/router';
 import { Component } from '@angular/core';
-import { FireService } from 'src/app/modules/fire/fire-service';
 import { AuthFormComponent } from 'src/app/modules/shared/components/auth-form/auth-form.component';
 import { TemplateModalService } from 'src/app/modules/shared/templateModal/templateModal.service';
 import { Subscription } from 'rxjs';
+import { AuthService } from 'src/app/modules/fire/auth-service';
 
 @Component({
   selector: 'app-home',
@@ -13,12 +13,14 @@ import { Subscription } from 'rxjs';
 export class HomeComponent {
   constructor(
     private templateModalService: TemplateModalService,
-    private fireService: FireService,
+    private authService: AuthService,
     private router: Router,
     ) {}
     private busSubscription!: Subscription
   toResumeBuilder() {
-    const isAuth = this.fireService.auth.currentUser;
+    const isAuth = this.authService.auth.currentUser;
+    console.log(isAuth);
+
     if (!isAuth) {
       this.busSubscription = this.templateModalService
         .open(AuthFormComponent)

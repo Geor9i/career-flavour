@@ -13,6 +13,7 @@ import { ResumeSectionComponent } from './components/resume-section/resume-secti
 import { FontSelectorComponent } from './components/font-selector/font-selector.component';
 import { ResumeRecordComponent } from './components/resume-record/resume-record.component';
 import { ResumeHelperComponent } from './components/resume-helper/resume-helper.component';
+import { NgxPrintModule } from 'ngx-print';
 @NgModule({
   declarations: [
     ResumePageComponent,
@@ -30,6 +31,7 @@ import { ResumeHelperComponent } from './components/resume-helper/resume-helper.
     UtilsModule,
     AnimationsModule,
     PipesModule,
+    NgxPrintModule,
     ResumeRoutingModule,
   ],
   exports: [ResumePageComponent, ResumeEditorComponent],

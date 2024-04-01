@@ -1,7 +1,7 @@
 import { Component, inject } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { Router } from '@angular/router';
-import { FireService } from 'src/app/modules/fire/fire-service';
+import { AuthService } from 'src/app/modules/fire/auth-service';
 
 @Component({
   selector: 'app-login',
@@ -9,11 +9,11 @@ import { FireService } from 'src/app/modules/fire/fire-service';
   styleUrls: ['./login.component.css'],
 })
 export class LoginComponent {
-  private fireService = inject(FireService);
+  private authService = inject(AuthService);
   private router = inject(Router);
   submitHandler(form: NgForm) {
     const { email, password } = form.value;
-    this.fireService.login({ email, password }).subscribe({
+    this.authService.login({ email, password }).subscribe({
       next: (data) => {
         this.router.navigateByUrl('/');
       },
