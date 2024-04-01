@@ -1,0 +1,40 @@
+:host {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.container {
+  width: 100%;
+  height: 100%;
+}
+
+.container ul {
+  padding: 0.5em;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+  gap: 0.5em;
+}
+
+.container ul li {
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  max-width: 40px;
+  aspect-ratio: 1;
+  border: 2px solid white;
+  background-color: white;
+  transition: color var(--pointer-transition) ease-in;
+  cursor: pointer;
+}
+
+.container ul li:hover {
+color: green;
+}

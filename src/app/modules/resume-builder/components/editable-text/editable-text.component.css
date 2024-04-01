@@ -5,7 +5,7 @@ pre {
   word-wrap: break-word; /* Internet Explorer 5.5+ */
   overflow-wrap: break-word; /* The preferred name for word-wrap */
   max-width: 100%; /* Limit the maximum width */
-  display: inline; /* Allow the element to shrink to fit content */
+  display: block; /* Allow the element to shrink to fit content */
 }
 
 pre:focus {

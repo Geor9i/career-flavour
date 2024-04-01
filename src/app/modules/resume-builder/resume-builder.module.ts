@@ -11,6 +11,8 @@ import { AnimationsModule } from '../animations/animations.module';
 import { PipesModule } from '../pipes/pipes.module';
 import { ResumeSectionComponent } from './components/resume-section/resume-section.component';
 import { FontSelectorComponent } from './components/font-selector/font-selector.component';
+import { ResumeRecordComponent } from './components/resume-record/resume-record.component';
+import { ResumeHelperComponent } from './components/resume-helper/resume-helper.component';
 @NgModule({
   declarations: [
     ResumePageComponent,
@@ -19,6 +21,8 @@ import { FontSelectorComponent } from './components/font-selector/font-selector.
     EditableTextComponent,
     ResumeSectionComponent,
     FontSelectorComponent,
+    ResumeRecordComponent,
+    ResumeHelperComponent,
   ],
   imports: [
     CommonModule,

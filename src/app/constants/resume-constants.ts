@@ -26,14 +26,25 @@ export const resumeConstants = {
 
 };
 
+// export const INITIAL_STYLES: Style = {
+//   display: 'grid',
+//   width: '595px',
+//   height: '842px',
+//   backgroundColor: 'lightgray',
+//   color: 'black',
+//   fontFamily: 'Arial, sans-serif',
+//   fontSize: '12px',
+//   padding: '24px',
+//   borderRadius: '5px',
+// }
+
 export const INITIAL_STYLES: Style = {
-  display: 'grid',
-  width: '595px',
-  height: '842px',
-  backgroundColor: 'lightgray',
-  color: 'black',
-  fontFamily: 'Arial, sans-serif',
-  fontSize: '12px',
-  padding: '24px',
-  borderRadius: '5px',
+  "display": "grid",
+  "width": "595px",
+  "height": "842px",
+  "fontFamily": "Calibri",
+  "fontSize": "12px",
+  "padding": "24px",
+  "gridTemplateColumns": "273.5px 273.5px",
+  "gridTemplateRows": "198.5px 198.5px 198.5px 198.5px"
 }

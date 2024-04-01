@@ -7,7 +7,6 @@ import {
 import { UtilService } from './../../../utils/util.service';
 import { PageManagerService } from './../../page-manager.service';
 import {
-  AfterViewChecked,
   AfterViewInit,
   Component,
   ElementRef,
@@ -21,7 +20,6 @@ import {
   FontConfig,
   GridData,
   PageValues,
-  Style,
   layoutData,
 } from '../../types';
 import { Subscription } from 'rxjs';
@@ -59,85 +57,108 @@ export class ResumePageComponent implements OnInit, AfterViewInit, OnDestroy {
   private resumeBuilderUtil = this.utilService.resumeBuilderUtil;
   public resumeConstants = resumeConstants;
   public selectedOption: Event | string = '';
-  public sections: any[] = [];
   resumeStyles = INITIAL_STYLES;
   public textStyling: FontConfig = FONT_SETTINGS;
-  // public testSections = [
-  //   {
-  //     type: 'Header',
-  //     name: 'Test name',
-  //     position: 'Applying for...',
-  //     summary: 'Something about me...',
-  //     contentPlacement: 'list',
-  //     contentFlow: 'vertical',
-  //     styles: {
-  //       gridRowStart: 'auto',
-  //       gridColumnEnd: '3',
-  //       gridRowEnd: 'auto',
-  //       gridColumnStart: '1',
-  //     },
-  //   },
-  //   {
-  //     type: 'Soft Skills',
-  //     title: 'Soft Skills',
-  //     contentPlacement: 'list',
-  //     contentFlow: 'horizontal',
-  //     styles: {
-  //       gridRowStart: 'auto',
-  //       gridColumnEnd: 'auto',
-  //       gridRowEnd: 'auto',
-  //       gridColumnStart: 'auto',
-  //     },
-  //   },
-  //   {
-  //     type: 'Contacts',
-  //     styles: {
-  //       gridRowStart: 'auto',
-  //       gridColumnEnd: 'auto',
-  //       gridRowEnd: 'auto',
-  //       gridColumnStart: 'auto',
-  //     },
-  //   },
-  //   {
-  //     type: 'Projects',
-  //     styles: {
-  //       gridRowStart: 'auto',
-  //       gridColumnEnd: 'auto',
-  //       gridRowEnd: 'auto',
-  //       gridColumnStart: 'auto',
-  //     },
-  //   },
-  //   {
-  //     type: 'Hobbies',
-  //     styles: {
-  //       gridRowStart: 'auto',
-  //       gridColumnEnd: 'auto',
-  //       gridRowEnd: 'auto',
-  //       gridColumnStart: 'auto',
-  //     },
-  //   },
-  //   {
-  //     type: 'Education',
-  //     title: 'Education',
-  //     contentPlacement: 'chronological',
-  //     contentFlow: 'vertical',
-  //     styles: {
-  //       gridRowStart: 'auto',
-  //       gridColumnEnd: 'auto',
-  //       gridRowEnd: 'auto',
-  //       gridColumnStart: 'auto',
-  //     },
-  //   },
-  //   {
-  //     type: 'Certificates',
-  //     styles: {
-  //       gridRowStart: 'auto',
-  //       gridColumnEnd: 'auto',
-  //       gridRowEnd: 'auto',
-  //       gridColumnStart: 'auto',
-  //     },
-  //   },
-  // ];
+  public sections: any[] = [
+    {
+        "type": "Header",
+        "name": "Test name",
+        "position": "Applying for...",
+        "summary": "Something about me...",
+        "contentPlacement": "list",
+        "contentFlow": "vertical",
+        "styles": {
+            "gridRowStart": "auto",
+            "gridColumnEnd": "3",
+            "gridRowEnd": "auto",
+            "gridColumnStart": "1"
+        }
+    },
+    {
+        "type": "Education",
+        "title": "Education",
+        "contentPlacement": "chronological",
+        "contentFlow": "vertical",
+        "styles": {
+            "gridRowStart": "auto",
+            "gridColumnEnd": "auto",
+            "gridRowEnd": "auto",
+            "gridColumnStart": "auto"
+        }
+    },
+    {
+        "type": "Work Experience",
+        "title": "Work Experience",
+        "contentPlacement": "chronological",
+        "contentFlow": "horizontal",
+        "styles": {
+            "gridRowStart": "auto",
+            "gridColumnEnd": "auto",
+            "gridRowEnd": "auto",
+            "gridColumnStart": "auto"
+        }
+    },
+    {
+        "type": "Soft Skills",
+        "title": "Soft Skills",
+        "contentPlacement": "list",
+        "contentFlow": "horizontal",
+        "styles": {
+            "gridRowStart": "auto",
+            "gridColumnEnd": "auto",
+            "gridRowEnd": "auto",
+            "gridColumnStart": "auto"
+        }
+    },
+    {
+        "type": "Skills",
+        "title": "Skills",
+        "contentPlacement": "list",
+        "contentFlow": "vertical",
+        "styles": {
+            "gridRowStart": "auto",
+            "gridColumnEnd": "auto",
+            "gridRowEnd": "auto",
+            "gridColumnStart": "auto"
+        }
+    },
+    {
+        "type": "Contacts",
+        "styles": {
+            "gridRowStart": "auto",
+            "gridColumnEnd": "auto",
+            "gridRowEnd": "auto",
+            "gridColumnStart": "auto"
+        }
+    },
+    {
+        "type": "Hobbies",
+        "styles": {
+            "gridRowStart": "auto",
+            "gridColumnEnd": "auto",
+            "gridRowEnd": "auto",
+            "gridColumnStart": "auto"
+        }
+    },
+    {
+        "type": "Projects",
+        "styles": {
+            "gridRowStart": "auto",
+            "gridColumnEnd": "auto",
+            "gridRowEnd": "auto",
+            "gridColumnStart": "auto"
+        }
+    },
+    {
+        "type": "Certificates",
+        "styles": {
+            "gridRowStart": "auto",
+            "gridColumnEnd": "auto",
+            "gridRowEnd": "auto",
+            "gridColumnStart": "auto"
+        }
+    }
+];
 
   ngOnInit(): void {
     this.renderer.setStyle(
@@ -178,8 +199,10 @@ export class ResumePageComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   dragStart(event: JSEvent) {
-    this.isDraggin = true;
     const e = event as MouseEvent;
+    if (e.target !== this.sheet.nativeElement) return;
+    
+    this.isDraggin = true;
     const {clientX, clientY} = e;
     const { rect } =  this.eventUtil.elementData(this.sheet.nativeElement);
     this.dragOffsetX = clientX - rect.left;
@@ -204,10 +227,6 @@ export class ResumePageComponent implements OnInit, AfterViewInit, OnDestroy {
   ngOnDestroy(): void {
     this.pageManagerSubscription.unsubscribe();
     this.renderer.removeStyle(document.documentElement, 'background-color');
-  }
-
-  change(value: PageValues) {
-    this.pageManager.modifyPage(value);
   }
 
   delegateTask(values: PageValues) {
@@ -239,6 +258,9 @@ export class ResumePageComponent implements OnInit, AfterViewInit, OnDestroy {
       gridTemplateRows: rows,
     };
     this.sections = childData as unknown as layoutData[];
+    // console.log(this.resumeStyles);
+    // console.log(this.sections);
+
   }
 
   calcGridCells(sheetWidth: number, sheetHeight: number, padding?: number) {

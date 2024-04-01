@@ -1,4 +1,14 @@
 <section class="resume-section">
-      <app-p *ngIf="data?.['title']"[text]="data?.['title'] || ''" />
+  <div class="header">
+    <app-p *ngIf="data?.['title']"[text]="data?.['title'] || ''" />
+    <app-p *ngIf="data?.['name']"[text]="data?.['name'] || ''" />
+    <app-p *ngIf="data?.['position']"[text]="data?.['position'] || ''" />
+  </div>
+
+
+  <div class="main">
+    <app-resume-record></app-resume-record>
+  </div>
+
       <!-- [textStyles]="textStyling"  -->
 </section>

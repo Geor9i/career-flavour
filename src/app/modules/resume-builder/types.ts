@@ -39,6 +39,10 @@ export type Bin = {
   };
 };
 
+export interface IdObj {
+  [key: string]: string;
+}
+
 export interface TemplateGridStyle {
   [key: string]: string;
 }
