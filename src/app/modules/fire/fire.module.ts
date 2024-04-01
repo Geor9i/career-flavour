@@ -4,8 +4,7 @@ import { initializeApp, provideFirebaseApp } from '@angular/fire/app';
 import { getFirestore, provideFirestore } from '@angular/fire/firestore';
 import { getAuth, provideAuth } from '@angular/fire/auth';
 import { firebaseConfig } from 'src/environments/environment';
-
-
+import { provideStorage, getStorage } from '@angular/fire/storage';
 
 @NgModule({
   declarations: [],
@@ -13,7 +12,8 @@ import { firebaseConfig } from 'src/environments/environment';
     CommonModule,
     provideFirebaseApp(() => initializeApp(firebaseConfig)),
     provideFirestore(() => getFirestore()),
-    provideAuth(() => getAuth())
-  ]
+    provideAuth(() => getAuth()),
+    provideStorage(() => getStorage()),
+  ],
 })
-export class FireModule { }
+export class FireModule {}

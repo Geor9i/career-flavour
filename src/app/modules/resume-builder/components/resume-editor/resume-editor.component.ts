@@ -10,6 +10,7 @@ import { PageManagerService } from '../../page-manager.service';
 import { GridData } from '../../types';
 import { FontSelectorComponent } from '../font-selector/font-selector.component';
 import { ResumeHelperComponent } from '../resume-helper/resume-helper.component';
+import { ResumeDocumentsComponent } from '../resume-documents/resume-documents.component';
 
 @Component({
   selector: 'app-resume-editor',
@@ -33,6 +34,7 @@ export class ResumeEditorComponent implements OnInit, OnDestroy {
     font: 'font',
     layout: 'layout',
     helper: 'helper',
+    documents: 'documents',
   };
   private modalId: string = '';
 
@@ -136,6 +138,35 @@ export class ResumeEditorComponent implements OnInit, OnDestroy {
       })
       .subscribe((observable) => {
         console.log(observable);
+        if (observable.data && observable.data.hasOwnProperty('confirm')) {
+          this.eventBusSubscription.unsubscribe();
+        } else if (observable) {
+          const obj = {
+            changeFont: observable.data,
+          };
+          this.pageManager.modifyPage(obj as PageValues);
+        }
+      });
+  }
+
+  openDocuments(e: Event, id: string) {
+    const { clientX, clientY } = this.eventUtil.eventData(e);
+    const [width, height] = this.eventUtil.resizeToScreen(40, 50);
+    this.layoutEditorStyles = {
+      ...this.layoutEditorStyles,
+      top: `${clientY - (height / 2)}px`,
+      left: `${clientX + (width * 0.75)}px`,
+      width: `${width}px`,
+      height: `${height}px`,
+    };
+    this.modalSubscriptionHandler(id);
+    this.eventBusSubscription = this.templateModalService
+      .open(ResumeDocumentsComponent, {
+        styles: this.layoutEditorStyles,
+        backdropStyles: this.backdropStyles,
+        openTransmission: true,
+      })
+      .subscribe((observable) => {
         if (observable.data && observable.data.hasOwnProperty('confirm')) {
           this.eventBusSubscription.unsubscribe();
         } else if (observable) {

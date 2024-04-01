@@ -1,0 +1,62 @@
+<div class="container">
+  <header class="header">
+    <ul>
+      <li (click)="modalView = modalViews['header']">Header</li>
+      <li (click)="modalView = modalViews['contacts']">Contacts</li>
+      <li (click)="modalView = modalViews['skills']">Skills</li>
+      <li (click)="modalView = modalViews['softSkills']">Soft Skills</li>
+      <li></li>
+    </ul>
+  </header>
+  <main>
+    <form class="form" #generalForm="ngForm" (ngSubmit)="submitHandler(generalForm)">
+
+
+      <div *ngIf="modalView === modalViews['header']">
+        <div class="input-group">
+          <label for="name">Name</label>
+          <input ngModel name="name" id="name" type="text" #name="ngModel"/>
+        </div>
+        <div class="input-group">
+          <label for="position">Position</label>
+          <input ngModel name="position" id="position" type="text" #position="ngModel"/>
+        </div>
+        <div class="input-group">
+          <label for="summary">Summary</label>
+          <textarea ngModel name="summary" id="summary" type="text" #summary="ngModel"></textarea>
+        </div>
+      </div>
+
+
+
+
+
+      <div *ngIf="modalView === modalViews['contacts']">
+        <div class="input-group">
+          <label for="email">Email</label>
+          <input ngModel name="email" id="email" type="text" #email="ngModel"/>
+        </div>
+        <div class="input-group">
+          <label for="phone">Phone</label>
+          <input ngModel name="phone" id="phone" type="text" #phone="ngModel"/>
+        </div>
+        <div class="input-group">
+          <label for="github">Github</label>
+          <input ngModel name="github" id="github" type="text" #github="ngModel"/>
+        </div>
+        <div class="input-group">
+          <label for="linkedin">LinkedIn</label>
+          <input ngModel name="linkedin" id="linkedin" type="text" #linkedin="ngModel"/>
+        </div>
+      </div>
+
+
+
+
+      <input type="submit" value="Save">
+    </form>
+
+
+
+  </main>
+</div>

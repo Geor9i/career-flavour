@@ -76,6 +76,8 @@
 }
 
 .template {
+  background: url('https://gdoc.io/uploads/University-Student-Resume-Template-web1-712x984.webp');
+  background-size: contain;
   border-radius: 3px;
   min-width: 20%;
   aspect-ratio: 0.707;

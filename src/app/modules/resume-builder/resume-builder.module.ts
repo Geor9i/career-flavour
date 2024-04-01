@@ -14,6 +14,7 @@ import { FontSelectorComponent } from './components/font-selector/font-selector.
 import { ResumeRecordComponent } from './components/resume-record/resume-record.component';
 import { ResumeHelperComponent } from './components/resume-helper/resume-helper.component';
 import { NgxPrintModule } from 'ngx-print';
+import { ResumeDocumentsComponent } from './components/resume-documents/resume-documents.component';
 @NgModule({
   declarations: [
     ResumePageComponent,
@@ -24,6 +25,7 @@ import { NgxPrintModule } from 'ngx-print';
     FontSelectorComponent,
     ResumeRecordComponent,
     ResumeHelperComponent,
+    ResumeDocumentsComponent,
   ],
   imports: [
     CommonModule,

@@ -1,3 +1,4 @@
+import { FireService } from 'src/app/modules/fire/fire-service';
 import { UtilService } from './../../../utils/util.service';
 import { JSEventBusService } from 'src/app/modules/event-bus/jsevent-bus.service';
 import { AfterViewInit,Component, ElementRef,OnDestroy, QueryList, ViewChildren,} from '@angular/core';
@@ -9,20 +10,22 @@ import { JSEvent } from 'src/app/modules/event-bus/types';
   styleUrls: ['./resume-templates-page.component.css'],
 })
 export class ResumeTemplatesPageComponent implements AfterViewInit, OnDestroy {
-  public templates: any = Array(5).fill(0);
+  public templates: any = Array(2).fill(0);
+  public link: string = ''
   public templateStyles: { [key: string]: string }[] = [];
 
   private jSEventSubId = 'ResumeTemplatesPageComponent';
   private jsEventUnsubscribeArr: (() => void)[] = [];
   private eventUt = this.utilService.eventUtil;
-
   constructor(
     private jSEventBusService: JSEventBusService,
-    private utilService: UtilService
+    private utilService: UtilService,
+    private fireService: FireService
   ) {}
 
   @ViewChildren('template') template!: QueryList<ElementRef>;
   ngAfterViewInit(): void {
+
 
     const templateElements = this.template
       .toArray()

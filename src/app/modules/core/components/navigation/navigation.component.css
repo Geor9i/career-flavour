@@ -71,11 +71,11 @@
   cursor: pointer;
   transition: background-color 0.2s ease-in, box-shadow var(--pointer-transition) ease-in;
   user-select: none;
-  transition: box-shadow var(--pointer-transition) ease-in;
+  transition: box-shadow var(--pointer-transition) ease-in, background-color var(--pointer-transition) ease-in;
 }
 
 .user-icon:hover {
-  box-shadow: inset -6px 0 15px rgba(0, 0, 0, 0.3);
+  background-color: var(--theme-blue);
 }
 
 .user-icon:hover > p {
@@ -125,17 +125,14 @@
   list-style: none;
   border-radius: 13px;
   overflow: clip;
-  box-shadow: 0 0 5px var(--theme-blue) inset;
   background-color: var(--theme-color);
 
 }
 
 .navigation-container li {
-  box-shadow: 0 0 5px var(--theme-blue) inset;
   padding: 1em 2em;
   color: white;
   font-weight: bold;
-  border-radius: 5px;
   text-align: center;
   cursor: pointer;
   transition: background-color var(--pointer-transition) ease-in;
@@ -146,7 +143,6 @@
   background-color: var(--theme-blue);
   color: white;
 }
-
 
 .backdrop {
   position: absolute;
