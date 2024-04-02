@@ -41,7 +41,10 @@ export class LayoutSelectorComponent
   ) {}
   private bins!: Bin;
   private activeSection: HTMLElement | null = null;
-  private userData: DocumentData | undefined = {};
+  private userData: DocumentData | undefined = {
+    arr:[],
+    obj: {}
+  };
   private userDataSubscriptions!: Subscription;
   public sectionControlDisabled = true;
   private draggedElement: EventTarget | null = null;
@@ -73,11 +76,15 @@ export class LayoutSelectorComponent
   ngOnInit(): void {
 
     this.userDataSubscriptions = this.fireService.userData.subscribe(data => {
-      const layout = data?.['layout'] || {};
-      this.userData = {
-        arr: this.objectUtil.reduceToArr(layout, {orderData: true}),
-        obj: data?.['layout'] || {}
-      };
+      if (data && data['layout']) {
+        const { sections, gridTemplateRows, gridTemplateColumns } = data?.['layout'];
+        if (sections) {
+          this.userData = {
+            arr: this.objectUtil.reduceToArr(sections, {orderData: true}),
+            obj: sections || {}
+          };
+        }
+      }
     })
 
     const unsubscribe1 = this.jsEventBusService.subscribe(
@@ -311,21 +318,21 @@ export class LayoutSelectorComponent
       this.bins['sheet'].element
     );
     const gridChildren = Array.from(this.bins['sheet'].element.children);
-    const childData: layoutData[] = [];
+    const sections: layoutData[] = [];
     gridChildren.forEach((child) => {
       const styles = this.domUtil.getGridChildStyles(child);
       const { id: name } = (child as HTMLElement).dataset;
       const templateData = this.generalSections.find(
         (section) => section.type.toLowerCase() === name?.toLowerCase()
       );
-      childData.push({
+      sections.push({
         ...templateData,
         styles,
       });
     });
     this.gridData = {
       ...gridData,
-      childData,
+      sections,
     };
 
   }

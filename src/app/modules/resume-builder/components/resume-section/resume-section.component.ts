@@ -1,9 +1,15 @@
 import { FontGroup } from './../../types';
 import {
+  AfterViewChecked,
+  AfterViewInit,
+  ChangeDetectorRef,
   Component,
+  ElementRef,
   HostBinding,
   Input,
   OnChanges,
+  OnInit,
+  Renderer2,
   SimpleChanges,
 } from '@angular/core';
 import { FontConfig, PageValues, Style, layoutData } from '../../types';
@@ -20,6 +26,9 @@ export class ResumeSectionComponent implements OnChanges {
   @Input('textStyling') fontStyling: FontConfig = {};
   @HostBinding('style') sectionStyles: Style = this.styles;
 
+  constructor(){}
+
+
   public fontStyles: FontGroup = {
     "sectionHeading": {
         "fontSize": "18px",
@@ -34,6 +43,7 @@ export class ResumeSectionComponent implements OnChanges {
         "fontFamily": "Calibri"
     }
 };
+
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes['styles']) {

@@ -70,9 +70,13 @@ export class ResumePageComponent implements OnInit, AfterViewInit, OnDestroy {
   ngOnInit(): void {
 
     this.userDataSubscription = this.fireService.userData.subscribe(data => {
-      const layout = data?.['layout'] || {};
-      this.sections = this.objectUtil.reduceToArr(layout, {orderData: true});
-    })
+      const layout = data?.['layout'] || {}; // Ensure layout is defined or provide a default value
+      const { sections, gridTemplateRows, gridTemplateColumns } = layout;
+      if (sections && gridTemplateColumns && gridTemplateRows) {
+        this.sections = this.objectUtil.reduceToArr(sections, {orderData: true});
+        this.editLayout({ sections: this.sections, gridTemplateRows, gridTemplateColumns });
+      }
+    });
 
     this.renderer.setStyle(
       document.documentElement,
@@ -146,7 +150,7 @@ export class ResumePageComponent implements OnInit, AfterViewInit, OnDestroy {
     const delegator: { [key: string]: () => void } = {
       resize: () => this.resizePage(values.resize as string),
       changeFont: () => this.processTextStyling(values),
-      layout: () => this.editLayout(values as GridData),
+      layout: () => this.editLayout(values['layout'] as GridData),
     };
 
     Object.keys(values).forEach((action) => {
@@ -155,10 +159,7 @@ export class ResumePageComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   editLayout(data: GridData) {
-    const { gridTemplateColumns, gridTemplateRows, childData } = data[
-      'layout'
-    ] as layoutData;
-
+    const { gridTemplateColumns, gridTemplateRows, sections } = data
     this.cellRatios.columns = this.domUtil
       .getRawGridValue(gridTemplateColumns as string)
       .map(Number);
@@ -184,10 +185,16 @@ export class ResumePageComponent implements OnInit, AfterViewInit, OnDestroy {
       gridTemplateColumns: colums,
       gridTemplateRows: rows,
     };
-    this.sections = childData as unknown as layoutData[];
-    let obj = this.objectUtil.reduceToObj(this.sections, 'type')
-    this.fireService.saveUserData(obj, 'layout', false).subscribe(() => {})
-    console.log(obj);
+    this.sections = sections as unknown as layoutData[];
+    let sectionsObj = this.objectUtil.reduceToObj(this.sections, 'type')
+
+    const userData = {
+      sections: sectionsObj,
+      gridTemplateColumns,
+      gridTemplateRows
+    }
+// TODO investigate userData multiple save!
+    this.fireService.saveUserData(userData, 'layout', false).subscribe(() => {})
 
   }
 

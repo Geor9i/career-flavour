@@ -1,3 +1,4 @@
+import { FireService } from 'src/app/modules/fire/fire-service';
 import { ModalService } from 'src/app/modules/shared/modal/modal.service';
 import {
   Component,
@@ -12,7 +13,6 @@ import { Button } from 'src/app/modules/shared/modal/types';
 import { Subscription } from 'rxjs';
 import { TemplateModalService } from 'src/app/modules/shared/templateModal/templateModal.service';
 import { AuthFormComponent } from 'src/app/modules/shared/components/auth-form/auth-form.component';
-import { BusData } from 'src/app/modules/event-bus/types';
 import { AuthService } from 'src/app/modules/fire/auth-service';
 
 @Component({
@@ -32,7 +32,8 @@ export class ProfileComponent implements OnInit, OnDestroy {
     private authService: AuthService,
     private router: Router,
     private modalService: ModalService,
-    private templateModalService: TemplateModalService
+    private templateModalService: TemplateModalService,
+    private fireService: FireService
   ) {}
 
   private modalSubscription: Subscription | undefined;
@@ -123,6 +124,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
         if (observer.data && observer.data['confirm']) {
           this.authService.deleteAccount();
           this.router.navigateByUrl('/');
+          this.fireService.deleteUserData();
         }
         this.templateModalSubscription?.unsubscribe();
       });
