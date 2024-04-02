@@ -124,6 +124,22 @@ export class FireService {
     }
   }
 
+  async deleteResume(documentId: string): Promise<void> {
+      const user  = this.authService.auth?.currentUser;
+      if (user) {
+        const data = {...this._userData};
+        const path = `resumes.${documentId}`
+        let finishedObj = this.objectUtil.deleteNestedProperty(data, path);
+        const docRef = doc(this.firestore, dbs.USERS, user.uid);
+        return setDoc(docRef, finishedObj)
+        .then(() => {
+          console.log('Resume Deleted!');
+        })
+        .catch((err) => {
+        });
+      }
+  }
+
   getFileUrl(filePath: string) {
     const fileRef = ref(this.storage, filePath);
     return getDownloadURL(fileRef);

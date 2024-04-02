@@ -6,11 +6,11 @@
     </div>
 
     <div
-      [routerLink]="['/resume-editor', i]"
       *ngFor="let template of templates; let i = index"
       #template
       class="template"
       [style]="templateStyles[i]"
+      (click)="openResume(template)"
     ></div>
   </section>
 </div>

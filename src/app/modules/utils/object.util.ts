@@ -104,6 +104,27 @@ getNestedProperty(targetObject: any, propPath: string) {
   }, targetObject);
 }
 
+
+deleteNestedProperty(object: any, propPath: string): any {
+  let targetObject = { ...object };
+  let propNameArr = propPath.split(".");
+  let lastProp = propNameArr.pop();
+  if (!lastProp) {
+    return targetObject;
+  }
+  let currentObj = targetObject;
+  for (const prop of propNameArr) {
+    if (!currentObj[prop]) {
+      // Property does not exist, nothing to delete
+      return targetObject;
+    }
+    currentObj = currentObj[prop];
+  }
+  // Set the value of the last property to undefined to delete it
+  delete currentObj[lastProp];
+  return targetObject;
+}
+
 typeof(target: any) {
   if (target === null) return null;
   if (target === undefined) return undefined;

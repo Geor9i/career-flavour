@@ -3,7 +3,7 @@ import { IdObj, PageValues } from './../../types';
 import { JSEventBusService } from 'src/app/modules/event-bus/jsevent-bus.service';
 import { UtilService } from './../../../utils/util.service';
 import { TemplateModalService } from './../../../shared/templateModal/templateModal.service';
-import { Component, OnDestroy, OnInit, Type } from '@angular/core';
+import { Component, OnDestroy, OnInit, TemplateRef, Type, ViewChild } from '@angular/core';
 import { LayoutSelectorComponent } from '../layout-selector/layout-selector.component';
 import { Subscription } from 'rxjs';
 import { PageManagerService } from '../../page-manager.service';
@@ -11,9 +11,10 @@ import { GridData } from '../../types';
 import { FontSelectorComponent } from '../font-selector/font-selector.component';
 import { ResumeHelperComponent } from '../resume-helper/resume-helper.component';
 import { ResumeDocumentsComponent } from '../resume-documents/resume-documents.component';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { DocumentData } from '@angular/fire/firestore';
 import { RESUME_DB } from 'src/app/constants/dbConstants';
+import { ModalService } from 'src/app/modules/shared/modal/modal.service';
 
 @Component({
   selector: 'app-resume-editor',
@@ -21,6 +22,8 @@ import { RESUME_DB } from 'src/app/constants/dbConstants';
   styleUrls: ['./resume-editor.component.css'],
 })
 export class ResumeEditorComponent implements OnInit, OnDestroy {
+
+  @ViewChild('deleteModal') deleteModal!: TemplateRef<any>;
   public resumePage!: Type<any>;
   private jsEventBusId = 'ResumeEditorComponent';
   constructor(
@@ -29,7 +32,9 @@ export class ResumeEditorComponent implements OnInit, OnDestroy {
     private jsEventBusService: JSEventBusService,
     private pageManager: PageManagerService,
     private activatedRoute: ActivatedRoute,
-    private fireService: FireService
+    private router: Router,
+    private fireService: FireService,
+    private modalService: ModalService
   ) {}
   private fireServiceSubscribtion!: Subscription;
   private resumeData!: DocumentData;
@@ -215,6 +220,15 @@ export class ResumeEditorComponent implements OnInit, OnDestroy {
   }
    print() {
     window.print()
+    }
+
+    deleteDocument() {
+      this.modalService.open(this.deleteModal, {buttons: [{name: 'Delete', action: 'submit'}, {name: 'Cancel', action: 'cancel'}]}).subscribe(choice => {
+        if (choice === 'confirm') {
+          this.fireService.deleteResume(this.pageManager.resumeID)
+          .then(() => this.router.navigateByUrl('/my-templates'))
+        }
+      })
     }
 
 }

@@ -19,6 +19,7 @@
   <aside>
     <ul>
       <li (click)="openDocuments($event, modalIds['documents'])"><i class="fa-regular fa-file fa-3x"></i></li>
+      <li (click)="deleteDocument()"><i class="fa-solid fa-trash-can fa-3x"></i></li>
     </ul>
 
   </aside>
@@ -27,3 +28,9 @@
 <!-- <ng-container *ngComponentOutlet="resumePage"></ng-container> -->
   <app-resume-page />
 
+
+
+
+  <ng-template #deleteModal>
+    <p class="modal-text">Delete your Resume?</p>
+  </ng-template>

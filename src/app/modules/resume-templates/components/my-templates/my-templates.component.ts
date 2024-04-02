@@ -25,7 +25,7 @@ import { DocumentData } from '@angular/fire/firestore';
   styleUrls: ['./my-templates.component.css'],
 })
 export class MyTemplatesComponent implements OnInit, AfterViewInit, OnDestroy {
-  public templates: NgIterable<any> = [];
+  public templates: NgIterable<DocumentData> = [];
   public link: string = '';
   public templateStyles: { [key: string]: string }[] = [];
   private jSEventSubId = 'MyTemplatesComponent';
@@ -46,7 +46,7 @@ export class MyTemplatesComponent implements OnInit, AfterViewInit, OnDestroy {
       (data) => {
         if (data && data[RESUME_DB.RESUMES]) {
           const resumes = data[RESUME_DB.RESUMES]
-          this.templates = this.objectutil.reduceToArr(resumes)
+          this.templates = this.objectutil.reduceToArr(resumes, {ownId: true})
           console.log(this.templates);
         }
       }
@@ -114,5 +114,9 @@ export class MyTemplatesComponent implements OnInit, AfterViewInit, OnDestroy {
   blankResume() {
   const id = `${Date.now()}${uuidv4()}`;
   this.router.navigateByUrl(`${this.resumeRoute}/${id}`)
+  }
+
+  openResume(template: DocumentData) {
+    this.router.navigate(['resume-editor', template?.['id']])
   }
 }
