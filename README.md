@@ -1,69 +1,54 @@
-# CareerFlavour
+# Career Flavour Documentation
 
-## This is project is Hosted on [Firebase ](https://career-flavour.web.app)
+## Overview
+Career Flavour is a platform designed for creating resumes. It provides users with tools to customize and design their resumes, offering features such as layout selection, font customization, and section management. The application is still in development but is usable, providing users with the ability to create and edit resumes.
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 16.2.12.
+### Demo
+A live demo of Career Flavour is available at [Career Flavour Demo](https://career-flavour.web.app/home).
 
-## Development server
+## Features
+- **Resume Editor**: Users can access an intuitive editor interface to customize and design their resumes. The editor provides tools for adding, removing, and formatting text, as well as managing different sections of the resume.
+- **Layout Selector**: Allows users to drag and drop different resume sections and position them within a CSS grid layout. This feature provides flexibility in arranging resume content to suit individual preferences.
+- **Font Selector**: Enables users to change and apply different fonts to their resume text. Users can choose from a selection of pre-defined fonts or upload custom fonts to personalize their resumes further.
+- **Section Management**: Users can add, remove, and manage different sections of their resume. This feature allows users to tailor their resumes to highlight their skills, experience, and achievements effectively.
+- **Editable Text**: Utilizes editable `<pre>` elements, allowing users to click on the page text and directly write or edit. This feature provides a seamless editing experience, allowing users to make changes to their resumes quickly and easily.
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
+## Architecture Overview
+Career Flavour follows a modular architecture, allowing for easy integration and customization. The project is organized into various modules, each serving a specific purpose.
 
-## Build
+### Modules
+1. **Core Module**: Contains core components such as the homepage and navigation. This module provides the foundation for the application's user interface and navigation.
+2. **Resume Builder Module**: Provides components and services for building and customizing resumes. This module includes the resume editor, layout selector, font selector, and section management features.
+3. **Resume Templates Module**: Includes components for managing and selecting resume templates. This module provides users with a selection of pre-designed resume templates to choose from.
+4. **User Module**: Handles user authentication and profile management. This module provides features for user registration, login, and profile customization.
+5. **Shared Module**: Contains shared components and utilities used across the application. This module includes common components, services, and directives used throughout the application.
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
+### Services
+- **Firebase Services**: Utilizes Firebase Firestore for database functionality and Firebase Authentication for user authentication. These services provide the backend infrastructure for storing user data and managing user authentication.
+- **Event Buses**: Implements two event buses for passing data and delegating global event listeners. These event buses facilitate communication between different components and modules within the application.
 
-The project is an Angular application that will allow the user to build a resume.
+### Styling
+The styling of Career Flavour is entirely original, created by the developer. It provides a unique and consistent visual experience throughout the application. The application's styling is designed to be responsive and user-friendly, ensuring a seamless user experience across different devices and screen sizes.
 
 ## Getting Started
+To run Career Flavour locally, follow these steps:
 
-### Prerequisites
-
-Before running the application, ensure you have the following installed:
-
-- Node.js and npm
-- Angular CLI
-
-### Development Server
-
-To start the development server, follow these steps:
-
-1. Clone the repository to your local machine:
-
-   ```bash
-   git clone <repository-url>
-   ```
+1. Clone the repository:
+it clone <repository-url>
 
 2. Navigate to the project directory:
-
-   ```bash
-   cd career-flavour
-   ```
+cd career-flavour
 
 3. Install dependencies:
-
-   ```bash
-   npm install
-   ```
+npm install
 
 4. Run the development server:
+ng serve
 
-   ```bash
-   ng serve
-   ```
+5. Open your browser and navigate to [http://localhost:4200/](http://localhost:4200/). You should see the Career Flavour application running locally on your machine.
 
-5. Open your browser and navigate to [http://localhost:4200/](http://localhost:4200/). The application will automatically reload if you make any changes to the source files.
+## Deployment
+Career Flavour is designed to be easily deployed. Simply build the project using `ng build`, and deploy the generated artifacts to your preferred hosting platform.
 
-### Build
-
-To build the project for production, run:
-
-```bash
-ng build
-```
-
-The build artifacts will be stored in the `dist/` directory.
-
-## Acknowledgements
-
-- This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 16.2.12.
-- Special thanks to the Angular community for their contributions and support.
+## Error Handling
+The application features a global error handler that captures and logs errors. Error da
