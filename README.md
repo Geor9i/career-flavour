@@ -28,7 +28,7 @@ Career Flavour follows a modular architecture, allowing for easy integration and
 - **Event Buses**: Implements two event buses for passing data and delegating global event listeners. These event buses facilitate communication between different components and modules within the application.
 
 ### Styling
-The styling of Career Flavour is entirely original, created by the developer. It provides a unique and consistent visual experience throughout the application. The application's styling is designed to be responsive and user-friendly, ensuring a seamless user experience across different devices and screen sizes.
+The styling of Career Flavour is entirely original, created by the developer. It provides a unique and consistent visual experience throughout the application.
 
 ## Getting Started
 To run Career Flavour locally, follow these steps:
@@ -51,4 +51,4 @@ ng serve
 Career Flavour is designed to be easily deployed. Simply build the project using `ng build`, and deploy the generated artifacts to your preferred hosting platform.
 
 ## Error Handling
-The application features a global error handler that captures and logs errors. Error da
+The application features a global error handler that captures and logs errors. 
