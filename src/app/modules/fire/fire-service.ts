@@ -6,21 +6,24 @@ import {
   getDoc,
   setDoc,
   onSnapshot,
-  deleteDoc
+  deleteDoc,
 } from '@angular/fire/firestore';
-import { isEqual } from 'lodash';
+import { isEqual, merge } from 'lodash';
 
 import { Storage, ref, getDownloadURL } from '@angular/fire/storage';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { AuthService } from './auth-service';
 import { dbs } from 'src/app/constants/dbConstants';
 import { Unsubscribe } from '@angular/fire/auth';
+import { UtilService } from '../utils/util.service';
 @Injectable({
   providedIn: 'root',
 })
 export class FireService {
   private firestore = inject(Firestore);
   private storage = inject(Storage);
+  private utilService = inject(UtilService);
+  private objectUtil = this.utilService.objectUtil;
   private onSnapshotInitialised = false;
   private userData$$ = new BehaviorSubject<DocumentData>({});
   private _userData!: DocumentData;
@@ -82,7 +85,7 @@ export class FireService {
     });
   }
 
-  saveUserData(data: any, path: string, merge = true): Observable<DocumentData> {
+  saveToDB(data: any, pathToProp: string): Observable<DocumentData> {
     return new Observable((observer) => {
       const user = this.authService.auth.currentUser;
       if (!user) {
@@ -90,22 +93,25 @@ export class FireService {
         observer.complete();
         return
       }
-      if (this._userData && this._userData[path] && isEqual(this._userData[path], data)) {
+      if (this._userData) {
+        const nestedPropUserData = this.objectUtil.getNestedProperty(this._userData, pathToProp);
+        if (isEqual(nestedPropUserData, data)) {
         console.log('Data is the same, no need to save.');
         observer.next();
         observer.complete();
         return;
+        }
       }
 
-      const docRef = doc(this.firestore, dbs.USERS, user?.uid as string);
-      setDoc(docRef, { [path]: data }, { merge })
+      const finalData = this.objectUtil.setNestedProperty(this._userData, pathToProp, data)
+      const docRef = doc(this.firestore, dbs.USERS, user.uid);
+      setDoc(docRef, finalData)
         .then(() => {
           console.log('Data saved Sucessfully!');
           observer.complete();
         })
         .catch((err) => {
           observer.error(err);
-          observer.complete();
         });
     });
   }

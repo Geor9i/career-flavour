@@ -1,12 +1,9 @@
 <div class="container">
   <p class="page-title" title="My Templates">My Templates</p>
   <section class="resume-select">
-    <div
-      [routerLink]="['/resume-editor', 1000]"
-      class="template blank-template"
-    >
-  <p>Start from scratch</p>
-</div>
+    <div (click)="blankResume()" class="template blank-template">
+      <p>Start from scratch</p>
+    </div>
 
     <div
       [routerLink]="['/resume-editor', i]"

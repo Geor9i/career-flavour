@@ -12,6 +12,7 @@ import {
   AfterViewInit,
   Component,
   ElementRef,
+  Input,
   OnDestroy,
   OnInit,
   Renderer2,
@@ -27,6 +28,8 @@ import {
 } from '../../types';
 import { Subscription } from 'rxjs';
 import { JSEvent } from 'src/app/modules/event-bus/types';
+import { DocumentData } from '@angular/fire/firestore';
+import { RESUME_DB } from 'src/app/constants/dbConstants';
 
 @Component({
   selector: 'app-resume-page',
@@ -41,10 +44,12 @@ export class ResumePageComponent implements OnInit, AfterViewInit, OnDestroy {
     private renderer: Renderer2,
     private fireService: FireService
   ) {}
-  private pageManagerSubscription!: Subscription;
+  private pageManagerResumeDataSubscription!: Subscription;
+  private pageManagerModalSubscription!: Subscription;
   private jsEventBusSubscribtionArr: (() => void)[] = [];
   @ViewChild('sheet') sheet!: ElementRef;
   @ViewChild('container') container!: ElementRef;
+  @Input('resumeData') resumeData!: DocumentData;
 
   private dragOffsetX = 0;
   private dragOffsetY = 0;
@@ -66,24 +71,37 @@ export class ResumePageComponent implements OnInit, AfterViewInit, OnDestroy {
   public textStyling: FontConfig = FONT_SETTINGS;
   public sections: any[] = [];
   private userDataSubscription!: Subscription;
+  private initialiseData = false;
 
   ngOnInit(): void {
+    this.pageManagerResumeDataSubscription =
+      this.pageManager.resumeData.subscribe((data) => {
+        // console.log('data: ', data);
 
-    this.userDataSubscription = this.fireService.userData.subscribe(data => {
-      const layout = data?.['layout'] || {}; // Ensure layout is defined or provide a default value
-      const { sections, gridTemplateRows, gridTemplateColumns } = layout;
-      if (sections && gridTemplateColumns && gridTemplateRows) {
-        this.sections = this.objectUtil.reduceToArr(sections, {orderData: true});
-        this.editLayout({ sections: this.sections, gridTemplateRows, gridTemplateColumns });
-      }
-    });
+        const layout = data?.['layout'] || {};
+        const { sections, gridTemplateRows, gridTemplateColumns } = layout;
+        if (sections && gridTemplateColumns && gridTemplateRows) {
+          this.initialiseData = true;
+          this.sections = this.objectUtil.reduceToArr(sections, {
+            orderData: true,
+          });
+          // console.log('this.sections: ', this.sections);
+
+          this.editSaveLayout({
+            sections: this.sections,
+            gridTemplateRows,
+            gridTemplateColumns,
+          });
+          this.initialiseData = false;
+        }
+      });
 
     this.renderer.setStyle(
       document.documentElement,
       'background-color',
       '#444457'
     );
-    this.pageManagerSubscription = this.pageManager.messenger$.subscribe(
+    this.pageManagerModalSubscription = this.pageManager.messenger$.subscribe(
       (data) => {
         this.delegateTask(data);
       }
@@ -128,7 +146,6 @@ export class ResumePageComponent implements OnInit, AfterViewInit, OnDestroy {
 
   dragOver(event: JSEvent) {
     if (this.isDraggin) {
-      console.log('drag');
       let e = event as MouseEvent;
       const { clientX, clientY } = this.eventUtil.eventData(e);
       this.resumeStyles['left'] = clientX - this.dragOffsetX + 'px';
@@ -141,8 +158,9 @@ export class ResumePageComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.userDataSubscription.unsubscribe()
-    this.pageManagerSubscription.unsubscribe();
+    this.pageManager.resumeData = {};
+    this.pageManagerResumeDataSubscription.unsubscribe();
+    this.pageManagerModalSubscription.unsubscribe();
     this.renderer.removeStyle(document.documentElement, 'background-color');
   }
 
@@ -150,7 +168,7 @@ export class ResumePageComponent implements OnInit, AfterViewInit, OnDestroy {
     const delegator: { [key: string]: () => void } = {
       resize: () => this.resizePage(values.resize as string),
       changeFont: () => this.processTextStyling(values),
-      layout: () => this.editLayout(values['layout'] as GridData),
+      layout: () => this.editSaveLayout(values['layout'] as GridData),
     };
 
     Object.keys(values).forEach((action) => {
@@ -158,8 +176,8 @@ export class ResumePageComponent implements OnInit, AfterViewInit, OnDestroy {
     });
   }
 
-  editLayout(data: GridData) {
-    const { gridTemplateColumns, gridTemplateRows, sections } = data
+  editSaveLayout(data: GridData) {
+    const { gridTemplateColumns, gridTemplateRows, sections } = data;
     this.cellRatios.columns = this.domUtil
       .getRawGridValue(gridTemplateColumns as string)
       .map(Number);
@@ -186,16 +204,18 @@ export class ResumePageComponent implements OnInit, AfterViewInit, OnDestroy {
       gridTemplateRows: rows,
     };
     this.sections = sections as unknown as layoutData[];
-    let sectionsObj = this.objectUtil.reduceToObj(this.sections, 'type')
+    let sectionsObj = this.objectUtil.reduceToObj(this.sections, 'type');
 
-    const userData = {
+    const resumeId = this.pageManager.resumeID;
+    const layoutData = {
       sections: sectionsObj,
       gridTemplateColumns,
-      gridTemplateRows
+      gridTemplateRows,
+    };
+    if (!this.initialiseData) {
+      const dbPath = `resumes.${resumeId}.layout`;
+      this.fireService.saveToDB(layoutData, dbPath).subscribe(() => {});
     }
-// TODO investigate userData multiple save!
-    this.fireService.saveUserData(userData, 'layout', false).subscribe(() => {})
-
   }
 
   calcGridCells(sheetWidth: number, sheetHeight: number, padding?: number) {
@@ -210,22 +230,27 @@ export class ResumePageComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   processTextStyling(values: PageValues) {
-    const { applicators, font, fontSize } =
-      values.changeFont as FontStyling;
+    const { applicators, font, fontSize } = values.changeFont as FontStyling;
     if (this.textStyling) {
       Object.keys(this.textStyling).forEach((selector) => {
-        if (applicators?.includes(FONT_APPLICATORS['all']['id']) || applicators?.includes(FONT_APPLICATORS[selector]['id'])) {
+        if (
+          applicators?.includes(FONT_APPLICATORS['all']['id']) ||
+          applicators?.includes(FONT_APPLICATORS[selector]['id'])
+        ) {
           const fontObj = this.textStyling[selector];
           if (fontObj) {
             const baseSize = fontObj['baseSize'] ?? '12px';
             let numBaseSize = this.domUtil.getUnitValue(baseSize, true);
-            (this.textStyling[selector] as FontStyling)['fontSize'] = `${Number(numBaseSize) + fontSize}px`;
-            (this.textStyling[selector] as FontStyling)['fontFamily'] = font as string;
+            (this.textStyling[selector] as FontStyling)['fontSize'] = `${
+              Number(numBaseSize) + fontSize
+            }px`;
+            (this.textStyling[selector] as FontStyling)['fontFamily'] =
+              font as string;
           }
         }
       });
     }
-    this.textStyling = {...this.textStyling};
+    this.textStyling = { ...this.textStyling };
   }
 
   resizePage(size: string) {

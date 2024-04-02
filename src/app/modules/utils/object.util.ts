@@ -76,6 +76,34 @@ reduceToObj(arr: any[], keyProp: string, orderData = true) {
   }, {})
 }
 
+setNestedProperty(object: any, propPath: string, setValue: any = {}): any {
+  let targetObject = {... object}
+  let propNameArr = propPath.split(".");
+  let lastProp = propNameArr.pop();
+  if (!lastProp) {
+    return targetObject;
+  }
+  let currentObj = targetObject;
+  for (const prop of propNameArr) {
+    if (!currentObj[prop]) {
+      currentObj[prop] = {};
+    }
+    currentObj = currentObj[prop];
+  }
+  currentObj[lastProp] = setValue;
+  return targetObject;
+}
+
+getNestedProperty(targetObject: any, propPath: string) {
+  let propNameArr = propPath.split(".");
+  if (propNameArr.length === 1) {
+    return targetObject[propPath] ?? null;
+  }
+  return propNameArr.reduce((obj, prop) => {
+    return obj && obj[prop] ? obj[prop] : null;
+  }, targetObject);
+}
+
 typeof(target: any) {
   if (target === null) return null;
   if (target === undefined) return undefined;

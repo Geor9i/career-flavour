@@ -18,15 +18,9 @@ export class ResumeDocumentsComponent {
   };
 
   submitHandler(form: NgForm) {
-    console.log(form.value);
-    const path = this.modalView;
+    const path = `personal.${this.modalView}`;
     const data = form.value;
-    this.fireService.saveUserData(data, path).subscribe(() => {
-      console.log('data saved from observer!');
+    this.fireService.saveToDB(data, path).subscribe(() => {
     })
-
   }
-
-
-
 }

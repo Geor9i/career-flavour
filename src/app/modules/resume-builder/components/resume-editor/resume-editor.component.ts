@@ -1,9 +1,9 @@
+import { FireService } from 'src/app/modules/fire/fire-service';
 import { IdObj, PageValues } from './../../types';
 import { JSEventBusService } from 'src/app/modules/event-bus/jsevent-bus.service';
 import { UtilService } from './../../../utils/util.service';
 import { TemplateModalService } from './../../../shared/templateModal/templateModal.service';
-import { Component, OnDestroy, OnInit, Type, ViewChild } from '@angular/core';
-import { ResumePageComponent } from '../resume-page/resume-page.component';
+import { Component, OnDestroy, OnInit, Type } from '@angular/core';
 import { LayoutSelectorComponent } from '../layout-selector/layout-selector.component';
 import { Subscription } from 'rxjs';
 import { PageManagerService } from '../../page-manager.service';
@@ -11,6 +11,9 @@ import { GridData } from '../../types';
 import { FontSelectorComponent } from '../font-selector/font-selector.component';
 import { ResumeHelperComponent } from '../resume-helper/resume-helper.component';
 import { ResumeDocumentsComponent } from '../resume-documents/resume-documents.component';
+import { ActivatedRoute } from '@angular/router';
+import { DocumentData } from '@angular/fire/firestore';
+import { RESUME_DB } from 'src/app/constants/dbConstants';
 
 @Component({
   selector: 'app-resume-editor',
@@ -24,9 +27,12 @@ export class ResumeEditorComponent implements OnInit, OnDestroy {
     private templateModalService: TemplateModalService,
     private utilService: UtilService,
     private jsEventBusService: JSEventBusService,
-    private pageManager: PageManagerService
+    private pageManager: PageManagerService,
+    private activatedRoute: ActivatedRoute,
+    private fireService: FireService
   ) {}
-
+  private fireServiceSubscribtion!: Subscription;
+  private resumeData!: DocumentData;
   private eventBusSubscription!: Subscription;
   private jsEventUnsubscribeArr: (() => void)[] = [];
   private eventUtil = this.utilService.eventUtil;
@@ -49,6 +55,17 @@ export class ResumeEditorComponent implements OnInit, OnDestroy {
   };
 
   ngOnInit(): void {
+
+    this.fireServiceSubscribtion = this.fireService.userData.subscribe(data => {
+      const documentId = this.activatedRoute.snapshot.params['id'];
+      this.pageManager.resumeID = documentId;
+      if (data && data?.[RESUME_DB.RESUMES]?.[documentId]) {
+          const resumeData = data?.[RESUME_DB.RESUMES]?.[documentId];
+          this.pageManager.resumeData = resumeData;
+      }
+    })
+
+
     const unsubscribe = this.jsEventBusService.subscribe(
       this.jsEventBusId,
       'click',
@@ -190,6 +207,7 @@ export class ResumeEditorComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
+    this.fireServiceSubscribtion.unsubscribe();
     if (this.eventBusSubscription) {
       this.eventBusSubscription.unsubscribe();
     }

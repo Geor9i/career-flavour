@@ -1,3 +1,4 @@
+import { PageManagerService } from './../../page-manager.service';
 import { FireService } from 'src/app/modules/fire/fire-service';
 import { EventBusService } from './../../../event-bus/event-bus.service';
 import { layoutConstants } from 'src/app/constants/layoutConstants';
@@ -16,7 +17,7 @@ import {
 } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { JSEvent } from 'src/app/modules/event-bus/types';
-import { Bin, GridData, SliderControl, TemplateGridStyle, layoutData } from '../../types';
+import { Bin, GridData, SliderControl,layoutData } from '../../types';
 import { Subscription } from 'rxjs';
 import { DocumentData } from '@angular/fire/firestore';
 @Component({
@@ -37,7 +38,7 @@ export class LayoutSelectorComponent
     private jsEventBusService: JSEventBusService,
     private eventBusService: EventBusService,
     private renderer: Renderer2,
-    private fireService: FireService
+    private pageManagerService: PageManagerService
   ) {}
   private bins!: Bin;
   private activeSection: HTMLElement | null = null;
@@ -75,9 +76,9 @@ export class LayoutSelectorComponent
   };
   ngOnInit(): void {
 
-    this.userDataSubscriptions = this.fireService.userData.subscribe(data => {
+    this.userDataSubscriptions = this.pageManagerService.resumeData.subscribe(data => {
       if (data && data['layout']) {
-        const { sections, gridTemplateRows, gridTemplateColumns } = data?.['layout'];
+        const { sections } = data?.['layout'];
         if (sections) {
           this.userData = {
             arr: this.objectUtil.reduceToArr(sections, {orderData: true}),
