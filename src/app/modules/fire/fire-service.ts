@@ -27,7 +27,7 @@ export class FireService {
       if (user && !this.onSnapshotInitialised) {
         const docRef = doc(this.firestore, dbs.USERS, user.uid);
         this.userDataUnsubscribe = onSnapshot(docRef, (observer) => {
-          console.log(observer.data());
+          // console.log(observer.data());
           this.userData$$.next(observer.data());
         });
       } else if (!user) {
@@ -75,7 +75,7 @@ export class FireService {
     });
   }
 
-  saveUserData(data: UserData, path: string): Observable<DocumentData> {
+  saveUserData(data: any, path: string, merge = true): Observable<DocumentData> {
     return new Observable((observer) => {
       const user = this.authService.auth.currentUser;
       if (!user) {
@@ -83,7 +83,7 @@ export class FireService {
         observer.complete();
       }
       const docRef = doc(this.firestore, dbs.USERS, user?.uid as string);
-      setDoc(docRef, { [path]: data }, { merge: true })
+      setDoc(docRef, { [path]: data }, { merge })
         .then(() => {
           console.log('Data saved Sucessfully!');
           observer.complete();

@@ -1,3 +1,4 @@
+import { FireService } from 'src/app/modules/fire/fire-service';
 import { EventBusService } from './../../../event-bus/event-bus.service';
 import { layoutConstants } from 'src/app/constants/layoutConstants';
 import { JSEventBusService } from './../../../event-bus/jsevent-bus.service';
@@ -16,6 +17,8 @@ import {
 import { NgForm } from '@angular/forms';
 import { JSEvent } from 'src/app/modules/event-bus/types';
 import { Bin, GridData, SliderControl, TemplateGridStyle, layoutData } from '../../types';
+import { Subscription } from 'rxjs';
+import { DocumentData } from '@angular/fire/firestore';
 @Component({
   selector: 'app-layout-selector',
   templateUrl: './layout-selector.component.html',
@@ -33,13 +36,17 @@ export class LayoutSelectorComponent
     private utilService: UtilService,
     private jsEventBusService: JSEventBusService,
     private eventBusService: EventBusService,
-    private renderer: Renderer2
+    private renderer: Renderer2,
+    private fireService: FireService
   ) {}
   private bins!: Bin;
   private activeSection: HTMLElement | null = null;
+  private userData: DocumentData | undefined = {};
+  private userDataSubscriptions!: Subscription;
   public sectionControlDisabled = true;
   private draggedElement: EventTarget | null = null;
   private onDragChildOverlapEl: EventTarget | null = null;
+  private objectUtil = this.utilService.objectUtil;
   private eventUtil = this.utilService.eventUtil;
   public stringUtil = this.utilService.stringUtil;
   private resumeUtil = this.utilService.resumeBuilderUtil;
@@ -64,6 +71,15 @@ export class LayoutSelectorComponent
     height: '0',
   };
   ngOnInit(): void {
+
+    this.userDataSubscriptions = this.fireService.userData.subscribe(data => {
+      const layout = data?.['layout'] || {};
+      this.userData = {
+        arr: this.objectUtil.reduceToArr(layout, {orderData: true}),
+        obj: data?.['layout'] || {}
+      };
+    })
+
     const unsubscribe1 = this.jsEventBusService.subscribe(
       this.eventId,
       'dragstart',
@@ -311,6 +327,7 @@ export class LayoutSelectorComponent
       ...gridData,
       childData,
     };
+
   }
 
   ngAfterViewInit(): void {
@@ -325,10 +342,28 @@ export class LayoutSelectorComponent
         classes: ['on-sheet', 'resizeable'],
       },
     };
+
+    const storedChildren = Array.from(this.bins['storage'].element.children);
+    storedChildren.forEach(child => {
+      const id = (child as HTMLElement).dataset['id'] as string;
+      if (this.userData?.['obj'].hasOwnProperty(id)) {
+        if (this.userData?.['obj']?.[id]['styles']) {
+          const styles = this.userData?.['obj']?.[id]['styles'];
+          const sectionIndex = this.generalSections.findIndex(section => section.type === id);
+          if (sectionIndex !== -1) {
+            this.generalSections[sectionIndex].styles = styles;
+          }
+        }
+        this.renderer.addClass(child, 'on-sheet');
+        this.renderer.addClass(child, 'resizeable');
+        this.renderer.appendChild(this.bins['sheet'].element, child)
+      }
+    })
   }
 
   ngOnDestroy(): void {
     this.jsEventUnsubscribeArr.forEach((unsubscribe) => unsubscribe());
+    this.userDataSubscriptions.unsubscribe();
   }
 
   addSection(form: NgForm) {

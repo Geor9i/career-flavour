@@ -1,3 +1,4 @@
+import { FireService } from 'src/app/modules/fire/fire-service';
 import { FONT_APPLICATORS } from 'src/app/constants/fontConstants';
 import { FONT_SETTINGS } from './../../../../constants/fontConstants';
 import { JSEventBusService } from './../../../event-bus/jsevent-bus.service';
@@ -38,7 +39,7 @@ export class ResumePageComponent implements OnInit, AfterViewInit, OnDestroy {
     private pageManager: PageManagerService,
     private utilService: UtilService,
     private renderer: Renderer2,
-    private elRef: ElementRef
+    private fireService: FireService
   ) {}
   private pageManagerSubscription!: Subscription;
   private jsEventBusSubscribtionArr: (() => void)[] = [];
@@ -51,6 +52,7 @@ export class ResumePageComponent implements OnInit, AfterViewInit, OnDestroy {
     rows: [],
     columns: [],
   };
+  private objectUtil = this.utilService.objectUtil;
   private eventUtil = this.utilService.eventUtil;
   private domUtil = this.utilService.domUtil;
   private zoom = 1;
@@ -62,9 +64,16 @@ export class ResumePageComponent implements OnInit, AfterViewInit, OnDestroy {
   public selectedOption: Event | string = '';
   resumeStyles = INITIAL_STYLES;
   public textStyling: FontConfig = FONT_SETTINGS;
-  public sections: any[] = []
+  public sections: any[] = [];
+  private userDataSubscription!: Subscription;
 
   ngOnInit(): void {
+
+    this.userDataSubscription = this.fireService.userData.subscribe(data => {
+      const layout = data?.['layout'] || {};
+      this.sections = this.objectUtil.reduceToArr(layout, {orderData: true});
+    })
+
     this.renderer.setStyle(
       document.documentElement,
       'background-color',
@@ -128,6 +137,7 @@ export class ResumePageComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
+    this.userDataSubscription.unsubscribe()
     this.pageManagerSubscription.unsubscribe();
     this.renderer.removeStyle(document.documentElement, 'background-color');
   }
@@ -175,8 +185,10 @@ export class ResumePageComponent implements OnInit, AfterViewInit, OnDestroy {
       gridTemplateRows: rows,
     };
     this.sections = childData as unknown as layoutData[];
-    // console.log(this.resumeStyles);
-    console.log(this.sections);
+    let obj = this.objectUtil.reduceToObj(this.sections, 'type')
+    this.fireService.saveUserData(obj, 'layout', false).subscribe(() => {})
+    console.log(obj);
+
   }
 
   calcGridCells(sheetWidth: number, sheetHeight: number, padding?: number) {
@@ -214,21 +226,5 @@ export class ResumePageComponent implements OnInit, AfterViewInit, OnDestroy {
     this.zoom = Math.min(Math.max(0.5, this.zoom + 0.1 * sign), 3);
     this.resumeStyles['transform'] = `scale(${this.zoom})`;
     console.log(this.resumeStyles);
-
-    // let { width, height, unit } = this.resumeBuilderUtil.calcAspectRatio(
-    //   size,
-    //   this.resumeStyles,
-    //   'px'
-    // );
-    // let fontSize = this.resumeBuilderUtil.fontRatio(width);
-    // this.resumeStyles['width'] = width + unit;
-    // this.resumeStyles['height'] = height + unit;
-    // this.resumeStyles['fontSize'] = fontSize + unit;
-    // if (this.resumeStyles['gridTemplateColumns'] && this.resumeStyles['gridTemplateRows']) {
-    //   const padding = Number(this.domUtil.getUnitValue(this.resumeStyles['padding'] as string, true));
-    //   const { rows, colums } = this.calcGridCells(width, height, padding);
-    //   this.resumeStyles['gridTemplateRows'] = rows;
-    //   this.resumeStyles['gridTemplateColumns'] = colums;
-    // }
   }
 }

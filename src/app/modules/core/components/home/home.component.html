@@ -4,7 +4,9 @@
   <p class="title-2">Your Personalised Resume Builder</p>
 
   <div class="build">
-    <p>Ready when you are</p>
-    <a (click)="toResumeBuilder()">Get Started</a>
+    <p *ngIf="!user">Ready when you are</p>
+    <p *ngIf="user">Hi {{name}}</p>
+    <a *ngIf="!user" (click)="toResumeBuilder()">Get Started</a>
+    <a *ngIf="user" (click)="toResumeBuilder()">Find a Template</a>
   </div>
 </div>

@@ -29,5 +29,66 @@ export default class ObjectUtil {
     return split(arr, callback);
 }
 
+reduceToArr(obj: any, { addParams = {}, setId = false, ownId = false, orderData = false }: { addParams?: any; setId?: boolean; ownId?: boolean; orderData?: boolean } = {}): any[] {
+  let arr = Object.keys(obj).reduce((arr: any[], key: string, i: number) => {
+    let element = obj[key];
+    if (addParams) {
+      Object.keys(addParams).forEach((paramKey: string) => {
+        element[paramKey] = addParams[paramKey];
+      });
+    }
+    if (setId) {
+      element.id = i;
+    } else if (ownId) {
+      element.id = key;
+    }
+    arr.push(element);
+    return arr;
+  }, []);
+  if (orderData) {
+    arr = this.mergeSort(arr, (a, b)=> a.index - b.index)
+  }
+  return arr
+}
+
+objFromStringArr(arr: any[], data: any) {
+  return arr.reduce((acc, curr) => {
+    let dataType = this.typeof(data);
+    switch (dataType) {
+      case "array":
+        acc[curr] = [...data];
+        break;
+      case "object":
+        acc[curr] = { ...data };
+        break;
+      default:
+        acc[curr] = data;
+        break;
+    }
+    return acc;
+  }, {});
+}
+
+reduceToObj(arr: any[], keyProp: string, orderData = true) {
+  return arr.reduce((obj: any, curr, index) => {
+    obj[curr[keyProp]] = orderData ?{...curr, index}: curr;
+    return obj
+  }, {})
+}
+
+typeof(target: any) {
+  if (target === null) return null;
+  if (target === undefined) return undefined;
+  let types = ["number", "string", "object", "boolean"];
+  let targetType = typeof target;
+  if (!types.includes(targetType)) return targetType;
+
+  if (targetType !== "object") {
+    return targetType;
+  } else {
+    return Array.isArray(target) ? "array" : "object";
+  }
+}
+
 
 }

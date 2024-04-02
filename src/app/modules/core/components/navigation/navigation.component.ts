@@ -1,4 +1,4 @@
-import { AfterViewChecked, AfterViewInit, Component, OnDestroy, OnInit } from '@angular/core';
+import { AfterViewChecked, AfterViewInit, ChangeDetectorRef, Component, OnChanges, OnDestroy, OnInit, SimpleChanges } from '@angular/core';
 import { Router } from '@angular/router';
 import { Subscription, filter } from 'rxjs';
 import { AuthService } from 'src/app/modules/fire/auth-service';
@@ -8,7 +8,7 @@ import { AuthService } from 'src/app/modules/fire/auth-service';
   templateUrl: './navigation.component.html',
   styleUrls: ['./navigation.component.css'],
 })
-export class NavigationComponent implements OnDestroy, AfterViewInit, AfterViewChecked {
+export class NavigationComponent implements OnDestroy, OnInit, AfterViewChecked{
   isAuthUser = false;
   public userName = '';
   private userSubscription!: Subscription;
@@ -17,12 +17,12 @@ export class NavigationComponent implements OnDestroy, AfterViewInit, AfterViewC
   constructor(private authService: AuthService, private router: Router) {}
 
   ngAfterViewChecked(): void {
-    if (!this.userName) {
+    if (this.userName === '') {
       this.userName = this.authService.auth.currentUser?.displayName || '';
     }
   }
 
-  ngAfterViewInit(): void {
+  ngOnInit(): void {
     this.userSubscription = this.authService.userObservable$.subscribe(auth => {
       this.currentNav = auth ? 'user' : 'guest'
         this.userName = auth?.displayName || '';
