@@ -34,7 +34,7 @@ The styling of Career Flavour is entirely original, created by the developer. It
 To run Career Flavour locally, follow these steps:
 
 1. Clone the repository:
-it clone <repository-url>
+git clone <repository-url>
 
 2. Navigate to the project directory:
 cd career-flavour

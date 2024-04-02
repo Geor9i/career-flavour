@@ -242,15 +242,18 @@ export class ResumePageComponent implements OnInit, AfterViewInit, OnDestroy {
             const baseSize = fontObj['baseSize'] ?? '12px';
             let numBaseSize = this.domUtil.getUnitValue(baseSize, true);
             (this.textStyling[selector] as FontStyling)['fontSize'] = `${
-              Number(numBaseSize) + fontSize
+              Number(numBaseSize) + Number(fontSize)
             }px`;
             (this.textStyling[selector] as FontStyling)['fontFamily'] =
               font as string;
+            }
           }
-        }
-      });
+        });
     }
     this.textStyling = { ...this.textStyling };
+    const resumeId = this.pageManager.resumeID;
+    const dbPath = `resumes.${resumeId}.textStyles`;
+    this.fireService.saveToDB(this.textStyling, dbPath).subscribe(() => {})
   }
 
   resizePage(size: string) {
