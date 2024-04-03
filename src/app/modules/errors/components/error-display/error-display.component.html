@@ -1,8 +1,6 @@
-<div *ngIf="errors.length" class="container">
+<div *ngIf="errorMessage" class="container">
   <div class="error-container">
-    <div *ngFor="let error of errors">
-      <p>{{ error.message }}</p>
-    </div>
+    <p>{{ errorMessage }}</p>
   </div>
   <div class="backdrop"></div>
 </div>

@@ -31,12 +31,16 @@ export class FontSelectorComponent implements OnInit {
       if (data && data['textStyles']) {
         const styles = data['textStyles'];
         Object.keys(styles).forEach(key => {
-          const baseValue = this.domUtil.getUnitValue(styles[key]['baseSize'], true);
-          const curentValue = this.domUtil.getUnitValue(styles[key]['fontSize'], true);
-          this.fontSettings[key] = {
-            ...styles[key],
-            fontIncrement: Number(curentValue) - Number(baseValue)
-          }
+          console.log(styles[key]);
+          console.log(key);
+
+
+          const baseValue = this.domUtil.getUnitValue(styles[key]?.['baseSize'], true);
+          const curentValue = this.domUtil.getUnitValue(styles[key]?.['fontSize'], true);
+            this.fontSettings[key] = {
+              ...styles[key],
+              fontIncrement: Number(curentValue) - Number(baseValue)
+            }
         })
       }
     })

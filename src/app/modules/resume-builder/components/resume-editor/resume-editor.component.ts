@@ -3,7 +3,14 @@ import { IdObj, PageValues } from './../../types';
 import { JSEventBusService } from 'src/app/modules/event-bus/jsevent-bus.service';
 import { UtilService } from './../../../utils/util.service';
 import { TemplateModalService } from './../../../shared/templateModal/templateModal.service';
-import { Component, OnDestroy, OnInit, TemplateRef, Type, ViewChild } from '@angular/core';
+import {
+  Component,
+  OnDestroy,
+  OnInit,
+  TemplateRef,
+  Type,
+  ViewChild,
+} from '@angular/core';
 import { LayoutSelectorComponent } from '../layout-selector/layout-selector.component';
 import { Subscription } from 'rxjs';
 import { PageManagerService } from '../../page-manager.service';
@@ -25,7 +32,6 @@ import { v4 as uuidv4 } from 'uuid';
   styleUrls: ['./resume-editor.component.css'],
 })
 export class ResumeEditorComponent implements OnInit, OnDestroy {
-
   @ViewChild('confirmedModal') confirmedModal!: TemplateRef<any>;
   @ViewChild('shareModal') shareModal!: TemplateRef<any>;
   @ViewChild('deleteModal') deleteModal!: TemplateRef<any>;
@@ -46,6 +52,7 @@ export class ResumeEditorComponent implements OnInit, OnDestroy {
     private modalService: ModalService,
     private authService: AuthService
   ) {}
+  private resumePath = RESUME_DB.RESUMES;
   private fireServiceSubscribtion!: Subscription;
   private resumeData!: DocumentData;
   private eventBusSubscription!: Subscription;
@@ -73,31 +80,34 @@ export class ResumeEditorComponent implements OnInit, OnDestroy {
   };
 
   ngOnInit(): void {
+    let publicDocumentId = this.activatedRoute.snapshot.params['id'];
+    const isPublic = publicDocumentId.startsWith('public');
+    publicDocumentId = isPublic ? publicDocumentId : `public-${publicDocumentId}`;
 
-    this.fireServiceSubscribtion = this.fireService.userData.subscribe(data => {
-      let documentId = this.activatedRoute.snapshot.params['id'];
-      let publicIdCheck = documentId.startsWith('public') ? documentId : `public-${documentId}`;
-      this.fireService.getOnePublicTemplate(publicIdCheck).subscribe(publicDoc => {
-        console.log('publicDoc', publicDoc);
-        if (publicDoc) {
-          this.isPublic = true;
-          this.isAuthor = publicDoc?.['authorId'] === this.authService.auth.currentUser?.uid;
-          console.log(this.isAuthor);
-          const navId = this.isAuthor ? documentId.replace('public-', '') : `${Date.now()}${uuidv4()}`;
-          this.pageManager.resumeID = navId;
-          this.pageManager.resumeData = publicDoc;
-          this.router.navigate([ROUTE.RESUME_EDITOR, navId]);
+    this.fireService.getOnePublicTemplate(publicDocumentId).subscribe((template) => {
+      let navId = publicDocumentId;
+      if (template) {
+        this.isPublic = true;
+        this.isAuthor = template?.['authorId'] === this.authService.auth.currentUser?.uid;
+        navId = this.isAuthor ? publicDocumentId.replace('public-', '') : `${Date.now()}${uuidv4()}`;
         } else {
-          if(data && data?.[RESUME_DB.RESUMES]?.[documentId]) {
-            this.pageManager.resumeData =  data?.[RESUME_DB.RESUMES]?.[documentId];
-            this.isAuthor = true;
-          }
-          this.pageManager.resumeID = documentId;
+          navId = publicDocumentId.replace('public-', '');
         }
-      })
-
-    })
-
+      this.pageManager.resumeID = navId;
+      this.pageManager.resumeData = template;
+      this.router.navigate([ROUTE.RESUME_EDITOR, navId]);
+      this.fireServiceSubscribtion = this.fireService.userData.subscribe(
+        (data) => {
+          debugger
+          let resumeId = publicDocumentId.replace('public-', '');
+          if (data && data?.[this.resumePath] && data?.[this.resumePath]?.[resumeId]) {
+            this.isAuthor = true;
+            const resume = data?.[this.resumePath]?.[resumeId];
+            this.pageManager.resumeData = resume;
+          }
+        }
+      );
+    });
 
     const unsubscribe = this.jsEventBusService.subscribe(
       this.jsEventBusId,
@@ -107,7 +117,19 @@ export class ResumeEditorComponent implements OnInit, OnDestroy {
         target: 'app-p',
       }
     );
-    this.jsEventUnsubscribeArr.push(unsubscribe)
+    this.jsEventUnsubscribeArr.push(unsubscribe);
+  }
+
+  stamp() {
+    this.pageManager.resumeData
+      .subscribe((data) => {
+        if (data && !data?.['dateStamp']) {
+          console.log(data);
+          console.log('stamping');
+        }
+        console.log('not stamping');
+      })
+      .unsubscribe();
   }
 
   openLayouts(e: Event, id: string) {
@@ -204,8 +226,8 @@ export class ResumeEditorComponent implements OnInit, OnDestroy {
     const [width, height] = this.eventUtil.resizeToScreen(40, 50);
     this.layoutEditorStyles = {
       ...this.layoutEditorStyles,
-      top: `${clientY - (height / 2)}px`,
-      left: `${clientX + (width * 0.75)}px`,
+      top: `${clientY - height / 2}px`,
+      left: `${clientX + width * 0.75}px`,
       width: `${width}px`,
       height: `${height}px`,
     };
@@ -240,66 +262,109 @@ export class ResumeEditorComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.fireServiceSubscribtion.unsubscribe();
+    if (this.fireServiceSubscribtion) {
+      this.fireServiceSubscribtion.unsubscribe();
+    }
     if (this.eventBusSubscription) {
       this.eventBusSubscription.unsubscribe();
     }
-    this.jsEventUnsubscribeArr.forEach(unsubscribe => unsubscribe());
+    this.jsEventUnsubscribeArr.forEach((unsubscribe) => unsubscribe());
   }
-   print() {
-    window.print()
-    }
+  print() {
+    window.print();
+  }
 
-    deleteDocument() {
-      this.modalService.open(this.deleteModal, {buttons: [{name: 'Delete', action: 'submit'}, {name: 'Cancel', action: 'cancel'}]}).subscribe(choice => {
+  deleteDocument() {
+    this.modalService
+      .open(this.deleteModal, {
+        buttons: [
+          { name: 'Delete', action: 'submit' },
+          { name: 'Cancel', action: 'cancel' },
+        ],
+      })
+      .subscribe((choice) => {
         if (choice === 'confirm') {
-          this.fireService.deleteResume(this.pageManager.resumeID)
-          .then(() => {
-            this.router.navigateByUrl('/my-templates')
+          this.fireService.deleteResume(this.pageManager.resumeID).then(() => {
+            this.router.navigateByUrl('/my-templates');
             this.fireService.unpublish(this.pageManager.resumeID).subscribe({
               error: () => {
-                console.log('Can\'t unpublish! Resume is not public.');
-              }
-            })
-          })
+                console.log("Can't unpublish! Resume is not public.");
+              },
+            });
+          });
         }
-      })
-    }
+      });
+  }
 
-    publish() {
-      const resumeId = this.pageManager.resumeID;
-      this.fireService.getOnePublicTemplate(`public-${resumeId}`).subscribe(resumeExists => {
+  publish() {
+    const resumeId = this.pageManager.resumeID;
+    this.fireService
+      .getOnePublicTemplate(`public-${resumeId}`)
+      .subscribe((resumeExists) => {
         console.log('resumeExists', resumeExists);
 
         if (resumeExists) {
-          this.modalService.open(this.templateAlreadyPublic, {buttons: [{name: 'Got it', action: 'submit'}]}).subscribe(() => {})
+          this.modalService
+            .open(this.templateAlreadyPublic, {
+              buttons: [{ name: 'Got it', action: 'submit' }],
+            })
+            .subscribe(() => {});
         } else {
-          this.modalService.open(this.shareModal, {buttons: [{name: 'Share', action: 'submit'}, {name: 'Cancel', action: 'cancel'}]}).subscribe(choice => {
-            if (choice === 'confirm') {
-              this.pageManager.resumeData.subscribe(data => {
-                if (!this.objectUtil.isEmpty(data)) {
-                  this.modalService.open(this.confirmedModal, {buttons: [{name: 'Okay', action: 'submit'}]}).subscribe(() => {})
-                  this.fireService.publish(data, resumeId).subscribe(() => {
-                })
-                } else {
-                  this.modalService.open(this.templateEmptyModal, {buttons: [{name: 'Okay', action: 'submit'}]}).subscribe(() => {})
-                }
-              }).unsubscribe()
-            }
-          })
+          this.modalService
+            .open(this.shareModal, {
+              buttons: [
+                { name: 'Share', action: 'submit' },
+                { name: 'Cancel', action: 'cancel' },
+              ],
+            })
+            .subscribe((choice) => {
+              if (choice === 'confirm') {
+                this.pageManager.resumeData
+                  .subscribe((data) => {
+                    if (!this.objectUtil.isEmpty(data)) {
+                      this.modalService
+                        .open(this.confirmedModal, {
+                          buttons: [{ name: 'Okay', action: 'submit' }],
+                        })
+                        .subscribe(() => {});
+                      this.fireService
+                        .publish(data, resumeId)
+                        .subscribe(() => {});
+                        this.isPublic = true;
+                    } else {
+                      this.modalService
+                        .open(this.templateEmptyModal, {
+                          buttons: [{ name: 'Okay', action: 'submit' }],
+                        })
+                        .subscribe(() => {});
+                    }
+                  })
+                  .unsubscribe();
+              }
+            });
         }
-
       });
-    }
+  }
 
-    unPublishDocument() {
-      const resumeId = this.pageManager.resumeID;
-      this.modalService.open(this.confirmUnpublishModal, {buttons: [{name: 'Unpublish', action: 'submit'}, {name: 'Cancel', action: 'cancel'}]}).subscribe(choice => {
-        if (choice === 'confirm') {
-              this.modalService.open(this.unpublishedModal, {buttons: [{name: 'Okay', action: 'submit'}]}).subscribe(() => {})
-              this.fireService.unpublish(resumeId).subscribe(() => {});
-        }
+  unPublishDocument() {
+    const resumeId = this.pageManager.resumeID;
+    this.modalService
+      .open(this.confirmUnpublishModal, {
+        buttons: [
+          { name: 'Unpublish', action: 'submit' },
+          { name: 'Cancel', action: 'cancel' },
+        ],
       })
-
-    }
+      .subscribe((choice) => {
+        if (choice === 'confirm') {
+          this.modalService
+            .open(this.unpublishedModal, {
+              buttons: [{ name: 'Okay', action: 'submit' }],
+            })
+            .subscribe(() => {});
+          this.fireService.unpublish(resumeId).subscribe(() => {});
+          this.isPublic = false;
+        }
+      });
+  }
 }

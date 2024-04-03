@@ -9,27 +9,33 @@ import { Subscription, timer } from 'rxjs';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ErrorDisplayComponent implements OnInit, OnDestroy {
-  public errors: Error[] = [];
+  public errorMessage: string | undefined;
   private errorMessageSubscription: Subscription | undefined;
 
   constructor(private errorMessageService: ErrorMessageService, private cdr: ChangeDetectorRef) {}
 
   ngOnInit(): void {
     this.errorMessageSubscription = this.errorMessageService.onUnhandledException$.subscribe((error: unknown) => {
-      this.errors.push(error as Error)
-      console.log(this.errors);
+      this.errorMessage = this.extractErrorMessage(error);
+      this.detectChanges(); // Manually trigger change detection
       timer(1000).subscribe(() => {
-        this.removeError(error as Error);
-        this.cdr.detectChanges(); // Trigger change detection
+        this.clearErrorMessage();
+        this.detectChanges(); // Manually trigger change detection
       });
     });
   }
-  
-  private removeError(error: Error): void {
-    const index = this.errors.indexOf(error);
-    if (index !== -1) {
-      this.errors.splice(index, 1);
-    }
+
+  private extractErrorMessage(error: unknown): string {
+    // Extract and format the error message as needed
+    return error instanceof Error ? error.message : 'An error occurred.';
+  }
+
+  private clearErrorMessage(): void {
+    this.errorMessage = undefined;
+  }
+
+  private detectChanges(): void {
+    this.cdr.detectChanges();
   }
 
   ngOnDestroy(): void {

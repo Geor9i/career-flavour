@@ -32,10 +32,12 @@ export class HomeComponent implements OnInit, OnDestroy {
     this.authSubscription = this.authService.userObservable$.subscribe((user) => {
         this.user = user;
         this.name = user?.displayName?.split(' ')[0] || '';
-      })
-      this.userResumeCount = this.fireService.getResumeCount();
-      this.fireService.getPublicTemplates().subscribe(data => {
-        this.publicResumeCount = data.length ?? 0;
+        this.userResumeCount = this.fireService.getResumeCount();
+        if (user) {
+          this.fireService.getPublicTemplates().subscribe(data => {
+            this.publicResumeCount = data.length ?? 0;
+          })
+        }
       })
     }
 

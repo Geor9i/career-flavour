@@ -9,7 +9,7 @@
     <a *ngIf="!user" (click)="toResumeBuilder('resume-templates')">Get Started</a>
     <a *ngIf="user && publicResumeCount > 0 && userResumeCount > 0" (click)="toResumeBuilder('resume-templates')">Find a Template</a>
     <a *ngIf="user && publicResumeCount > 0 && userResumeCount < 1" (click)="toResumeBuilder('resume-templates')">Browse our templates</a>
-    <a *ngIf="user && publicResumeCount < 1 && userResumeCount < 1" (click)="toResumeBuilder('resume-editor')">Create with your first template</a>
+    <a *ngIf="user && publicResumeCount < 1 && userResumeCount < 1" (click)="toResumeBuilder('resume-editor')">Create your first template</a>
     <a *ngIf="user && publicResumeCount < 1 && userResumeCount > 0" (click)="toResumeBuilder('my-templates')">Continue Editing</a>
   </div>
 

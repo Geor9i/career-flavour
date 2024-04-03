@@ -54,6 +54,10 @@ export class FireService {
     return this.userData$$.asObservable();
   }
 
+  get userDataSnapshot() {
+    return this._userData;
+  }
+
   getUserData(): Observable<DocumentData> {
     return new Observable((observer) => {
       const user = this.authService.auth.currentUser;
@@ -88,12 +92,14 @@ export class FireService {
     });
   }
 
-  saveToDB(data: DocumentData, pathToProp: string): Observable<DocumentData> {
+  saveToDB(
+    data: DocumentData,
+    pathToProp: string,
+  ): Observable<DocumentData> {
     return new Observable((observer) => {
       console.log('data: ', data);
       console.log('userdata: ', this._userData);
       console.log('pathToProp: ', pathToProp);
-
       const user = this.authService.auth.currentUser;
       if (!user) {
         observer.error('No active user!');
@@ -111,12 +117,13 @@ export class FireService {
           observer.complete();
           return;
         }
+        console.log('nestedPropUserData', nestedPropUserData);
       }
 
       const finalData = this.objectUtil.setNestedProperty(
         this._userData,
         pathToProp,
-        data
+        data,
       );
       const docRef = doc(this.firestore, dbs.USERS, user.uid);
       setDoc(docRef, finalData)
@@ -136,7 +143,7 @@ export class FireService {
     if (!this.objectUtil.isEmpty(resumes)) {
       return Object.keys(resumes).length;
     }
-    return 0
+    return 0;
   }
 
   getPublicTemplates(): Observable<DocumentData[]> {
@@ -176,7 +183,7 @@ export class FireService {
     });
   }
 
-  publish(data: DocumentData, id:string): Observable<DocumentData> {
+  publish(data: DocumentData, id: string): Observable<DocumentData> {
     return new Observable((observer) => {
       const user = this.authService.auth.currentUser;
       if (!user) {
