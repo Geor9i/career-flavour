@@ -93,7 +93,7 @@ export class ResumeTemplatesPageComponent implements OnInit, AfterViewInit, OnDe
   }
 
   openTemplate(template: DocumentData) {
-    console.log(template);
+    // console.log(template);
     this.router.navigate([ROUTE.RESUME_EDITOR, template['id']])
   }
 

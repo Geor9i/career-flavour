@@ -90,6 +90,10 @@ export class FireService {
 
   saveToDB(data: any, pathToProp: string): Observable<DocumentData> {
     return new Observable((observer) => {
+      console.log('data: ', data);
+      console.log('userdata: ', this._userData);
+      console.log('pathToProp: ', pathToProp);
+
       const user = this.authService.auth.currentUser;
       if (!user) {
         observer.error('No active user!');
@@ -140,21 +144,41 @@ export class FireService {
         });
 
       return () => {
-        // Unsubscribe function to clean up when the observable is unsubscribed
         unsubscribe.then(() => {}).catch(() => {});
       };
     });
   }
 
-  savePublic(data: DocumentData, id: string): Observable<DocumentData> {
+  getOnePublicTemplate(id: string): Observable<DocumentData> {
     return new Observable((observer) => {
-      const username = (
-        this.authService.auth.currentUser?.displayName || ''
-      ).split(' ')[0];
-      const publicId = `public-${id}`;
+      const docRef = doc(this.firestore, dbs.PUBLIC, id);
+      getDoc(docRef)
+        .then((data) => {
+          if (data.exists()) {
+            observer.next(data.data());
+          } else {
+            observer.next(undefined);
+          }
+          observer.complete();
+        })
+        .catch((err) => {
+          observer.error(err);
+        });
+    });
+  }
+
+  publish(data: DocumentData, id:string): Observable<DocumentData> {
+    return new Observable((observer) => {
+      const user = this.authService.auth.currentUser;
+      if (!user) {
+        observer.error('No active user!');
+      }
+      const username = (user?.displayName || '').split(' ')[0];
+      let publicId = `public-${id}`;
       const finalData = {
         ...data,
         id: publicId,
+        authorId: user?.uid,
         username,
       };
       const docRef = doc(this.firestore, dbs.PUBLIC, publicId);
@@ -171,34 +195,39 @@ export class FireService {
 
   unpublish(id: string): Observable<void> {
     return new Observable((observer) => {
-      const publicId = `public-${id}`
-      this.getPublicTemplates().subscribe(data => {
-        const isPublic = data.find(document => document?.['id'] === publicId)
+      const publicId = `public-${id}`;
+      this.getPublicTemplates().subscribe((data) => {
+        const isPublic = data.find((document) => document?.['id'] === publicId);
         if (isPublic) {
           const docRef = doc(this.firestore, dbs.PUBLIC, publicId);
           deleteDoc(docRef)
-          .then(() => {
-            observer.complete()
-          })
-          .catch(err => {
-            observer.error(err)
-          })
+            .then(() => {
+              observer.complete();
+            })
+            .catch((err) => {
+              observer.error(err);
+            });
         }
       });
-    })
-
+    });
   }
 
-  findCreated(resumeId: string) {
-    const user = this.authService.auth.currentUser;
-    if (!user) {
-      return;
-    }
-    const resumes = this._userData?.['resumes'];
-    if (resumes) {
-      return Object.keys(resumes).find(key => resumeId.replace('public-', '') === key);
-    }
-    return null;
+  isAuthor(resumeId: string): Observable<boolean | null> {
+    return new Observable((observer) => {
+      const user = this.authService.auth.currentUser;
+      if (!user) {
+        observer.error(new Error('No active user!'));
+      }
+      return this.getOnePublicTemplate(resumeId).subscribe((resume) => {
+        if (resume) {
+          const isAuthor = resume['uid'] === user?.uid;
+          observer.next(isAuthor);
+          observer.complete();
+        } else {
+          observer.error('Resume is not public!');
+        }
+      });
+    });
   }
 
   async deleteUserData() {

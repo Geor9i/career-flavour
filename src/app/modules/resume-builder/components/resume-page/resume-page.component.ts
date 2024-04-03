@@ -214,6 +214,8 @@ export class ResumePageComponent implements OnInit, AfterViewInit, OnDestroy {
     };
     if (!this.initialiseData) {
       const dbPath = `resumes.${resumeId}.layout`;
+      console.log(dbPath);
+
       this.fireService.saveToDB(layoutData, dbPath).subscribe(() => {});
     }
   }
