@@ -18,6 +18,7 @@ import { UtilService } from 'src/app/modules/utils/util.service';
 import { Router } from '@angular/router';
 import { RESUME_DB, dbs } from 'src/app/constants/dbConstants';
 import { DocumentData } from '@angular/fire/firestore';
+import { ROUTE } from 'src/app/constants/routes';
 
 @Component({
   selector: 'app-my-templates',
@@ -31,7 +32,6 @@ export class MyTemplatesComponent implements OnInit, AfterViewInit, OnDestroy {
   private jSEventSubId = 'MyTemplatesComponent';
   private jsEventUnsubscribeArr: (() => void)[] = [];
   private fireServiceSubscription!: Subscription;
-  private resumeRoute = '/resume-editor';
   constructor(
     private jSEventBusService: JSEventBusService,
     private utilService: UtilService,
@@ -113,7 +113,7 @@ export class MyTemplatesComponent implements OnInit, AfterViewInit, OnDestroy {
 
   blankResume() {
   const id = `${Date.now()}${uuidv4()}`;
-  this.router.navigateByUrl(`${this.resumeRoute}/${id}`)
+  this.router.navigateByUrl(`${ROUTE.RESUME_EDITOR}/${id}`)
   }
 
   openResume(template: DocumentData) {

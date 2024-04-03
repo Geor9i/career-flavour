@@ -15,6 +15,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { DocumentData } from '@angular/fire/firestore';
 import { RESUME_DB } from 'src/app/constants/dbConstants';
 import { ModalService } from 'src/app/modules/shared/modal/modal.service';
+import { ROUTE } from 'src/app/constants/routes';
 
 @Component({
   selector: 'app-resume-editor',
@@ -26,6 +27,9 @@ export class ResumeEditorComponent implements OnInit, OnDestroy {
   @ViewChild('confirmedModal') confirmedModal!: TemplateRef<any>;
   @ViewChild('shareModal') shareModal!: TemplateRef<any>;
   @ViewChild('deleteModal') deleteModal!: TemplateRef<any>;
+  @ViewChild('templateEmptyModal') templateEmptyModal!: TemplateRef<any>;
+  @ViewChild('confirmUnpublishModal') confirmUnpublishModal!: TemplateRef<any>;
+  @ViewChild('unpublishedModal') unpublishedModal!: TemplateRef<any>;
   public resumePage!: Type<any>;
   private jsEventBusId = 'ResumeEditorComponent';
   constructor(
@@ -43,6 +47,9 @@ export class ResumeEditorComponent implements OnInit, OnDestroy {
   private eventBusSubscription!: Subscription;
   private jsEventUnsubscribeArr: (() => void)[] = [];
   private eventUtil = this.utilService.eventUtil;
+  private objectUtil = this.utilService.objectUtil;
+  public isPublic = false;
+  public isAuthor = false;
   public modalIds: IdObj = {
     font: 'font',
     layout: 'layout',
@@ -64,8 +71,21 @@ export class ResumeEditorComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
 
     this.fireServiceSubscribtion = this.fireService.userData.subscribe(data => {
-      const documentId = this.activatedRoute.snapshot.params['id'];
-      this.pageManager.resumeID = documentId;
+      let documentId = this.activatedRoute.snapshot.params['id'];
+      if (documentId.startsWith('public')) {
+        this.isPublic = true;
+        const personalId = this.fireService.findCreated(documentId);
+        if (personalId && typeof personalId === 'string') {
+          this.isAuthor = true;
+          this.router.navigate([ROUTE.RESUME_EDITOR, personalId]);
+          documentId = personalId;
+        } else {
+          console.log('else');
+
+        }
+      } else {
+        this.pageManager.resumeID = documentId;
+      }
       if (data && data?.[RESUME_DB.RESUMES]?.[documentId]) {
           const resumeData = data?.[RESUME_DB.RESUMES]?.[documentId];
           this.pageManager.resumeData = resumeData;
@@ -228,7 +248,6 @@ export class ResumeEditorComponent implements OnInit, OnDestroy {
       this.modalService.open(this.deleteModal, {buttons: [{name: 'Delete', action: 'submit'}, {name: 'Cancel', action: 'cancel'}]}).subscribe(choice => {
         if (choice === 'confirm') {
           console.log(choice);
-
           this.fireService.deleteResume(this.pageManager.resumeID)
           .then(() => this.router.navigateByUrl('/my-templates'))
         }
@@ -236,14 +255,29 @@ export class ResumeEditorComponent implements OnInit, OnDestroy {
     }
 
     publish() {
-// TODO ! Inspect extra document publishing
+      const resumeId = this.pageManager.resumeID;
       this.modalService.open(this.shareModal, {buttons: [{name: 'Share', action: 'submit'}, {name: 'Cancel', action: 'cancel'}]}).subscribe(choice => {
         if (choice === 'confirm') {
           this.pageManager.resumeData.subscribe(data => {
-            this.modalService.open(this.confirmedModal, {buttons: [{name: 'Okay', action: 'submit'}]}).subscribe(() => {})
-            this.fireService.savePublic(data).subscribe(() => {
+            if (!this.objectUtil.isEmpty(data)) {
+              this.modalService.open(this.confirmedModal, {buttons: [{name: 'Okay', action: 'submit'}]}).subscribe(() => {})
+              this.fireService.savePublic(data, resumeId).subscribe(() => {
             })
-          })
+            } else {
+              this.modalService.open(this.templateEmptyModal, {buttons: [{name: 'Okay', action: 'submit'}]}).subscribe(() => {})
+            }
+          }).unsubscribe()
+        }
+      })
+
+    }
+
+    unPublishDocument() {
+      const resumeId = this.pageManager.resumeID;
+      this.modalService.open(this.confirmUnpublishModal, {buttons: [{name: 'Unpublish', action: 'submit'}, {name: 'Cancel', action: 'cancel'}]}).subscribe(choice => {
+        if (choice === 'confirm') {
+              this.modalService.open(this.unpublishedModal, {buttons: [{name: 'Okay', action: 'submit'}]}).subscribe(() => {})
+              this.fireService.unpublish(resumeId).subscribe(() => {});
         }
       })
 

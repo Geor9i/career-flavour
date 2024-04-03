@@ -140,4 +140,44 @@ typeof(target: any) {
 }
 
 
+isEmpty(target: any) {
+  if (!target) return true;
+
+  const isEmptyObject = (object:any) => {
+    for (let key in object) {
+      let type = this.typeof(object[key]);
+      if (type === "object") {
+        if (Object.keys(object[key]).length === 0) {
+          continue;
+        }
+        if (!isEmptyObject(object[key])) {
+          return false;
+        }
+      } else if (object[key] === null || object[key] === undefined) {
+        continue;
+      } else if (["array", "string", "boolean", "number"].includes(type as string)) {
+        if (!this.isEmpty(object[key])) {
+          return false;
+        }
+      }
+    }
+    return true;
+  };
+
+  let type = this.typeof(target);
+  switch (type) {
+    case "string":
+      return target.length === 0;
+    case "array":
+      return target.filter((el: any) => !this.isEmpty(el)).length === 0;
+    case "object":
+      return isEmptyObject(target);
+    case "undefined":
+    case "null":
+      return true;
+    default:
+      return false;
+  }
+}
+
 }

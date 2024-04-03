@@ -19,6 +19,7 @@
       <li (click)="openDocuments($event, modalIds['documents'])"><i class="fa-regular fa-file fa-3x"></i></li>
       <li><i (click)="publish()" class="fa-solid fa-file-arrow-up fa-3x"></i></li>
       <li class="bin" (click)="deleteDocument()"><i class="fa-solid fa-trash-can fa-3x"></i></li>
+      <li class="lock" (click)="unPublishDocument()" *ngIf="isPublic && isAuthor"><i class="fa-solid fa-lock fa-3x"></i></li>
     </ul>
 
   </aside>
@@ -40,4 +41,18 @@
 
   <ng-template #confirmedModal>
     <p class="modal-text">Your template has been published!</p>
+  </ng-template>
+
+  <ng-template #templateEmptyModal>
+    <p class="modal-text">Your template is empty!</p>
+  </ng-template>
+
+
+  <ng-template #confirmUnpublishModal>
+    <p class="modal-text">Do you want to unpublish this template?</p>
+  </ng-template>
+
+
+  <ng-template #unpublishedModal>
+    <p class="modal-text">Template is private!</p>
   </ng-template>

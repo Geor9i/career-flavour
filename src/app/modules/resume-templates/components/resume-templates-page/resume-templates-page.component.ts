@@ -4,6 +4,9 @@ import { JSEventBusService } from 'src/app/modules/event-bus/jsevent-bus.service
 import { AfterViewInit,Component, ElementRef,NgIterable,OnDestroy, OnInit, QueryList, ViewChildren,} from '@angular/core';
 import { JSEvent } from 'src/app/modules/event-bus/types';
 import { DocumentData } from '@angular/fire/firestore';
+import { Router } from '@angular/router';
+import { v4 as uuidv4 } from 'uuid';
+import { ROUTE } from 'src/app/constants/routes';
 
 @Component({
   selector: 'app-resume-templates-page',
@@ -11,7 +14,7 @@ import { DocumentData } from '@angular/fire/firestore';
   styleUrls: ['./resume-templates-page.component.css'],
 })
 export class ResumeTemplatesPageComponent implements OnInit, AfterViewInit, OnDestroy {
-  public templates: NgIterable<DocumentData> = [];
+  public templates: any = [];
   public link: string = ''
   public templateStyles: { [key: string]: string }[] = [];
 
@@ -21,13 +24,15 @@ export class ResumeTemplatesPageComponent implements OnInit, AfterViewInit, OnDe
   constructor(
     private jSEventBusService: JSEventBusService,
     private utilService: UtilService,
-    private fireService: FireService
+    private fireService: FireService,
+    private router: Router
   ) {}
   // @ViewChildren('template') template!: QueryList<ElementRef>;
 
   ngOnInit(): void {
     this.fireService.getPublicTemplates().subscribe(data => {
       this.templates = data || [];
+      console.log(this.templates);
     })
   }
 
@@ -85,5 +90,15 @@ export class ResumeTemplatesPageComponent implements OnInit, AfterViewInit, OnDe
         transform: 'perspective(600px) rotateX(0deg) rotateY(0deg)',
       };
     }
+  }
+
+  openTemplate(template: DocumentData) {
+    console.log(template);
+    this.router.navigate([ROUTE.RESUME_EDITOR, template['id']])
+  }
+
+  createPersonalTemplate() {
+    const id = `${Date.now()}${uuidv4()}`;
+    this.router.navigateByUrl(`${ROUTE.RESUME_EDITOR}/${id}`)
   }
 }

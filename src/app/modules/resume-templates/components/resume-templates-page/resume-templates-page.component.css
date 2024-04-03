@@ -76,6 +76,7 @@
 }
 
 .template {
+  position: relative;
   background: url('https://gdoc.io/uploads/University-Student-Resume-Template-web1-712x984.webp');
   background-size: contain;
   border-radius: 3px;
@@ -92,3 +93,27 @@
 .template:hover {
   box-shadow: 1px 1px 10px gold;
 }
+
+
+.resume-select .template p {
+  font-weight: bold;
+  position: absolute;
+  top: -10%;
+  }
+
+.templates-empty {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.templates-empty span {
+  color: red;
+  transition: color var(--pointer-transition) ease-in;
+  cursor: pointer;
+}
+.templates-empty span:hover {
+  color: blue;
+}
+

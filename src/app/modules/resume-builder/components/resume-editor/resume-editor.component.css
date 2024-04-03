@@ -93,6 +93,10 @@ aside ul .bin:hover {
   color: red;
 }
 
+aside ul .lock:hover {
+  color: rgb(111, 0, 255);
+}
+
 .modal-text {
   font-size: 20px;
   font-weight: bold;

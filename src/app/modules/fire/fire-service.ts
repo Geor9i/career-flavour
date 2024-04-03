@@ -10,7 +10,7 @@ import {
   collection,
   getDocs,
 } from '@angular/fire/firestore';
-import { isEqual, map, merge } from 'lodash';
+import { isEqual } from 'lodash';
 
 import { Storage, ref, getDownloadURL } from '@angular/fire/storage';
 import { BehaviorSubject, Observable, from } from 'rxjs';
@@ -18,7 +18,7 @@ import { AuthService } from './auth-service';
 import { dbs } from 'src/app/constants/dbConstants';
 import { Unsubscribe } from '@angular/fire/auth';
 import { UtilService } from '../utils/util.service';
-import { v4 as uuid } from 'uuid';
+import { v4 as uuidv4 } from 'uuid';
 @Injectable({
   providedIn: 'root',
 })
@@ -39,7 +39,7 @@ export class FireService {
           if (observer.exists()) {
             const result = observer.data();
             this.userData$$.next(result);
-            this._userData = result
+            this._userData = result;
           }
         });
       } else if (!user) {
@@ -51,7 +51,7 @@ export class FireService {
   }
 
   get userData() {
-    return this.userData$$.asObservable()
+    return this.userData$$.asObservable();
   }
 
   getUserData(): Observable<DocumentData> {
@@ -94,19 +94,26 @@ export class FireService {
       if (!user) {
         observer.error('No active user!');
         observer.complete();
-        return
+        return;
       }
       if (this._userData) {
-        const nestedPropUserData = this.objectUtil.getNestedProperty(this._userData, pathToProp);
+        const nestedPropUserData = this.objectUtil.getNestedProperty(
+          this._userData,
+          pathToProp
+        );
         if (isEqual(nestedPropUserData, data)) {
-        console.log('Data is the same, no need to save.');
-        observer.next();
-        observer.complete();
-        return;
+          console.log('Data is the same, no need to save.');
+          observer.next();
+          observer.complete();
+          return;
         }
       }
 
-      const finalData = this.objectUtil.setNestedProperty(this._userData, pathToProp, data)
+      const finalData = this.objectUtil.setNestedProperty(
+        this._userData,
+        pathToProp,
+        data
+      );
       const docRef = doc(this.firestore, dbs.USERS, user.uid);
       setDoc(docRef, finalData)
         .then(() => {
@@ -124,11 +131,11 @@ export class FireService {
       const collectionRef = collection(this.firestore, dbs.PUBLIC);
       const unsubscribe = getDocs(collectionRef)
         .then((querySnapshot) => {
-          const documentsData = querySnapshot.docs.map(doc => doc.data());
+          const documentsData = querySnapshot.docs.map((doc) => doc.data());
           observer.next(documentsData);
           observer.complete();
         })
-        .catch(err => {
+        .catch((err) => {
           observer.error(err);
         });
 
@@ -139,11 +146,19 @@ export class FireService {
     });
   }
 
-  savePublic(data: any): Observable<DocumentData> {
+  savePublic(data: DocumentData, id: string): Observable<DocumentData> {
     return new Observable((observer) => {
-    const id = uuid();
-      const docRef = doc(this.firestore, dbs.PUBLIC, id);
-      setDoc(docRef, data)
+      const username = (
+        this.authService.auth.currentUser?.displayName || ''
+      ).split(' ')[0];
+      const publicId = `public-${id}`;
+      const finalData = {
+        ...data,
+        id: publicId,
+        username,
+      };
+      const docRef = doc(this.firestore, dbs.PUBLIC, publicId);
+      setDoc(docRef, finalData)
         .then(() => {
           console.log('Data saved Sucessfully!');
           observer.complete();
@@ -154,28 +169,62 @@ export class FireService {
     });
   }
 
+  unpublish(id: string): Observable<void> {
+    return new Observable((observer) => {
+      const publicId = `public-${id}`
+      this.getPublicTemplates().subscribe(data => {
+        const isPublic = data.find(document => document?.['id'] === publicId)
+        if (isPublic) {
+          const docRef = doc(this.firestore, dbs.PUBLIC, publicId);
+          deleteDoc(docRef)
+          .then(() => {
+            observer.complete()
+          })
+          .catch(err => {
+            observer.error(err)
+          })
+        }
+      });
+    })
+
+  }
+
+  findCreated(resumeId: string) {
+    const user = this.authService.auth.currentUser;
+    if (!user) {
+      return;
+    }
+    const resumes = this._userData?.['resumes'];
+    if (resumes) {
+      return Object.keys(resumes).find(key => resumeId.replace('public-', '') === key);
+    }
+    return null;
+  }
+
   async deleteUserData() {
-    if (this.authService?.auth?.currentUser && this.authService?.auth?.currentUser?.uid) {
+    if (
+      this.authService?.auth?.currentUser &&
+      this.authService?.auth?.currentUser?.uid
+    ) {
       const uid = this.authService.auth.currentUser.uid;
-      const docRef = doc(this.firestore, dbs.USERS, uid)
-       await deleteDoc(docRef)
+      const docRef = doc(this.firestore, dbs.USERS, uid);
+      await deleteDoc(docRef);
     }
   }
 
   async deleteResume(documentId: string): Promise<void> {
-      const user  = this.authService.auth?.currentUser;
-      if (user) {
-        const data = {...this._userData};
-        const path = `resumes.${documentId}`
-        let finishedObj = this.objectUtil.deleteNestedProperty(data, path);
-        const docRef = doc(this.firestore, dbs.USERS, user.uid);
-        return setDoc(docRef, finishedObj)
+    const user = this.authService.auth?.currentUser;
+    if (user) {
+      const data = { ...this._userData };
+      const path = `resumes.${documentId}`;
+      let finishedObj = this.objectUtil.deleteNestedProperty(data, path);
+      const docRef = doc(this.firestore, dbs.USERS, user.uid);
+      return setDoc(docRef, finishedObj)
         .then(() => {
           console.log('Resume Deleted!');
         })
-        .catch((err) => {
-        });
-      }
+        .catch((err) => {});
+    }
   }
 
   getFileUrl(filePath: string) {

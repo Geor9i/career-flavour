@@ -2,12 +2,18 @@
   <p class="page-title" title="Resume Templates">Resume Templates</p>
   <section class="resume-select">
     <div
-    [routerLink]="['/resume-editor', i]"
+    (click)="openTemplate(template)"
       *ngFor="let template of templates; let i = index"
       #template
       class="template"
       [style]="templateStyles[i]"
     >
+    <p>Created by {{template.username}}</p>
+</div>
+
+<div *ngIf="templates.length < 1" class="templates-empty">
+  <h1>There are currently no public templates!</h1>
+  <h2>Be the first one to <span (click)="createPersonalTemplate()">share</span></h2>
 </div>
   </section>
 </div>
