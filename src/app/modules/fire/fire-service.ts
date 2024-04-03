@@ -88,7 +88,7 @@ export class FireService {
     });
   }
 
-  saveToDB(data: any, pathToProp: string): Observable<DocumentData> {
+  saveToDB(data: DocumentData, pathToProp: string): Observable<DocumentData> {
     return new Observable((observer) => {
       console.log('data: ', data);
       console.log('userdata: ', this._userData);
@@ -128,6 +128,15 @@ export class FireService {
           observer.error(err);
         });
     });
+  }
+
+  getResumeCount(): number {
+    const resumes = this._userData?.['resumes'];
+
+    if (!this.objectUtil.isEmpty(resumes)) {
+      return Object.keys(resumes).length;
+    }
+    return 0
   }
 
   getPublicTemplates(): Observable<DocumentData[]> {

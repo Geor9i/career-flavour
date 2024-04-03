@@ -96,3 +96,14 @@
   color: black;
   background-color: rgb(255, 213, 234);
 }
+
+.resumeCounter {
+  font-weight: bold;
+  font-size: 48px;
+  color: rgb(245, 245, 245);
+  text-shadow: 2px 2px 1px black;
+}
+
+.resumeCounter span {
+    color: var(--theme-blue);
+}
