@@ -33,8 +33,6 @@ export class FontSelectorComponent implements OnInit {
         Object.keys(styles).forEach(key => {
           const baseValue = this.domUtil.getUnitValue(styles[key]['baseSize'], true);
           const curentValue = this.domUtil.getUnitValue(styles[key]['fontSize'], true);
-          console.log({baseValue, curentValue});
-
           this.fontSettings[key] = {
             ...styles[key],
             fontIncrement: Number(curentValue) - Number(baseValue)
@@ -83,7 +81,6 @@ export class FontSelectorComponent implements OnInit {
 
   changeFontSize(e: Event) {
     const target = e.currentTarget as HTMLInputElement;
-    console.log(target.value);
     this.transmit();
   }
 }

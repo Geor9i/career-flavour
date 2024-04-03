@@ -1,20 +1,41 @@
-import { CanActivateFn, Router } from '@angular/router';
-import { inject } from '@angular/core';
+import {
+  ActivatedRouteSnapshot,
+  Router,
+  RouterStateSnapshot,
+} from '@angular/router';
 import { AuthService } from '../modules/fire/auth-service';
+import { Injectable } from '@angular/core';
 
-export const authGuard: CanActivateFn = (route, state) => {
-  const router = inject(Router);
-  const authService = inject(AuthService);
-  const auth = authService.auth;
-  if (auth && route.url[0].path === 'logout') {
-      authService.logout();
-      router.navigateByUrl('/')
-      return true;
-  }
-  if (!auth) {
-    router.navigateByUrl('/login')
-    return false
-  }
+@Injectable({
+  providedIn: 'root',
+})
+export class authGuard {
+  constructor(private authService: AuthService, private router: Router) {}
 
-  return true;
-};
+  canActivate(
+    route: ActivatedRouteSnapshot,
+    state: RouterStateSnapshot
+  ): Promise<boolean> {
+    return new Promise((resolve, reject) => {
+      this.authService
+        .getCurrentUser()
+        .then((user) => {
+          if (user && route.url[0].path === 'logout') {
+            this.authService.logout();
+            this.router.navigateByUrl('/');
+            resolve(true);
+          }
+          if (!user) {
+            this.router.navigateByUrl('/login');
+            resolve(false);
+          }
+          resolve(true);
+        })
+        .catch((err) => {
+          resolve(false);
+          this.router.navigateByUrl('/login');
+          throw new Error(err)
+        });
+    });
+  }
+}

@@ -1,5 +1,10 @@
 import { TemplateGridStyle } from '../modules/resume-builder/types';
 
+function deepCopy(obj: any) {
+  return JSON.parse(JSON.stringify(obj));
+}
+
+
 const initialStyles: TemplateGridStyle = {
   gridRowStart: '0',
   gridRowEnd: '0',
@@ -7,43 +12,45 @@ const initialStyles: TemplateGridStyle = {
   gridColumnEnd: '0',
 };
 
+const baseSection = {
+  styles: deepCopy(initialStyles),
+  contentPlacement: 'list',
+  contentFlow: 'vertical',
+};
+
 const header = {
   type: 'Header',
   name: 'Test name',
   position: 'Applying for...',
   summary: 'Something about me...',
-  contentPlacement: 'list',
-  contentFlow: 'vertical',
-  styles: { ...initialStyles },
+  ...deepCopy(baseSection),
 };
 const education = {
   type: 'Education',
   title: 'Education',
+  ...deepCopy(baseSection),
   contentPlacement: 'chronological',
-  contentFlow: 'vertical',
-  styles: { ...initialStyles },
 };
 const workExperience = {
   type: 'Work Experience',
   title: 'Work Experience',
+  ...deepCopy(baseSection),
   contentPlacement: 'chronological',
   contentFlow: 'horizontal',
-  styles: { ...initialStyles },
 };
 const skills = {
   type: 'Skills',
   title: 'Skills',
-  contentPlacement: 'list',
-  contentFlow: 'vertical',
-  styles: { ...initialStyles },
+  ...deepCopy(baseSection),
 };
 const softSkills = {
   type: 'Soft Skills',
   title: 'Soft Skills',
-  contentPlacement: 'list',
+  ...deepCopy(baseSection),
   contentFlow: 'horizontal',
-  styles: { ...initialStyles },
 };
+
+const contacts = { type: 'Contacts', ...deepCopy(baseSection), contentFlow: 'horzontal' };
 
 export const layoutConstants = {
   generalSections: [
@@ -52,9 +59,9 @@ export const layoutConstants = {
     workExperience,
     skills,
     softSkills,
-    { type: 'Contacts', styles: { ...initialStyles } },
-    { type: 'Projects', styles: { ...initialStyles } },
-    { type: 'Hobbies', styles: { ...initialStyles } },
-    { type: 'Certificates', styles: { ...initialStyles } },
+    contacts,
+    { type: 'Projects', ...deepCopy(baseSection), },
+    { type: 'Hobbies', ...deepCopy(baseSection), },
+    { type: 'Certificates', ...deepCopy(baseSection), },
   ],
 };

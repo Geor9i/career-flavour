@@ -89,6 +89,10 @@ aside ul li:hover {
   color: green;
 }
 
+aside ul .bin:hover {
+  color: red;
+}
+
 .modal-text {
   font-size: 20px;
   font-weight: bold;
