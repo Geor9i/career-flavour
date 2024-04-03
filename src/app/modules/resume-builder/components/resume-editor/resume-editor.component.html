@@ -17,6 +17,7 @@
   <aside>
     <ul>
       <li (click)="openDocuments($event, modalIds['documents'])"><i class="fa-regular fa-file fa-3x"></i></li>
+      <li><i (click)="publish()" class="fa-solid fa-file-arrow-up fa-3x"></i></li>
       <li class="bin" (click)="deleteDocument()"><i class="fa-solid fa-trash-can fa-3x"></i></li>
     </ul>
 
@@ -30,4 +31,13 @@
 
   <ng-template #deleteModal>
     <p class="modal-text">Delete your Resume?</p>
+  </ng-template>
+
+
+  <ng-template #shareModal>
+    <p class="modal-text">Share your template?</p>
+  </ng-template>
+
+  <ng-template #confirmedModal>
+    <p class="modal-text">Your template has been published!</p>
   </ng-template>

@@ -7,15 +7,18 @@ import {
   setDoc,
   onSnapshot,
   deleteDoc,
+  collection,
+  getDocs,
 } from '@angular/fire/firestore';
-import { isEqual, merge } from 'lodash';
+import { isEqual, map, merge } from 'lodash';
 
 import { Storage, ref, getDownloadURL } from '@angular/fire/storage';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject, Observable, from } from 'rxjs';
 import { AuthService } from './auth-service';
 import { dbs } from 'src/app/constants/dbConstants';
 import { Unsubscribe } from '@angular/fire/auth';
 import { UtilService } from '../utils/util.service';
+import { v4 as uuid } from 'uuid';
 @Injectable({
   providedIn: 'root',
 })
@@ -33,7 +36,6 @@ export class FireService {
       if (user && user.uid && !this.onSnapshotInitialised) {
         const docRef = doc(this.firestore, dbs.USERS, user.uid);
         this.userDataUnsubscribe = onSnapshot(docRef, (observer) => {
-          // console.log(observer.data());
           if (observer.exists()) {
             const result = observer.data();
             this.userData$$.next(result);
@@ -43,6 +45,7 @@ export class FireService {
       } else if (!user) {
         this.userDataUnsubscribe();
         this.userData$$.next({});
+        this._userData = {};
       }
     });
   }
@@ -106,6 +109,41 @@ export class FireService {
       const finalData = this.objectUtil.setNestedProperty(this._userData, pathToProp, data)
       const docRef = doc(this.firestore, dbs.USERS, user.uid);
       setDoc(docRef, finalData)
+        .then(() => {
+          console.log('Data saved Sucessfully!');
+          observer.complete();
+        })
+        .catch((err) => {
+          observer.error(err);
+        });
+    });
+  }
+
+  getPublicTemplates(): Observable<DocumentData[]> {
+    return new Observable((observer) => {
+      const collectionRef = collection(this.firestore, dbs.PUBLIC);
+      const unsubscribe = getDocs(collectionRef)
+        .then((querySnapshot) => {
+          const documentsData = querySnapshot.docs.map(doc => doc.data());
+          observer.next(documentsData);
+          observer.complete();
+        })
+        .catch(err => {
+          observer.error(err);
+        });
+
+      return () => {
+        // Unsubscribe function to clean up when the observable is unsubscribed
+        unsubscribe.then(() => {}).catch(() => {});
+      };
+    });
+  }
+
+  savePublic(data: any): Observable<DocumentData> {
+    return new Observable((observer) => {
+    const id = uuid();
+      const docRef = doc(this.firestore, dbs.PUBLIC, id);
+      setDoc(docRef, data)
         .then(() => {
           console.log('Data saved Sucessfully!');
           observer.complete();

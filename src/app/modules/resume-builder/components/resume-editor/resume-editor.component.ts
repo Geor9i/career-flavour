@@ -23,6 +23,8 @@ import { ModalService } from 'src/app/modules/shared/modal/modal.service';
 })
 export class ResumeEditorComponent implements OnInit, OnDestroy {
 
+  @ViewChild('confirmedModal') confirmedModal!: TemplateRef<any>;
+  @ViewChild('shareModal') shareModal!: TemplateRef<any>;
   @ViewChild('deleteModal') deleteModal!: TemplateRef<any>;
   public resumePage!: Type<any>;
   private jsEventBusId = 'ResumeEditorComponent';
@@ -225,10 +227,25 @@ export class ResumeEditorComponent implements OnInit, OnDestroy {
     deleteDocument() {
       this.modalService.open(this.deleteModal, {buttons: [{name: 'Delete', action: 'submit'}, {name: 'Cancel', action: 'cancel'}]}).subscribe(choice => {
         if (choice === 'confirm') {
+          console.log(choice);
+
           this.fireService.deleteResume(this.pageManager.resumeID)
           .then(() => this.router.navigateByUrl('/my-templates'))
         }
       })
     }
 
+    publish() {
+// TODO ! Inspect extra document publishing
+      this.modalService.open(this.shareModal, {buttons: [{name: 'Share', action: 'submit'}, {name: 'Cancel', action: 'cancel'}]}).subscribe(choice => {
+        if (choice === 'confirm') {
+          this.pageManager.resumeData.subscribe(data => {
+            this.modalService.open(this.confirmedModal, {buttons: [{name: 'Okay', action: 'submit'}]}).subscribe(() => {})
+            this.fireService.savePublic(data).subscribe(() => {
+            })
+          })
+        }
+      })
+
+    }
 }

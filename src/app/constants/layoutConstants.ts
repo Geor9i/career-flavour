@@ -4,7 +4,6 @@ function deepCopy(obj: any) {
   return JSON.parse(JSON.stringify(obj));
 }
 
-
 const initialStyles: TemplateGridStyle = {
   gridRowStart: '0',
   gridRowEnd: '0',

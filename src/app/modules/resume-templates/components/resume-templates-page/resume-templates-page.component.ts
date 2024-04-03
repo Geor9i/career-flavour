@@ -1,16 +1,17 @@
 import { FireService } from 'src/app/modules/fire/fire-service';
 import { UtilService } from './../../../utils/util.service';
 import { JSEventBusService } from 'src/app/modules/event-bus/jsevent-bus.service';
-import { AfterViewInit,Component, ElementRef,OnDestroy, QueryList, ViewChildren,} from '@angular/core';
+import { AfterViewInit,Component, ElementRef,NgIterable,OnDestroy, OnInit, QueryList, ViewChildren,} from '@angular/core';
 import { JSEvent } from 'src/app/modules/event-bus/types';
+import { DocumentData } from '@angular/fire/firestore';
 
 @Component({
   selector: 'app-resume-templates-page',
   templateUrl: './resume-templates-page.component.html',
   styleUrls: ['./resume-templates-page.component.css'],
 })
-export class ResumeTemplatesPageComponent implements AfterViewInit, OnDestroy {
-  public templates: any = Array(2).fill(0);
+export class ResumeTemplatesPageComponent implements OnInit, AfterViewInit, OnDestroy {
+  public templates: NgIterable<DocumentData> = [];
   public link: string = ''
   public templateStyles: { [key: string]: string }[] = [];
 
@@ -22,26 +23,27 @@ export class ResumeTemplatesPageComponent implements AfterViewInit, OnDestroy {
     private utilService: UtilService,
     private fireService: FireService
   ) {}
+  // @ViewChildren('template') template!: QueryList<ElementRef>;
 
-  @ViewChildren('template') template!: QueryList<ElementRef>;
+  ngOnInit(): void {
+    this.fireService.getPublicTemplates().subscribe(data => {
+      this.templates = data || [];
+    })
+  }
+
   ngAfterViewInit(): void {
-
-
-    const templateElements = this.template
-      .toArray()
-      .map((el) => el.nativeElement);
     const unsubscribe = this.jSEventBusService.subscribe(
       this.jSEventSubId,
       'mousemove',
       this.onMouseMoveTemplate.bind(this),
-      { target: templateElements }
+      { target: '.container .template' }
     );
 
     const unsubscribe2 = this.jSEventBusService.subscribe(
       this.jSEventSubId,
       'mouseout',
       this.resetTemplateStyles.bind(this),
-      { target: templateElements }
+      { target: '.container .template' }
     );
 
     this.jsEventUnsubscribeArr.push(unsubscribe, unsubscribe2);
@@ -51,7 +53,8 @@ export class ResumeTemplatesPageComponent implements AfterViewInit, OnDestroy {
     this.jsEventUnsubscribeArr.forEach((unsubscribe) => unsubscribe());
   }
   onMouseMoveTemplate(event: JSEvent): void {
-    const targetIndex = this.template.toArray().findIndex((ref) => ref.nativeElement === event.target);
+    // const targetIndex = this.template.toArray().findIndex((ref) => ref.nativeElement === event.target);
+    const targetIndex = Array.from(document.querySelectorAll('.container .template')).findIndex((el) => el === event.target);
 
     if (targetIndex !== -1) {
       const { offsetX, offsetY, rect } = this.utilService.eventUtil.eventData(event);
@@ -74,7 +77,9 @@ export class ResumeTemplatesPageComponent implements AfterViewInit, OnDestroy {
     }
   }
   resetTemplateStyles(event: JSEvent): void {
-    const targetIndex = this.template.toArray().findIndex((ref) => ref.nativeElement === event.target);
+    // const targetIndex = this.template.toArray().findIndex((ref) => ref.nativeElement === event.target);
+    const targetIndex = Array.from(document.querySelectorAll('.container .template')).findIndex((el) => el === event.target);
+
     if (targetIndex !== -1) {
       this.templateStyles[targetIndex] = {
         transform: 'perspective(600px) rotateX(0deg) rotateY(0deg)',

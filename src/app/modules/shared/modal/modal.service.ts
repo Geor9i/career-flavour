@@ -49,6 +49,7 @@ export class ModalService {
 
   private submitModal() {
     this.modalNotifier?.next('confirm');
+    this.modalNotifier?.complete();
     this.closeModal();
 
   }
