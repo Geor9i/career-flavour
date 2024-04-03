@@ -9,6 +9,8 @@ import {
   deleteDoc,
   collection,
   getDocs,
+  where,
+  query,
 } from '@angular/fire/firestore';
 import { isEqual } from 'lodash';
 
@@ -256,6 +258,28 @@ export class FireService {
       await deleteDoc(docRef);
     }
   }
+
+  async deletePublicUserData() {
+    if (
+      this.authService?.auth?.currentUser &&
+      this.authService?.auth?.currentUser?.uid
+    ) {
+      const userResumes = this._userData['resumes'];
+      if (userResumes) {
+        const idArr = Object.keys(userResumes);
+        idArr.forEach(async (id) => {
+          const ref = doc(this.firestore, dbs.PUBLIC, `public-${id}`);
+          try {
+            await deleteDoc(ref);
+            console.log(`Resume with ID ${id} successfully deleted from PUBLIC collection.`);
+          } catch (error) {
+            console.error(`Error deleting resume with ID ${id} from PUBLIC collection:`, error);
+          }
+        });
+      }
+    }
+  }
+
 
   async deleteResume(documentId: string): Promise<void> {
     const user = this.authService.auth?.currentUser;

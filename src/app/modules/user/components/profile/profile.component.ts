@@ -124,7 +124,10 @@ export class ProfileComponent implements OnInit, OnDestroy {
         if (observer.data && observer.data['confirm']) {
           this.authService.deleteAccount();
           this.router.navigateByUrl('/');
-          this.fireService.deleteUserData();
+          this.fireService.deletePublicUserData()
+          .then(() => {
+            this.fireService.deleteUserData();
+          })
         }
         this.templateModalSubscription?.unsubscribe();
       });

@@ -27,7 +27,6 @@ export class HomeComponent implements OnInit, OnDestroy {
     public publicResumeCount = 0;
     public userResumeCount = 0;
     private newId = `${Date.now()}${uuidv4()}`;
-
     ngOnInit(): void {
     this.authSubscription = this.authService.userObservable$.subscribe((user) => {
         this.user = user;

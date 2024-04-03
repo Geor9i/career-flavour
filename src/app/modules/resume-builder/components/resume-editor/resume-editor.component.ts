@@ -98,7 +98,6 @@ export class ResumeEditorComponent implements OnInit, OnDestroy {
       this.router.navigate([ROUTE.RESUME_EDITOR, navId]);
       this.fireServiceSubscribtion = this.fireService.userData.subscribe(
         (data) => {
-          debugger
           let resumeId = publicDocumentId.replace('public-', '');
           if (data && data?.[this.resumePath] && data?.[this.resumePath]?.[resumeId]) {
             this.isAuthor = true;
@@ -109,15 +108,15 @@ export class ResumeEditorComponent implements OnInit, OnDestroy {
       );
     });
 
-    const unsubscribe = this.jsEventBusService.subscribe(
-      this.jsEventBusId,
-      'click',
-      this.resumeHelper.bind(this),
-      {
-        target: 'app-p',
-      }
-    );
-    this.jsEventUnsubscribeArr.push(unsubscribe);
+    // const unsubscribe = this.jsEventBusService.subscribe(
+    //   this.jsEventBusId,
+    //   'click',
+    //   this.resumeHelper.bind(this),
+    //   {
+    //     target: 'app-p',
+    //   }
+    // );
+    // this.jsEventUnsubscribeArr.push(unsubscribe);
   }
 
   stamp() {
@@ -190,36 +189,36 @@ export class ResumeEditorComponent implements OnInit, OnDestroy {
       });
   }
 
-  resumeHelper(e: Event) {
-    const { clientX, clientY } = this.eventUtil.eventData(e);
-    const [width, height] = this.eventUtil.resizeToScreen(3, 20);
-    this.layoutEditorStyles = {
-      ...this.layoutEditorStyles,
-      top: `${clientY - height / 2}px`,
-      left: `${clientX - width}px`,
-      width: `${width}px`,
-      height: `${height}px`,
-      'border-radius': `${13}px`,
-    };
-    this.modalSubscriptionHandler(this.modalIds['helper']);
-    this.eventBusSubscription = this.templateModalService
-      .open(ResumeHelperComponent, {
-        styles: this.layoutEditorStyles,
-        backdropStyles: this.backdropStyles,
-        openTransmission: true,
-      })
-      .subscribe((observable) => {
-        console.log(observable);
-        if (observable.data && observable.data.hasOwnProperty('confirm')) {
-          this.eventBusSubscription.unsubscribe();
-        } else if (observable) {
-          const obj = {
-            changeFont: observable.data,
-          };
-          this.pageManager.modifyPage(obj as PageValues);
-        }
-      });
-  }
+  // resumeHelper(e: Event) {
+  //   const { clientX, clientY } = this.eventUtil.eventData(e);
+  //   const [width, height] = this.eventUtil.resizeToScreen(3, 20);
+  //   this.layoutEditorStyles = {
+  //     ...this.layoutEditorStyles,
+  //     top: `${clientY - height / 2}px`,
+  //     left: `${clientX - width}px`,
+  //     width: `${width}px`,
+  //     height: `${height}px`,
+  //     'border-radius': `${13}px`,
+  //   };
+  //   this.modalSubscriptionHandler(this.modalIds['helper']);
+  //   this.eventBusSubscription = this.templateModalService
+  //     .open(ResumeHelperComponent, {
+  //       styles: this.layoutEditorStyles,
+  //       backdropStyles: this.backdropStyles,
+  //       openTransmission: true,
+  //     })
+  //     .subscribe((observable) => {
+  //       console.log(observable);
+  //       if (observable.data && observable.data.hasOwnProperty('confirm')) {
+  //         this.eventBusSubscription.unsubscribe();
+  //       } else if (observable) {
+  //         const obj = {
+  //           changeFont: observable.data,
+  //         };
+  //         this.pageManager.modifyPage(obj as PageValues);
+  //       }
+  //     });
+  // }
 
   openDocuments(e: Event, id: string) {
     const { clientX, clientY } = this.eventUtil.eventData(e);
@@ -268,7 +267,7 @@ export class ResumeEditorComponent implements OnInit, OnDestroy {
     if (this.eventBusSubscription) {
       this.eventBusSubscription.unsubscribe();
     }
-    this.jsEventUnsubscribeArr.forEach((unsubscribe) => unsubscribe());
+    // this.jsEventUnsubscribeArr.forEach((unsubscribe) => unsubscribe());
   }
   print() {
     window.print();
