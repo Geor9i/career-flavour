@@ -15,7 +15,7 @@
   align-items: center;
   width: 100%;
   list-style: none;
-  background-color: red;
+  background-color: var(--theme-color);
 }
 
 .guest-nav ul li {
