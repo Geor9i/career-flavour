@@ -18,8 +18,8 @@
     <ul>
       <li (click)="openDocuments($event, modalIds['documents'])"><i class="fa-regular fa-file fa-3x"></i></li>
       <li><i (click)="publish()" class="fa-solid fa-file-arrow-up fa-3x"></i></li>
-      <li class="bin" (click)="deleteDocument()"><i class="fa-solid fa-trash-can fa-3x"></i></li>
-      <li class="lock" (click)="unPublishDocument()" *ngIf="isPublic && isAuthor"><i class="fa-solid fa-lock fa-3x"></i></li>
+      <li  *ngIf="isAuthor" class="bin" (click)="deleteDocument()"><i class="fa-solid fa-trash-can fa-3x"></i></li>
+      <li  *ngIf="isPublic && isAuthor" class="lock" (click)="unPublishDocument()"><i class="fa-solid fa-lock fa-3x"></i></li>
     </ul>
 
   </aside>

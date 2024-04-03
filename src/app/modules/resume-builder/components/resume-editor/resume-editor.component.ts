@@ -82,6 +82,7 @@ export class ResumeEditorComponent implements OnInit, OnDestroy {
         if (publicDoc) {
           this.isPublic = true;
           this.isAuthor = publicDoc?.['authorId'] === this.authService.auth.currentUser?.uid;
+          console.log(this.isAuthor);
           const navId = this.isAuthor ? documentId.replace('public-', '') : `${Date.now()}${uuidv4()}`;
           this.pageManager.resumeID = navId;
           this.pageManager.resumeData = publicDoc;
@@ -89,6 +90,7 @@ export class ResumeEditorComponent implements OnInit, OnDestroy {
         } else {
           if(data && data?.[RESUME_DB.RESUMES]?.[documentId]) {
             this.pageManager.resumeData =  data?.[RESUME_DB.RESUMES]?.[documentId];
+            this.isAuthor = true;
           }
           this.pageManager.resumeID = documentId;
         }
@@ -251,9 +253,15 @@ export class ResumeEditorComponent implements OnInit, OnDestroy {
     deleteDocument() {
       this.modalService.open(this.deleteModal, {buttons: [{name: 'Delete', action: 'submit'}, {name: 'Cancel', action: 'cancel'}]}).subscribe(choice => {
         if (choice === 'confirm') {
-          console.log(choice);
           this.fireService.deleteResume(this.pageManager.resumeID)
-          .then(() => this.router.navigateByUrl('/my-templates'))
+          .then(() => {
+            this.router.navigateByUrl('/my-templates')
+            this.fireService.unpublish(this.pageManager.resumeID).subscribe({
+              error: () => {
+                console.log('Can\'t unpublish! Resume is not public.');
+              }
+            })
+          })
         }
       })
     }
