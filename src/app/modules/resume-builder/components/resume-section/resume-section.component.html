@@ -1,18 +1,18 @@
 <section class="resume-section" [class.bg-style]="data?.['type'] === 'Header'">
   <div class="header">
-    <app-p [textStyles]="fontStyles['sectionHeading']" *ngIf="data?.['title']"[text]="data?.['title'] || ''" />
-    <app-p [textStyles]="fontStyles['sectionHeading']" *ngIf="data?.['name']"[text]="data?.['name'] || ''" />
-    <app-p [textStyles]="fontStyles['topicHeading']" *ngIf="data?.['position']"[text]="data?.['position'] || ''" />
+    <app-p [textStyles]="fontStyles['sectionHeading']" *ngIf="data?.['title']" [text]="data?.['title'] || ''"></app-p>
+    <app-p [textStyles]="fontStyles['sectionHeading']" *ngIf="data?.['name']" [text]="personal?.['header']?.['name'] || data?.['name'] || ''"></app-p>
+    <app-p [textStyles]="fontStyles['topicHeading']" *ngIf="data?.['position']" [text]="personal?.['header']?.['position'] || data?.['position'] || ''"></app-p>
   </div>
 
   <div *ngIf="data?.['type'] === 'Header'" class="image">
     <div class="icon-container">
-      <img src="https://th-thumbnailer.cdn-si-edu.com/bgmkh2ypz03IkiRR50I-UMaqUQc=/1000x750/filters:no_upscale():focal(1061x707:1062x708)/https://tf-cmsv2-smithsonianmag-media.s3.amazonaws.com/filer_public/55/95/55958815-3a8a-4032-ac7a-ff8c8ec8898a/gettyimages-1067956982.jpg" alt="">
+      <img src="{{personal?.['header']?.['image'] || avatar}}" alt="">
     </div>
   </div>
 
   <div *ngIf="data?.['type'] === 'Header'" class="main">
-    <app-p [textStyles]="fontStyles['paragraph']" *ngIf="data?.['summary']"[text]="data?.['summary'] || ''" />
+    <app-p [textStyles]="fontStyles['paragraph']" *ngIf="data?.['summary']" [text]="personal?.['header']?.['summary'] || data?.['summary'] || ''"></app-p>
   </div>
 
   <!-- <app-resume-record></app-resume-record> -->

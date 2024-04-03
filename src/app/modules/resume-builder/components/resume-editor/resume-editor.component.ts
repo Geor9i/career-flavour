@@ -103,6 +103,12 @@ export class ResumeEditorComponent implements OnInit, OnDestroy {
             this.isAuthor = true;
             const resume = data?.[this.resumePath]?.[resumeId];
             this.pageManager.resumeData = resume;
+
+            if (data && data?.['personal']) {
+              this.pageManager.personalData = data?.['personal'];
+
+            }
+
           }
         }
       );

@@ -8,6 +8,7 @@ import { DocumentData } from '@angular/fire/firestore';
 })
 export class PageManagerService {
   constructor() {}
+  private personalData$$: BehaviorSubject<DocumentData> = new BehaviorSubject({});
   private _resumeID = '';
   private resumeData$$: BehaviorSubject<DocumentData> = new BehaviorSubject({});
   private post = new Subject<PageValues>();
@@ -29,6 +30,14 @@ export class PageManagerService {
 
   get resumeID() {
     return this._resumeID;
+  }
+
+  set personalData(data: DocumentData) {
+    this.personalData$$.next(data)
+  }
+
+  get personalData(): Observable<DocumentData>  {
+    return this.personalData$$.asObservable();
   }
 
 }

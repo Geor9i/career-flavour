@@ -15,15 +15,21 @@
       <div *ngIf="modalView === modalViews['header']">
         <div class="input-group">
           <label for="name">Name</label>
-          <input ngModel name="name" id="name" type="text" #name="ngModel"/>
+          <input ngModel name="name" id="name" type="text" [ngModel]="personal?.['header']?.['name'] || ''" #name="ngModel"/>
+
+
         </div>
         <div class="input-group">
           <label for="position">Position</label>
-          <input ngModel name="position" id="position" type="text" #position="ngModel"/>
+          <input [ngModel]="personal?.['header']?.['position'] || ''" ngModel name="position" id="position" type="text" #position="ngModel"/>
         </div>
         <div class="input-group">
           <label for="summary">Summary</label>
-          <textarea ngModel name="summary" id="summary" type="text" #summary="ngModel"></textarea>
+          <textarea [ngModel]="personal?.['header']?.['summary'] || ''" ngModel name="summary" id="summary" type="text" #summary="ngModel"></textarea>
+        </div>
+        <div class="input-group">
+          <label for="image">ImageUrl</label>
+          <input [ngModel]="personal?.['header']?.['image'] || ''" ngModel name="image" id="image" type="text" #image="ngModel" />
         </div>
       </div>
 
