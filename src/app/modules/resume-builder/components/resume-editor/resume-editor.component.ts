@@ -129,10 +129,7 @@ export class ResumeEditorComponent implements OnInit, OnDestroy {
     this.pageManager.resumeData
       .subscribe((data) => {
         if (data && !data?.['dateStamp']) {
-          console.log(data);
-          console.log('stamping');
         }
-        console.log('not stamping');
       })
       .unsubscribe();
   }
@@ -306,7 +303,6 @@ export class ResumeEditorComponent implements OnInit, OnDestroy {
     this.fireService
       .getOnePublicTemplate(`public-${resumeId}`)
       .subscribe((resumeExists) => {
-        console.log('resumeExists', resumeExists);
 
         if (resumeExists) {
           this.modalService

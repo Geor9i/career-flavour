@@ -49,7 +49,7 @@ const softSkills = {
   contentFlow: 'horizontal',
 };
 
-const contacts = { type: 'Contacts', ...deepCopy(baseSection), contentFlow: 'horzontal' };
+const contacts = { type: 'Contacts', ...deepCopy(baseSection), contentFlow: 'horizontal', email: 'email', phone: 'phone', linkedIn: 'linkedIn', github: 'github' };
 
 export const layoutConstants = {
   generalSections: [

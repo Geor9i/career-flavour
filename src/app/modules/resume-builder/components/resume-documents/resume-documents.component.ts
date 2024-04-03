@@ -26,7 +26,6 @@ ngOnInit(): void {
   this.pageManagerSubscription = this.pageManagerService.personalData.subscribe(data => {
     if (data) {
       this.personal = data;
-      console.log('this.personal', this.personal);
 
     }
   })

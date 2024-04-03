@@ -78,7 +78,6 @@ export class ResumePageComponent implements OnInit, AfterViewInit, OnDestroy {
   ngOnInit(): void {
     this.pageManagerResumeDataSubscription =
       this.pageManager.resumeData.subscribe((data) => {
-        // console.log('data: ', data);
 
         const layout = data?.['layout'] || {};
         const { sections, gridTemplateRows, gridTemplateColumns } = layout;
@@ -87,7 +86,6 @@ export class ResumePageComponent implements OnInit, AfterViewInit, OnDestroy {
           this.sections = this.objectUtil.reduceToArr(sections, {
             orderData: true,
           });
-          // console.log('this.sections: ', this.sections);
 
           this.editSaveLayout({
             sections: this.sections,
@@ -216,7 +214,6 @@ export class ResumePageComponent implements OnInit, AfterViewInit, OnDestroy {
     };
     if (!this.initialiseData) {
       const dbPath = `resumes.${resumeId}.layout`;
-      console.log(dbPath);
 
       this.fireService.saveToDB(layoutData, dbPath).subscribe(() => {});
     }
@@ -264,6 +261,5 @@ export class ResumePageComponent implements OnInit, AfterViewInit, OnDestroy {
     const sign = size === '+' ? 1 : -1;
     this.zoom = Math.min(Math.max(0.5, this.zoom + 0.1 * sign), 3);
     this.resumeStyles['transform'] = `scale(${this.zoom})`;
-    console.log(this.resumeStyles);
   }
 }

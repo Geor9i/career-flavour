@@ -36,23 +36,22 @@
 
 
 
-
       <div *ngIf="modalView === modalViews['contacts']">
         <div class="input-group">
           <label for="email">Email</label>
-          <input ngModel name="email" id="email" type="text" #email="ngModel"/>
+          <input [ngModel]="personal?.['contacts']?.['email'] || ''" ngModel name="email" id="email" type="text" #email="ngModel"/>
         </div>
         <div class="input-group">
           <label for="phone">Phone</label>
-          <input ngModel name="phone" id="phone" type="text" #phone="ngModel"/>
+          <input [ngModel]="personal?.['contacts']?.['phone'] || ''" ngModel name="phone" id="phone" type="text" #phone="ngModel"/>
         </div>
         <div class="input-group">
           <label for="github">Github</label>
-          <input ngModel name="github" id="github" type="text" #github="ngModel"/>
+          <input [ngModel]="personal?.['contacts']?.['github'] || ''" ngModel name="github" id="github" type="text" #github="ngModel"/>
         </div>
         <div class="input-group">
           <label for="linkedin">LinkedIn</label>
-          <input ngModel name="linkedin" id="linkedin" type="text" #linkedin="ngModel"/>
+          <input [ngModel]="personal?.['contacts']?.['linkedin'] || ''" ngModel name="linkedin" id="linkedin" type="text" #linkedin="ngModel"/>
         </div>
       </div>
 

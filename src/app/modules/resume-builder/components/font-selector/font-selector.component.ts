@@ -31,8 +31,6 @@ export class FontSelectorComponent implements OnInit {
       if (data && data['textStyles']) {
         const styles = data['textStyles'];
         Object.keys(styles).forEach(key => {
-          console.log(styles[key]);
-          console.log(key);
 
 
           const baseValue = this.domUtil.getUnitValue(styles[key]?.['baseSize'], true);

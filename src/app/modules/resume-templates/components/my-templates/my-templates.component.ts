@@ -47,7 +47,6 @@ export class MyTemplatesComponent implements OnInit, AfterViewInit, OnDestroy {
         if (data && data[RESUME_DB.RESUMES]) {
           const resumes = data[RESUME_DB.RESUMES]
           this.templates = this.objectutil.reduceToArr(resumes, {ownId: true})
-          console.log(this.templates);
         }
       }
     );

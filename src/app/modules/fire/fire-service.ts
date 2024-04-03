@@ -99,9 +99,7 @@ export class FireService {
     pathToProp: string,
   ): Observable<DocumentData> {
     return new Observable((observer) => {
-      console.log('data: ', data);
-      console.log('userdata: ', this._userData);
-      console.log('pathToProp: ', pathToProp);
+
       const user = this.authService.auth.currentUser;
       if (!user) {
         observer.error('No active user!');
@@ -119,7 +117,6 @@ export class FireService {
           observer.complete();
           return;
         }
-        console.log('nestedPropUserData', nestedPropUserData);
       }
 
       const finalData = this.objectUtil.setNestedProperty(
